@@ -1,0 +1,20 @@
+{
+  "name": "research-project-management-tool-client-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Avdunusinghe/Research-Project-Management-Tool-Client-App.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Avdunusinghe/Research-Project-Management-Tool-Client-App/issues"
+  },
+  "homepage": "https://github.com/Avdunusinghe/Research-Project-Management-Tool-Client-App#readme"
+}
