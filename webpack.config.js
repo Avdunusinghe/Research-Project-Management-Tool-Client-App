@@ -13,6 +13,14 @@ module.exports = {
   },
   resolve: {
     extensions: [".js", ".jsx"],
+    alias: {
+      "@mui/base": "@mui/base/legacy",
+      "@mui/lab": "@mui/lab/legacy",
+      "@mui/material": "@mui/material/legacy",
+      "@mui/styled-engine": "@mui/styled-engine/legacy",
+      "@mui/system": "@mui/system/legacy",
+      abcd$: path.resolve(__dirname, "path/to/file_name.js"),
+    },
   },
   module: {
     rules: [
@@ -25,7 +33,6 @@ module.exports = {
         enforce: "pre",
         use: ["source-map-loader"],
       },
-
       {
         test: /\.scss$/,
         use: ["style-loader", "css-loader", "sass-loader"],
@@ -44,6 +51,19 @@ module.exports = {
         test: /\.png|svg|jpg|gif$/,
         use: ["file-loader"],
       },
+      {
+        test: /\.(ttf|eot|gif|svg|woff(2)?)(\S+)?$/,
+        use: { loader: "file-loader?name=[name].[ext]" },
+      },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack", "url-loader"],
+      },
+      {
+        test: /\.svg$/,
+        use: ["@svgr/webpack"],
+      },
+
       {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
         exclude: /node_modules/,
