@@ -11,6 +11,7 @@ const SideBar = () => {
       <div className="center">
         <ul>
           <li>
+            <DashboardIcon></DashboardIcon>
             <span>Dashboard</span>
           </li>
           <li>

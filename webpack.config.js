@@ -11,69 +11,28 @@ module.exports = {
     filename: "bundle.js",
     publicPath: "/",
   },
+  target: "web",
   resolve: {
-    extensions: [".js", ".jsx"],
-    alias: {
-      "@mui/base": "@mui/base/legacy",
-      "@mui/lab": "@mui/lab/legacy",
-      "@mui/material": "@mui/material/legacy",
-      "@mui/styled-engine": "@mui/styled-engine/legacy",
-      "@mui/system": "@mui/system/legacy",
-      abcd$: path.resolve(__dirname, "path/to/file_name.js"),
-    },
+    extensions: [".js", ".jsx", "json"],
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        use: {
-          loader: "babel-loader",
-        },
-        enforce: "pre",
-        use: ["source-map-loader"],
+        use: "babel-loader",
+
+        //enforce: "pre",
       },
+
       {
         test: /\.scss$/,
         use: ["style-loader", "css-loader", "sass-loader"],
       },
-      {
-        test: /\.jsx?$/,
-        exclude: /node_modules/,
-        loader: require.resolve("babel-loader"),
-      },
-      { test: /\.txt$/, use: "raw-loader" },
+
       {
         test: /\.css$/,
         use: ["style-loader", "css-loader"],
-      },
-      {
-        test: /\.png|svg|jpg|gif$/,
-        use: ["file-loader"],
-      },
-      {
-        test: /\.(ttf|eot|gif|svg|woff(2)?)(\S+)?$/,
-        use: { loader: "file-loader?name=[name].[ext]" },
-      },
-      {
-        test: /\.svg$/,
-        use: ["@svgr/webpack", "url-loader"],
-      },
-      {
-        test: /\.svg$/,
-        use: ["@svgr/webpack"],
-      },
-
-      {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
-        exclude: /node_modules/,
-        loader: "file-loader",
-        options: {
-          limit: 1024,
-          name: "[name].[ext]",
-          publicPath: "dist/assets/",
-          outputPath: "dist/assets/",
-        },
       },
     ],
   },
