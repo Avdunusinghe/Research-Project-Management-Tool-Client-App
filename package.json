@@ -19,11 +19,17 @@
   },
   "homepage": "https://github.com/Avdunusinghe/Research-Project-Management-Tool-Client-App#readme",
   "dependencies": {
+    "@emotion/react": "^11.9.0",
+    "@emotion/styled": "^11.8.1",
+    "@mui/icons-material": "^5.8.0",
+    "@mui/material": "^5.8.0",
+    "@mui/styled-engine-sc": "^5.8.0",
     "dotenv": "^16.0.1",
     "html-webpack-plugin": "^5.5.0",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
-    "sass": "^1.51.0"
+    "sass": "^1.51.0",
+    "styled-components": "^5.3.5"
   },
   "devDependencies": {
     "@babel/core": "^7.17.10",
