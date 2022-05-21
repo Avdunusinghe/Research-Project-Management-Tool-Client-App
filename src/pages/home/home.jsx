@@ -3,6 +3,7 @@ import Chart from "../../components/chart/chart";
 import Featured from "../../components/featured/featured";
 import NavBar from "../../components/navbar/navbar";
 import SideBar from "../../components/sidebar/sidebar";
+import Table from "../../components/table/table";
 import Widget from "../../components/widget/widget";
 import "./home.scss";
 
@@ -21,6 +22,10 @@ const Home = () => {
         <div className="charts">
           <Featured />
           <Chart />
+        </div>
+        <div className="listContainer">
+          <div className="listTitle">Sample Data</div>
+          <Table />
         </div>
       </div>
     </div>
