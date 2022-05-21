@@ -11,7 +11,7 @@ const SideBar = () => {
       <div className="top">
         <span className="logo">AF</span>
       </div>
-      <hr></hr>
+      <hr />
       <div className="center">
         <ul>
           <p className="title">MAIN</p>
