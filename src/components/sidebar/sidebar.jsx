@@ -5,11 +5,14 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
+import { Link } from "react-router-dom";
 const SideBar = () => {
   return (
     <div className="sidebar">
       <div className="top">
-        <span className="logo">AF</span>
+        <Link to="/home" style={{ textDecoration: "none" }}>
+          <span className="logo">Application Framworks</span>
+        </Link>
       </div>
       <hr />
       <div className="center">
@@ -21,8 +24,10 @@ const SideBar = () => {
           </li>
           <p className="title">CORE MODULES</p>
           <li>
-            <PersonOutlineOutlinedIcon className="icon" />
-            <span>Users</span>
+            <Link to="/users" style={{ textDecoration: "none" }}>
+              <PersonOutlineOutlinedIcon className="icon" />
+              <span>Users</span>
+            </Link>
           </li>
           <li>
             <GroupsRoundedIcon className="icon" />
