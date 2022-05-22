@@ -5,7 +5,7 @@ import SideBar from "./../../../components/sidebar/sidebar";
 import NavBar from "./../../../components/navbar/navbar";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 const UserDetail = () => {
-  const [file, setFile] = useState(";");
+  const [file, setFile] = useState("");
   return (
     <div className="new">
       <SideBar />
