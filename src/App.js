@@ -1,8 +1,7 @@
 import React from "react";
-
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Login from "./pages/authentication/login";
+import Login from "./pages/authentication/login/login";
 import Home from "./pages/home/home";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
