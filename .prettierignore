@@ -1,0 +1,10 @@
+build
+dist/*
+.github
+.idea/*
+.vscode
+node_modules/*
+Document
+public/assets/*
+README.md
+LICENSE
