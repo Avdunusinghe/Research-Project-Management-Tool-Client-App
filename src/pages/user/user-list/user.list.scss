@@ -1,7 +1,56 @@
-.list {
-  display: flex;
-  width: 100%;
-  .listContainer {
-    flex: 6;
+@import "/src/styles/breakpoints.scss";
+
+@include media("<=phone") {
+  .list {
+    display: flex;
+    width: 100%;
+    .listContainer {
+      flex: 6;
+    }
+  }
+}
+@include media(">=phone", "<tablet") {
+  .list {
+    display: flex;
+    width: 100%;
+    .listContainer {
+      flex: 6;
+    }
+  }
+}
+@include media(">=smalldesktop", "<desktop") {
+  .list {
+    display: flex;
+    width: 100%;
+    .listContainer {
+      flex: 6;
+    }
+  }
+}
+@include media(">=tablet", "<smalldesktop") {
+  .list {
+    display: flex;
+    width: 100%;
+    .listContainer {
+      flex: 6;
+    }
+  }
+}
+@include media(">=desktop", "<largedesktop") {
+  .list {
+    display: flex;
+    width: 100%;
+    .listContainer {
+      flex: 6;
+    }
+  }
+}
+@include media(">=largedesktop") {
+  .list {
+    display: flex;
+    width: 100%;
+    .listContainer {
+      flex: 6;
+    }
   }
 }
