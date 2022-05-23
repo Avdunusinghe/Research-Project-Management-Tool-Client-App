@@ -15,12 +15,16 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./login.scss";
 import authService from "../../../services/auth.service";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const theme = createTheme();
 
 const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	let navigate = useNavigate();
+	let location = useLocation();
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -31,9 +35,17 @@ const Login = () => {
 		};
 
 		authService.login(loginModel).then((response) => {
-			if (response) {
-				console.log(response);
+			console.log(response);
+			if (response.data.isSuccess === false) {
 				toast(response.data.message);
+			} else {
+				const currentUser = {
+					token: response.data.token,
+					isLogged: response.data.isLogged,
+				};
+
+				localStorage.setItem("currentUser", JSON.stringify(currentUser));
+				navigate("/home" + location.search);
 			}
 		});
 	};
