@@ -35,7 +35,6 @@ const Login = () => {
 		};
 
 		authService.login(loginModel).then((response) => {
-			console.log(response);
 			if (response.data.isSuccess === false) {
 				toast(response.data.message);
 			} else {
