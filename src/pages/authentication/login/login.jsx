@@ -20,8 +20,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 const theme = createTheme();
 
 const Login = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
 
 	let navigate = useNavigate();
 	let location = useLocation();
@@ -41,6 +41,12 @@ const Login = () => {
 				const currentUser = {
 					token: response.data.token,
 					isLogged: response.data.isLogged,
+					userName: response.data.firstName,
+					isAdmin: response.data.isAdmin,
+					isPanelMember: response.data.isPanelMember,
+					isSupervisor: response.data.isSupervisor,
+					isLecure: response.data.isLecure,
+					isStudent: response.data.isStudent,
 				};
 
 				localStorage.setItem("currentUser", JSON.stringify(currentUser));
