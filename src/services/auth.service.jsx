@@ -5,6 +5,10 @@ class AuthService {
 	login(loginModel) {
 		return axios.post(`${apiUrl}auth`, loginModel);
 	}
+
+	signup(signUpModel) {
+		return axios.post(`${apiUrl}student/`, signUpModel);
+	}
 }
 
 export default new AuthService();
