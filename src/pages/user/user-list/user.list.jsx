@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import moment from "moment";
 import "./user.list.scss";
+import { ToastContainer, toast } from "react-toastify";
 import userService from "../../../services/user/user.service";
 
 const userColumns = [
@@ -98,6 +99,7 @@ const UserList = () => {
 						rowsPerPageOptions={[10]}
 						checkboxSelection
 					/>
+					<ToastContainer />
 				</div>
 			</div>
 		</div>

@@ -48,6 +48,8 @@ const Login = () => {
 					isStudent: response.data.isStudent,
 				};
 
+				console.log(currentUser);
+
 				localStorage.setItem("currentUser", JSON.stringify(currentUser));
 				navigate("/home" + location.search);
 			}
