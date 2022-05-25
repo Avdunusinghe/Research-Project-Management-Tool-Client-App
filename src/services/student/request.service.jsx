@@ -2,14 +2,14 @@ import axios from "axios";
 //const apiUrl = process.env.REACT_APP_API_URL;
 import environment from "../../../environment.prod";
 
-class TopicService {
-	requestSupervisor(studentGroupModel) {
-		return axios.post(`${environment.apiUrl}request/`, studentGroupModel);
+class RequestService {
+	requestSupervisor(registerModel) {
+		return axios.post(`${environment.apiUrl}requests/`, registerModel);
 	}
 
 	getAllSupervisorRequestss() {
-		return axios.get(`${environment.apiUrl}topic/all`);
+		return axios.get(`${environment.apiUrl}requests/all`);
 	}
 }
 
-export default new TopicService();
+export default new RequestService();

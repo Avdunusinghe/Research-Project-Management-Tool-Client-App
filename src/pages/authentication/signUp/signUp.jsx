@@ -15,15 +15,16 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./signup.scss";
+import userService from "../../../services/user/user.service";
 import authService from "../../../services/auth/auth.service";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 const theme = createTheme();
 
 const SignUp = () => {
-	const [fullname, setFullname] = React.useState("");
+	const [fullName, setFullName] = React.useState("");
 	const [studentid, setStudentid] = React.useState("");
-	const [mobilenumber, setMobilenumber] = React.useState("");
+	const [mobileNumber, setMobileNumber] = React.useState("");
 	const [department, setDepartment] = React.useState([]);
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
@@ -34,21 +35,20 @@ const SignUp = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		const signUpModel = {
-			fullname: fullname,
+		const userModel = {
+			fullName: fullName,
 			studentid: studentid,
-			mobilenumber: mobilenumber,
-			faculty: faculty,
+			mobileNumber: mobileNumber,
 			department: department,
 			email: email,
 			password: password,
+			isStudent: true,
 		};
 
-		authService.saveStudent(signUpModel).then((response) => {
+		userService.saveUser(userModel).then((response) => {
 			if (response) {
 				toast(response.data.message);
-				isStudent: true;
-				navigate("/home" + location.search);
+				navigate("/" + location.search);
 			}
 		});
 	};
@@ -81,11 +81,11 @@ const SignUp = () => {
 								margin="normal"
 								required
 								fullWidth
-								id="fullname"
+								id="fullName"
 								label="Full Name"
-								name="fullname"
-								value={fullname}
-								onChange={(e) => setFullname(e.target.value)}
+								name="fullName"
+								value={fullName}
+								onChange={(e) => setFullName(e.target.value)}
 								//autoComplete="email"
 								autoFocus
 							/>
@@ -105,11 +105,11 @@ const SignUp = () => {
 								margin="normal"
 								required
 								fullWidth
-								id="mobilenumber"
+								id="mobileNumber"
 								label="Mobile Number"
-								name="mobilenumber"
-								value={mobilenumber}
-								onChange={(e) => setMobilenumber(e.target.value)}
+								name="mobileNumber"
+								value={mobileNumber}
+								onChange={(e) => setMobileNumber(e.target.value)}
 								//autoComplete="email"
 							/>
 

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import "./sidebar.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
@@ -9,7 +9,9 @@ import TopicIcon from "@mui/icons-material/Topic";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { Link } from "react-router-dom";
+
 const SideBar = () => {
+	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 	return (
 		<div className="sidebar">
 			<div className="top">
@@ -32,30 +34,28 @@ const SideBar = () => {
 							<span>Users</span>
 						</Link>
 					</li>
-					<li>
-						<Link to="/studentGroups" style={{ textDecoration: "none" }}>
-							<GroupAddIcon className="icon" />
-							<span>Register Groups</span>
-						</Link>
-					</li>
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
+								<GroupAddIcon className="icon" />
+								<span>Register Groups</span>
+							</Link>
+						</li>
+					)}
 					<li>
 						<Link to="/studentGroupslist" style={{ textDecoration: "none" }}>
 							<GroupsRoundedIcon className="icon" />
 							<span>Student Groups</span>
 						</Link>
 					</li>
-					<li>
-						<Link to="/topicdetail" style={{ textDecoration: "none" }}>
-							<AddCardIcon className="icon" />
-							<span>Register Topic</span>
-						</Link>
-					</li>
-					<li>
-						<Link to="/topiclist" style={{ textDecoration: "none" }}>
-							<TopicIcon className="icon" />
-							<span> Registered Topics</span>
-						</Link>
-					</li>
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/topiclist" style={{ textDecoration: "none" }}>
+								<TopicIcon className="icon" />
+								<span> Registered Topics</span>
+							</Link>
+						</li>
+					)}
 					<p className="title">SETTINGS</p>
 					<li>
 						<AccountCircleOutlinedIcon className="icon" />

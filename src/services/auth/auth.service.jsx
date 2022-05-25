@@ -5,9 +5,9 @@ class AuthService {
 		return axios.post(`${environment.apiUrl}auth`, loginModel);
 	}
 
-	saveUser(signUpModel) {
+	/* saveUser(signUpModel) {
 		return axios.post(`${environment.apiUrl}user/`, signUpModel);
-	}
+	} */
 }
 
 export default new AuthService();

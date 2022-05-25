@@ -17,8 +17,11 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import studentService from "../../../services/student/studentGroup.service";
+import requestService from "../../../services/student/request.service";
 import { ToastContainer, toast } from "react-toastify";
-import { Navigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Modal, Form } from "react-bootstrap";
 
 const StudentGroupDetail = () => {
 	const [groupName, setGroupName] = useState("");
@@ -35,6 +38,12 @@ const StudentGroupDetail = () => {
 	const [fourthMemberName, setFourthMemberName] = useState("");
 	const [fourthMemberEmail, setFourthMemberEmail] = useState("");
 	const [fourthMemberRegNumber, setFourthMemberRegNumber] = useState("");
+
+	const [groupleaderName, setgroupleaderName] = useState("");
+	const [groupleaderId, setgroupleaderId] = useState("");
+	const [groupleaderEmail, setgroupleaderEmail] = useState("");
+	const [group, setgroup] = useState("");
+	const [description, setdescription] = useState("");
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -60,10 +69,36 @@ const StudentGroupDetail = () => {
 			if (response) {
 				console.log(response);
 				toast(response.data.message);
-				<Link href="/home" variant="body2"></Link>;
+				navigate("/home" + location.search);
 			}
 		});
 	};
+
+	let navigate = useNavigate();
+	let location = useLocation();
+
+	const handleModalSubmit = (event) => {
+		event.preventDefault();
+
+		const registerModel = {
+			groupleaderName: groupleaderName,
+			groupleaderId: groupleaderId,
+			groupleaderEmail: groupleaderEmail,
+			group: group,
+			description: description,
+		};
+
+		requestService.requestSupervisor(registerModel).then((response) => {
+			if (response) {
+				console.log(response);
+				toast(response.data.message);
+				navigate("/studentGroups" + location.search);
+			}
+		});
+	};
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
 	return (
 		<div className="new">
@@ -254,9 +289,98 @@ const StudentGroupDetail = () => {
 							</div>
 
 							<div className="formInput">
+								<label> Need Suppervisor</label> <br />
+								<label>
+									<input type="radio" name="needSuppervisor" id="needSuppervisor" onClick={handleShow}></input>
+									YES
+								</label>
+								<label style={{ marginLeft: "15px" }}>
+									<input type="radio" name="needSuppervisor" id="needSuppervisor" value={"no"}></input>
+									NO (ckecked key word eka npmdapan)
+								</label>
+							</div>
+
+							<div className="formInput">
 								<button onClick={handleSubmit}>Submit</button>
 							</div>
 						</form>
+
+						<Modal show={show} onHide={handleClose}>
+							<Modal.Header closeButton>
+								<Modal.Title> REQUEST SUPERVISOR/CO-SUPERVISOR</Modal.Title>
+							</Modal.Header>
+							<Modal.Body>
+								<Form onSubmit={handleModalSubmit}>
+									<Form.Group className="mb-3">
+										<Form.Label> Group Leader ID:</Form.Label>
+										<Form.Control
+											type="text"
+											name="groupleaderId"
+											id="groupleaderId"
+											placeholder="Group Leader Registration Number"
+											value={groupleaderId}
+											onChange={(e) => setgroupleaderId(e.target.value)}
+											autoComplete="groupleaderId"
+											autoFocus
+										/>
+									</Form.Group>
+									<Form.Group className="mb-3">
+										<Form.Label>Group Leader Name:</Form.Label>
+										<Form.Control
+											type="text"
+											name="groupleaderName"
+											id="groupleaderName"
+											placeholder="Group Leader Name"
+											value={groupleaderName}
+											onChange={(e) => setgroupleaderName(e.target.value)}
+											autoComplete="groupleaderName"
+											autoFocus
+										/>
+									</Form.Group>
+									<Form.Group className="mb-3">
+										<Form.Label>Group Leader Email:</Form.Label>
+										<Form.Control
+											type="email"
+											name="groupleaderEmail"
+											id="groupleaderEmail"
+											placeholder="Group Leader Email"
+											value={groupleaderEmail}
+											onChange={(e) => setgroupleaderEmail(e.target.value)}
+											autoComplete="groupleaderEmail"
+											autoFocus
+										/>
+									</Form.Group>
+									<Form.Group className="mb-3">
+										<Form.Label>Group Name:</Form.Label>
+										<Form.Control
+											type="text"
+											name="group"
+											id="group"
+											placeholder="Group Name"
+											value={group}
+											onChange={(e) => setgroup(e.target.value)}
+											autoComplete="groupId"
+											autoFocus
+										/>
+									</Form.Group>
+									<Form.Group className="mb-3">
+										<Form.Label>Description:</Form.Label> <br />
+										<textarea
+											rows="5"
+											value={description}
+											onChange={(e) => setdescription(e.target.value)}
+											autoComplete="description"
+											autoFocus
+										>
+											Mention whether you need co-supervisor or supervisor in text area.
+										</textarea>
+									</Form.Group>
+								</Form>
+							</Modal.Body>
+							<Modal.Footer>
+								<Button variant="success">REQUEST</Button>
+							</Modal.Footer>
+						</Modal>
 					</div>
 				</div>
 			</div>
