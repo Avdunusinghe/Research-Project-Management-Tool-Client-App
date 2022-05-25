@@ -3,6 +3,9 @@ import "./sidebar.scss";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import GroupsRoundedIcon from "@mui/icons-material/GroupsRounded";
+import GroupAddIcon from "@mui/icons-material/GroupAdd";
+import AddCardIcon from "@mui/icons-material/AddCard";
+import TopicIcon from "@mui/icons-material/Topic";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import { Link } from "react-router-dom";
@@ -31,7 +34,7 @@ const SideBar = () => {
 					</li>
 					<li>
 						<Link to="/studentGroups" style={{ textDecoration: "none" }}>
-							<GroupsRoundedIcon className="icon" />
+							<GroupAddIcon className="icon" />
 							<span>Register Groups</span>
 						</Link>
 					</li>
@@ -42,9 +45,15 @@ const SideBar = () => {
 						</Link>
 					</li>
 					<li>
-						<Link to="/studentGroupslist" style={{ textDecoration: "none" }}>
-							<GroupsRoundedIcon className="icon" />
-							<span>Student Groups</span>
+						<Link to="/topicdetail" style={{ textDecoration: "none" }}>
+							<AddCardIcon className="icon" />
+							<span>Register Topic</span>
+						</Link>
+					</li>
+					<li>
+						<Link to="/topiclist" style={{ textDecoration: "none" }}>
+							<TopicIcon className="icon" />
+							<span> Registered Topics</span>
 						</Link>
 					</li>
 					<p className="title">SETTINGS</p>

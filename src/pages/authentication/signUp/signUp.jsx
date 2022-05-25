@@ -5,8 +5,10 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
@@ -15,105 +17,46 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./signup.scss";
 import authService from "../../../services/auth/auth.service";
 import { ToastContainer, toast } from "react-toastify";
-import { Navigate } from "react-router-dom";
-
+import { useNavigate, useLocation } from "react-router-dom";
 const theme = createTheme();
-const faculties = [
-	{
-		value: "computing",
-		label: "Computing",
-	},
-	{
-		value: "business",
-		label: "Business",
-	},
-	{
-		value: "engineering",
-		label: "Engineering",
-	},
-	{
-		value: "architecture",
-		label: "Architecture",
-	},
-];
-const departments = [
-	{
-		value: "information Technology",
-		label: "Information Technology",
-	},
-	{
-		value: "computer systems & network engineering",
-		label: "Computer systems & network engineering",
-	},
-	{
-		value: "software Engineering",
-		label: "Software Engineering",
-	},
-	{
-		value: "software Engineering",
-		label: "Software Engineering",
-	},
-	{
-		value: "cyber Security",
-		label: "Cyber Security",
-	},
-	{
-		value: "interactive Media",
-		label: "Interactive Media",
-	},
-];
-const roles = [
-	{
-		value: "student",
-		label: "Student",
-	},
-	{
-		value: "admin",
-		label: "Admin",
-	},
-	{
-		value: "supervisor",
-		label: "Supervisor",
-	},
-	{
-		value: "co-supervisor",
-		label: "Co-Supervisor",
-	},
-];
+
 const SignUp = () => {
-	const [firstname, setFirstname] = useState("");
-	const [lastname, setLastname] = useState("");
-	const [studenid, setStudentid] = useState("");
-	const [mobilenumber, setMobilenumber] = useState("");
-	const [faculty, setFaculty] = useState("");
-	const [department, setDepartment] = useState("");
-	const [role, setRole] = useState("");
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const [fullname, setFullname] = React.useState("");
+	const [studentid, setStudentid] = React.useState("");
+	const [mobilenumber, setMobilenumber] = React.useState("");
+	const [department, setDepartment] = React.useState([]);
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
+
+	let navigate = useNavigate();
+	let location = useLocation();
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
 		const signUpModel = {
-			firstname: firstname,
-			lastname: lastname,
-			studenid: studenid,
+			fullname: fullname,
+			studentid: studentid,
 			mobilenumber: mobilenumber,
 			faculty: faculty,
 			department: department,
-			role: role,
 			email: email,
 			password: password,
 		};
 
-		authService.signup(signUpModel).then((response) => {
+		authService.saveStudent(signUpModel).then((response) => {
 			if (response) {
-				console.log(response);
 				toast(response.data.message);
-				<Link href="/home" variant="body2"></Link>;
+				isStudent: true;
+				navigate("/home" + location.search);
 			}
 		});
 	};
+
+	const handleChange = (event) => {
+		setDepartment(event.target.value);
+	};
+
 	return (
 		<div>
 			<ThemeProvider theme={theme}>
@@ -138,25 +81,13 @@ const SignUp = () => {
 								margin="normal"
 								required
 								fullWidth
-								id="firstname"
-								label="First Name"
-								name="firstname"
-								value={firstname}
-								onChange={(e) => setFirstname(e.target.value)}
+								id="fullname"
+								label="Full Name"
+								name="fullname"
+								value={fullname}
+								onChange={(e) => setFullname(e.target.value)}
 								//autoComplete="email"
 								autoFocus
-							/>
-							<TextField
-								margin="normal"
-								required
-								fullWidth
-								id="lastname"
-								label="Last Name"
-								name="lastname"
-								value={lastname}
-								onChange={(e) => setLastname(e.target.value)}
-								//autoComplete="email"
-								//autoFocus
 							/>
 							<TextField
 								margin="normal"
@@ -165,7 +96,7 @@ const SignUp = () => {
 								id="studentid"
 								label="Student Id"
 								name="studentid"
-								value={studenid}
+								value={studentid}
 								onChange={(e) => setStudentid(e.target.value)}
 								//autoComplete="email"
 								//autoFocus
@@ -181,64 +112,25 @@ const SignUp = () => {
 								onChange={(e) => setMobilenumber(e.target.value)}
 								//autoComplete="email"
 							/>
-							<TextField
-								margin="normal"
-								required
-								fullWidth
-								id="faculty"
-								label="Faculty"
-								name="faculty"
-								select
-								SelectProps={{ native: true }}
-								value={faculty}
-								onChange={(e) => setFaculty(e.target.value)}
-								//autoComplete="email"
-							>
-								{faculties.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-							</TextField>
-							<TextField
-								margin="normal"
-								required
-								fullWidth
-								id="department"
-								label="Department"
-								name="department"
-								select
-								SelectProps={{ native: true }}
-								value={department}
-								onChange={(e) => setDepartment(e.target.value)}
-								//autoComplete="email"
-							>
-								{departments.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-							</TextField>
 
-							<TextField
-								margin="normal"
-								required
-								fullWidth
-								id="role"
-								label="Roles"
-								name="role"
-								value={role}
-								select
-								SelectProps={{ native: true }}
-								onChange={(e) => setRole(e.target.value)}
-								//autoComplete="email"
-							>
-								{roles.map((option) => (
-									<option key={option.value} value={option.value}>
-										{option.label}
-									</option>
-								))}
-							</TextField>
+							<FormControl fullWidth>
+								<InputLabel id="demo-simple-select-label">Department</InputLabel>
+								<Select
+									labelId="demo-simple-select-label"
+									id="demo-simple-select"
+									value={department}
+									label="Department"
+									onChange={handleChange}
+								>
+									<MenuItem value={1}>Information Technology</MenuItem>
+									<MenuItem value={2}>Software Engineering</MenuItem>
+									<MenuItem value={3}>Computer systems and network engineering</MenuItem>
+									<MenuItem value={4}>Cyber Security</MenuItem>
+									<MenuItem value={5}>Interactive Media</MenuItem>
+									<MenuItem value={6}>Computer systems and network engineering</MenuItem>
+								</Select>
+							</FormControl>
+
 							<TextField
 								margin="normal"
 								required
@@ -263,7 +155,7 @@ const SignUp = () => {
 								//autoComplete="current-password"
 							/>
 							<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-							<Button onClick={handleSubmit()} type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+							<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
 								Sign Up
 							</Button>
 						</Box>

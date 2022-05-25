@@ -5,8 +5,8 @@ class AuthService {
 		return axios.post(`${environment.apiUrl}auth`, loginModel);
 	}
 
-	signup(signUpModel) {
-		return axios.post(`${environment.apiUrl}student`, signUpModel);
+	saveUser(signUpModel) {
+		return axios.post(`${environment.apiUrl}user/`, signUpModel);
 	}
 }
 
