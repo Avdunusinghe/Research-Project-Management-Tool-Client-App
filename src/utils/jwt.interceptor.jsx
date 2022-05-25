@@ -1,16 +1,15 @@
 import axios from "axios";
-
-export function jwtInterceptor() {
+import environment from "../../environment.prod";
+function jwtInterceptor() {
 	axios.interceptors.request.use((request) => {
-		const currentUser = JSON.parse(localStorage.getItem("currentUer"));
-		const apiUrl = "http://localhost:4000/api/";
-
-		const isApiUr = request.url.startsWith(apiUrl);
-
-		if (isApiUr) {
-			request.headers.common.Authorization = `Bearer ${currentUser.token}`;
+		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+		const isApiUr = request.url.startsWith(environment.apiUrl);
+		if (isApiUr && currentUser != null) {
+			request.headers.common.Authorization = currentUser.token;
 		}
 
 		return request;
 	});
 }
+
+export default jwtInterceptor;

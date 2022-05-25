@@ -1,15 +1,13 @@
 import React, { Component, useCallback, useEffect } from "react";
-import AdvancedDataTable from "../../../components/advanced-data-table/advance.data.table";
 import NavBar from "../../../components/navbar/navbar";
 import SideBar from "../../../components/sidebar/sidebar";
 import { DataGrid } from "@mui/x-data-grid";
 import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import moment from "moment";
-//import { randomCreatedDate, randomTraderName, randomUpdatedDate } from "@mui/x-data-grid-generator";
-
 import "./user.list.scss";
 import userService from "../../../services/user/user.service";
+
 const userColumns = [
 	{
 		field: "fullName",
@@ -21,7 +19,6 @@ const userColumns = [
 		headerName: "Email",
 		width: 150,
 	},
-
 	{
 		field: "mobileNumber",
 		headerName: "Mobile Number",
@@ -56,7 +53,6 @@ const UserList = () => {
 
 	const getAllUsers = useCallback(() => {
 		userService.getAllUsers().then((response) => {
-			console.log(response);
 			setUsers(response.data);
 		});
 	}, []);
