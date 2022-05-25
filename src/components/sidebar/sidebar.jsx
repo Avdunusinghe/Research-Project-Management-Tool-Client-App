@@ -32,6 +32,18 @@ const SideBar = () => {
 					<li>
 						<Link to="/studentGroups" style={{ textDecoration: "none" }}>
 							<GroupsRoundedIcon className="icon" />
+							<span>Register Groups</span>
+						</Link>
+					</li>
+					<li>
+						<Link to="/studentGroupslist" style={{ textDecoration: "none" }}>
+							<GroupsRoundedIcon className="icon" />
+							<span>Student Groups</span>
+						</Link>
+					</li>
+					<li>
+						<Link to="/studentGroupslist" style={{ textDecoration: "none" }}>
+							<GroupsRoundedIcon className="icon" />
 							<span>Student Groups</span>
 						</Link>
 					</li>

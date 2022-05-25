@@ -1,9 +1,14 @@
 import axios from "axios";
 //const apiUrl = process.env.REACT_APP_API_URL;
-const apiUrl = "http://localhost:4000/api/";
+import environment from "../../../environment.prod";
+
 class StudentService {
 	saveStudentGroup(studentGroupModel) {
-		return axios.post(`${apiUrl}studentGroup/`, studentGroupModel);
+		return axios.post(`${environment.apiUrl}studentGroup/`, studentGroupModel);
+	}
+
+	getAllStudentsGroups() {
+		return axios.get(`${environment.apiUrl}studentGroup/all`);
 	}
 }
 

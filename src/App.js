@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Login from "./pages/authentication/login/login";
 import SignUp from "./pages/authentication/signUp/signUp";
 import Home from "./pages/home/home";
+import StudentGroupList from "./pages/studentgroups/studentGroup-list/studentGroup-list";
 import StudentGroupDetail from "./pages/studentgroups/studentGroups-detail/studentGroup-detail";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
@@ -23,6 +24,9 @@ export function App() {
 						</Route>
 						<Route path="studentGroups">
 							<Route index element={<StudentGroupDetail></StudentGroupDetail>}></Route>
+						</Route>
+						<Route path="studentGroupslist">
+							<Route index element={<StudentGroupList></StudentGroupList>}></Route>
 						</Route>
 					</Route>
 				</Routes>
