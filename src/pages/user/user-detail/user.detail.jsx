@@ -37,7 +37,6 @@ const UserDetail = () => {
 
 	const onRoleChanged = (event) => {
 		setRole(event.target.value);
-		console.log(role);
 	};
 
 	const handleDepartmentChange = (event) => {
@@ -51,12 +50,13 @@ const UserDetail = () => {
 			fullName: fullName,
 			email: email,
 			mobileNumber: mobileNumber,
+			department: department,
 			password: password,
 			isAdmin: role === "isAdmin" ? true : false,
-			IsLecure: role === "IsLecure" ? true : false,
-			IsSupervisor: role === "IsSupervisor" ? true : false,
-			IsCoSupervisor: role === "IsCoSupervisor" ? true : false,
-			IsPanelMember: role === "IsPanelMember" ? true : false,
+			isLecure: role === "IsLecure" ? true : false,
+			isSupervisor: role === "IsSupervisor" ? true : false,
+			isCoSupervisor: role === "IsCoSupervisor" ? true : false,
+			isPanelMember: role === "IsPanelMember" ? true : false,
 		};
 
 		userService.saveUser(userModel).then((response) => {
@@ -174,6 +174,7 @@ const UserDetail = () => {
 														aria-labelledby="demo-row-radio-buttons-group-label"
 														name="controlled-radio-buttons-group"
 														value={role}
+														multiple
 														onChange={onRoleChanged}
 													>
 														<FormControlLabel value="isAdmin" control={<Radio />} label="Admin" />
