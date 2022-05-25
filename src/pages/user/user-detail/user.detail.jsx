@@ -6,6 +6,8 @@ import NavBar from "./../../../components/navbar/navbar";
 import CloudUploadIcon from "@mui/icons-material/Cloud";
 import TextField from "@mui/material/TextField";
 //import { ValidatorForm, TextValidator } from "react-mui-ui-form-validator";
+
+
 const UserDetail = () => {
 	const [file, setFile] = React.useState("");
 	const [firstName, setFirstName] = React.useState("");
