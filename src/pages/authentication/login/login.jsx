@@ -3,8 +3,6 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
@@ -13,27 +11,47 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./login.scss";
-import authService from "../../../services/auth.service";
+import authService from "../../../services/auth/auth.service";
 import { ToastContainer, toast } from "react-toastify";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useForm } from "react-hook-form";
 
 const theme = createTheme();
 
 const Login = () => {
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
+	const {
+		register,
+		handleSubmit,
+		formState: { errors },
+	} = useForm();
+	let navigate = useNavigate();
+	let location = useLocation();
 
-	const handleSubmit = (event) => {
-		event.preventDefault();
-
+	const onSubmit = (data) => {
 		const loginModel = {
-			email: email,
-			password: password,
+			email: data.email,
+			password: data.password,
 		};
 
 		authService.login(loginModel).then((response) => {
-			if (response) {
-				console.log(response);
+			if (response.data.isSuccess === false) {
 				toast(response.data.message);
+			} else {
+				const currentUser = {
+					token: response.data.token,
+					isLogged: response.data.isLogged,
+					userName: response.data.firstName,
+					isAdmin: response.data.isAdmin,
+					isPanelMember: response.data.isPanelMember,
+					isSupervisor: response.data.isSupervisor,
+					isLecure: response.data.isLecure,
+					isStudent: response.data.isStudent,
+				};
+
+				console.log(currentUser);
+
+				localStorage.setItem("currentUser", JSON.stringify(currentUser));
+				navigate("/home" + location.search);
 			}
 		});
 	};
@@ -56,32 +74,42 @@ const Login = () => {
 						<Typography component="h1" variant="h5">
 							Sign in
 						</Typography>
-						<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+
+						<Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
 							<TextField
 								margin="normal"
-								required
 								fullWidth
 								id="email"
 								label="Email Address"
 								name="email"
-								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								autoComplete="email"
 								autoFocus
+								{...register("email", {
+									required: "Email is Requird",
+									pattern: {
+										value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+										message: "Invalid email address",
+									},
+								})}
+								error={!!errors?.email}
+								helperText={errors?.email ? errors.email.message : null}
 							/>
 							<TextField
 								margin="normal"
-								required
 								fullWidth
 								name="password"
-								value={password}
 								onChange={(e) => setPassword(e.target.value)}
 								label="Password"
 								type="password"
 								id="password"
-								autoComplete="current-password"
+								{...register("password", {
+									required: "Password is Requird",
+								})}
+								error={!!errors?.password}
+								helperText={errors?.password ? errors.password.message : null}
 							/>
-							<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+
 							<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
 								Sign In
 							</Button>
