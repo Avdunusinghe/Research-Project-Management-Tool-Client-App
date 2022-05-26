@@ -35,12 +35,10 @@ const SubmissionDetail = () => {
 	}, []);
 
 	const onUpload = (data) => {
-		console.log(data);
-
 		const name = new Date().getTime() + data.files[0].name;
 
 		const file = data.files[0];
-		console.log(file);
+
 		const storageRef = ref(storage, name);
 		const uploadTask = uploadBytesResumable(storageRef, file);
 
