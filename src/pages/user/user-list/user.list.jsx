@@ -2,7 +2,7 @@ import React, { Component, useCallback, useEffect } from "react";
 import NavBar from "../../../components/navbar/navbar";
 import SideBar from "../../../components/sidebar/sidebar";
 import { DataGrid } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import Button from "@mui/material/Button";
 import moment from "moment";
 import "./user.list.scss";
@@ -52,13 +52,8 @@ const UserList = () => {
 	const [visible, setVisible] = React.useState(false);
 	const toast = React.useRef(null);
 
-	const accept = () => {
-		toast.current.show({ severity: "info", summary: "Confirmed", detail: "You have accepted", life: 3000 });
-	};
-
-	const reject = () => {
-		toast.current.show({ severity: "warn", summary: "Rejected", detail: "You have rejected", life: 3000 });
-	};
+	let navigate = useNavigate();
+	let location = useLocation();
 
 	useEffect(() => {
 		getAllUsers();
@@ -89,16 +84,33 @@ const UserList = () => {
 			},
 		},
 	];
-	const handleDelete = () => {
+
+	const handleDelete = (id) => {
 		confirmDialog({
 			message: "Do you want to delete this record?",
 			header: "Delete Confirmation",
 			icon: "pi pi-info-circle",
 			acceptClassName: "p-button-danger",
-			accept,
+			accept: () => acceptFunc(id),
 			reject,
 		});
 	};
+
+	const acceptFunc = (id) => {
+		userService.deleteUser(id).then((response) => {
+			if (response.data.isSuccess === true) {
+				toast.current.show({ severity: "info", summary: "Confirmed", detail: response.data.message, life: 3000 });
+				getAllUsers();
+			} else {
+				toast.current.show({ severity: "error", summary: "Rejected", detail: response.data.message, life: 3000 });
+			}
+		});
+	};
+
+	const reject = () => {
+		toast.current.show({ severity: "warn", summary: "Rejected", detail: "You have rejected", life: 3000 });
+	};
+
 	return (
 		<div className="list">
 			<SideBar />
