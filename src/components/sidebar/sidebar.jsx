@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 
 const SideBar = () => {
 	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
 	return (
 		<div className="sidebar">
 			<div className="top">
@@ -28,12 +29,30 @@ const SideBar = () => {
 						<span>Dashboard</span>
 					</li>
 					<p className="title">CORE MODULES</p>
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/users" style={{ textDecoration: "none" }}>
+								<PersonOutlineOutlinedIcon className="icon" />
+								<span>Users</span>
+							</Link>
+						</li>
+					)}
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/studentGroupslist" style={{ textDecoration: "none" }}>
+								<GroupsRoundedIcon className="icon" />
+								<span>Student Groups</span>
+							</Link>
+						</li>
+					)}
+
 					<li>
-						<Link to="/users" style={{ textDecoration: "none" }}>
-							<PersonOutlineOutlinedIcon className="icon" />
-							<span>Users</span>
+						<Link to="/topiclist" style={{ textDecoration: "none" }}>
+							<TopicIcon className="icon" />
+							<span>Registered Topic</span>
 						</Link>
 					</li>
+
 					{currentUser.isStudent === true && (
 						<li>
 							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
@@ -42,20 +61,32 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)}
-					<li>
-						<Link to="/studentGroupslist" style={{ textDecoration: "none" }}>
-							<GroupsRoundedIcon className="icon" />
-							<span>Student Groups</span>
-						</Link>
-					</li>
 					{currentUser.isStudent === true && (
 						<li>
-							<Link to="/topiclist" style={{ textDecoration: "none" }}>
-								<TopicIcon className="icon" />
-								<span> Registered Topics</span>
+							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
+								<GroupAddIcon className="icon" />
+								<span>Assignments</span>
 							</Link>
 						</li>
 					)}
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/templatelist" style={{ textDecoration: "none" }}>
+								<GroupAddIcon className="icon" />
+								<span>Templates</span>
+							</Link>
+						</li>
+					)}
+
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/topicform" style={{ textDecoration: "none" }}>
+								<TopicIcon className="icon" />
+								<span>Topic Registration</span>
+							</Link>
+						</li>
+					)}
+
 					<p className="title">SETTINGS</p>
 					<li>
 						<AccountCircleOutlinedIcon className="icon" />
