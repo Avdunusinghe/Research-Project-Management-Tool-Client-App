@@ -14,6 +14,7 @@ import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "./submission.detail.scss";
 import { DateRangeTwoTone } from "@mui/icons-material";
+import submisstionService from "../../../services/submisstion/submisstion.service";
 const SubmissionDetail = () => {
 	const types = [
 		{ name: "Proposal", code: "NY" },
@@ -22,11 +23,10 @@ const SubmissionDetail = () => {
 		{ name: "Data", code: "IST" },
 		{ name: "project", code: "PRS" },
 	];
-
-	const [showMessage, setShowMessage] = useState(false);
 	const [formData, setFormData] = useState({});
 	const [submisstionType, setSubmisstionType] = useState({});
 	const [file, setFile] = useState("");
+	const [submisstionfile, setsubmisstionfile] = useState("");
 	const toast = useRef(null);
 	const fileUploadRef = useRef(null);
 
@@ -63,7 +63,7 @@ const SubmissionDetail = () => {
 			},
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-					setFormData((prev) => ({ ...prev, submisstionfile: downloadURL }));
+					setsubmisstionfile(downloadURL);
 				});
 			}
 		);
@@ -73,7 +73,6 @@ const SubmissionDetail = () => {
 	const formik = useFormik({
 		initialValues: {
 			submisstionName: "",
-			fileName: "",
 			fromDate: null,
 			toDate: null,
 			submisstionType: null,
@@ -85,16 +84,25 @@ const SubmissionDetail = () => {
 			if (!data.submisstionName) {
 				errors.submisstionName = "Submisstion Name is required.";
 			}
-			if (!data.fileName) {
-				errors.fileName = "File Name is required.";
-			}
 
 			return errors;
 		},
 		onSubmit: (data) => {
-			console.log(data);
 			setFormData(data);
-			setShowMessage(true);
+
+			const submisstionModel = {
+				submisstionName: data.submisstionName,
+				submissionType: data.submisstionType.name,
+				fromDate: data.fromDate,
+				toDate: data.toDate,
+				submisstionfile: submisstionfile,
+			};
+
+			submisstionService.saveSubmisstion(submisstionModel).then((response) => {
+				if (response.data.isSuccess === true) {
+					toast.current.show({ severity: "success", summary: "Success", detail: response.data.message });
+				}
+			});
 
 			formik.resetForm();
 		},
@@ -131,40 +139,24 @@ const SubmissionDetail = () => {
 											htmlFor="submisstionName"
 											className={classNames({ "p-error": isFormFieldValid("submisstionName") })}
 										>
-											SubmisstionName*
+											Submisstion Name
 										</label>
 									</span>
 									{getFormErrorMessage("submisstionName")}
 								</div>
 								<div className="field col">
 									<span className="p-float-label">
-										<InputText
-											id="fileName"
-											name="fileName"
-											value={formik.values.fileName}
+										<Dropdown
+											id="submisstionType"
+											name="submisstionType"
+											value={formik.values.submisstionType}
 											onChange={formik.handleChange}
-											autoFocus
-											className={classNames({ "p-invalid": isFormFieldValid("fileName") })}
+											options={submisstionType}
+											optionLabel="name"
 										/>
-										<label htmlFor="fileName" className={classNames({ "p-error": isFormFieldValid("fileName") })}>
-											File Name*
-										</label>
+										<label htmlFor="submisstionType">Submisstion Type</label>
 									</span>
-									{getFormErrorMessage("fileName")}
 								</div>
-							</div>
-							<div className="field">
-								<span className="p-float-label">
-									<Dropdown
-										id="submisstionType"
-										name="submisstionType"
-										value={formik.values.submisstionType}
-										onChange={formik.handleChange}
-										options={submisstionType}
-										optionLabel="name"
-									/>
-									<label htmlFor="submisstionType">Submisstion Type</label>
-								</span>
 							</div>
 							<div className="field">
 								<span className="p-float-label">
