@@ -1,6 +1,6 @@
 import SideBar from "./../../../components/sidebar/sidebar";
 import NavBar from "./../../../components/navbar/navbar";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Toast } from "primereact/toast";
 import { FileUpload } from "primereact/fileupload";
 import { useFormik } from "formik";
@@ -9,56 +9,87 @@ import { Tooltip } from "primereact/tooltip";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import { Calendar } from "primereact/calendar";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-const theme = createTheme();
-
+import { Dropdown } from "primereact/dropdown";
+import { storage } from "../../../../firebase";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import "./submission.detail.scss";
 const SubmissionDetail = () => {
-	const [totalSize, setTotalSize] = useState(0);
+	const types = [
+		{ name: "Proposal", code: "NY" },
+		{ name: "Final", code: "RM" },
+		{ name: "Ui", code: "LDN" },
+		{ name: "Data", code: "IST" },
+		{ name: "project", code: "PRS" },
+	];
 
-	const [countries, setCountries] = useState([]);
 	const [showMessage, setShowMessage] = useState(false);
 	const [formData, setFormData] = useState({});
+	const [submisstionType, setSubmisstionType] = useState({});
+	const [file, setFile] = useState("");
 	const toast = useRef(null);
 	const fileUploadRef = useRef(null);
 
+	useEffect(() => {
+		setSubmisstionType(types);
+	}, []);
+
 	const onUpload = () => {
+		const name = new Date().getTime() + file.name;
+		const storageRef = ref(storage, file.name);
+		const uploadTask = uploadBytesResumable(storageRef, file);
+
+		uploadTask.on(
+			"state_changed",
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				console.log("Upload is " + progress + "% done");
+				switch (snapshot.state) {
+					case "paused":
+						console.log("Upload is paused");
+						break;
+					case "running":
+						console.log("Upload is running");
+						break;
+					default:
+						break;
+				}
+			},
+			(error) => {
+				console.log(error);
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					setFormData((prev) => ({ ...prev, submisstionfile: downloadURL }));
+				});
+			}
+		);
+
 		toast.current.show({ severity: "info", summary: "Success", detail: "File Uploaded" });
 	};
 
 	const formik = useFormik({
 		initialValues: {
-			name: "",
-			email: "",
-			password: "",
-			date: null,
-			country: null,
+			submisstionName: "",
+			fileName: "",
+			fromDate: null,
+			toDate: null,
+			submisstionType: null,
 			accept: false,
 		},
 		validate: (data) => {
 			let errors = {};
 
-			if (!data.name) {
-				errors.name = "Name is required.";
+			if (!data.submisstionName) {
+				errors.submisstionName = "Submisstion Name is required.";
 			}
-
-			if (!data.email) {
-				errors.email = "Email is required.";
-			} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(data.email)) {
-				errors.email = "Invalid email address. E.g. example@email.com";
-			}
-
-			if (!data.password) {
-				errors.password = "Password is required.";
-			}
-
-			if (!data.accept) {
-				errors.accept = "You need to agree to the terms and conditions.";
+			if (!data.fileName) {
+				errors.fileName = "File Name is required.";
 			}
 
 			return errors;
 		},
 		onSubmit: (data) => {
+			console.log(data);
 			setFormData(data);
 			setShowMessage(true);
 
@@ -81,47 +112,63 @@ const SubmissionDetail = () => {
 				</div>
 				<div className="bottom">
 					<div>
-						<form onSubmit={formik.handleSubmit} className="p-fluid">
+						<form onSubmit={formik.handleSubmit} className="p-fluid form-config">
 							<div className="formgrid grid">
 								<div className="field col">
 									<span className="p-float-label">
 										<InputText
-											id="name"
-											name="name"
-											value={formik.values.name}
+											id="submisstionName"
+											name="submisstionName"
+											value={formik.values.submisstionName}
 											onChange={formik.handleChange}
 											autoFocus
-											className={classNames({ "p-invalid": isFormFieldValid("name") })}
+											className={classNames({ "p-invalid": isFormFieldValid("submisstionName") })}
 										/>
-										<label htmlFor="name" className={classNames({ "p-error": isFormFieldValid("name") })}>
+										<label
+											htmlFor="submisstionName"
+											className={classNames({ "p-error": isFormFieldValid("submisstionName") })}
+										>
+											SubmisstionName*
+										</label>
+									</span>
+									{getFormErrorMessage("submisstionName")}
+								</div>
+								<div className="field col">
+									<span className="p-float-label">
+										<InputText
+											id="fileName"
+											name="fileName"
+											value={formik.values.fileName}
+											onChange={formik.handleChange}
+											autoFocus
+											className={classNames({ "p-invalid": isFormFieldValid("fileName") })}
+										/>
+										<label htmlFor="fileName" className={classNames({ "p-error": isFormFieldValid("fileName") })}>
 											File Name*
 										</label>
 									</span>
-									{getFormErrorMessage("name")}
-								</div>
-								<div className="field col">
-									<span className="p-float-label p-input-icon-right">
-										<i className="pi pi-envelope" />
-										<InputText
-											id="email"
-											name="email"
-											value={formik.values.email}
-											onChange={formik.handleChange}
-											className={classNames({ "p-invalid": isFormFieldValid("email") })}
-										/>
-										<label htmlFor="email" className={classNames({ "p-error": isFormFieldValid("email") })}>
-											Email*
-										</label>
-									</span>
-									{getFormErrorMessage("email")}
+									{getFormErrorMessage("fileName")}
 								</div>
 							</div>
 							<div className="field">
 								<span className="p-float-label">
+									<Dropdown
+										id="submisstionType"
+										name="submisstionType"
+										value={formik.values.submisstionType}
+										onChange={formik.handleChange}
+										options={submisstionType}
+										optionLabel="name"
+									/>
+									<label htmlFor="submisstionType">Submisstion Type</label>
+								</span>
+							</div>
+							<div className="field">
+								<span className="p-float-label">
 									<Calendar
-										id="date"
-										name="date"
-										value={formik.values.date}
+										id="fromDate"
+										name="fromDate"
+										value={formik.values.fromDate}
 										onChange={formik.handleChange}
 										dateFormat="dd/mm/yy"
 										mask="99/99/9999"
@@ -129,61 +176,26 @@ const SubmissionDetail = () => {
 										showTime
 										showSeconds
 									/>
-									<label htmlFor="date">To date</label>
+									<label htmlFor="fromDate">From Date</label>
 								</span>
 							</div>
-
-							<div>
-								<Toast ref={toast}></Toast>
-
-								<Tooltip target=".custom-choose-btn" content="Choose" position="bottom" />
-								<Tooltip target=".custom-upload-btn" content="Upload" position="bottom" />
-								<Tooltip target=".custom-cancel-btn" content="Clear" position="bottom" />
-
-								<div className="card">
-									<h5>Submission</h5>
-									<FileUpload
-										name="demo[]"
-										url="https://primefaces.org/primereact/showcase/upload.php"
-										onUpload={onUpload}
-										multiple
-										accept="image/*"
-										maxFileSize={10000000}
-										emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}
-									/>
-								</div>
-							</div>
-
-							<Button type="submit" label="Submit" className="mt-2" />
-						</form>
-					</div>
-				</div>
-
-				{/* <div className="bottom">
-					<div className="left">
-						<h5 className="text-center">Register</h5>
-						<form onSubmit={formik.handleSubmit} className="p-fluid">
 							<div className="field">
 								<span className="p-float-label">
-									<InputText
-										id="name"
-										name="name"
-										value={formik.values.name}
+									<Calendar
+										id="toDate"
+										name="toDate"
+										value={formik.values.toDate}
 										onChange={formik.handleChange}
-										autoFocus
-										className={classNames({ "p-invalid": isFormFieldValid("name") })}
+										dateFormat="dd/mm/yy"
+										mask="99/99/9999"
+										showIcon
+										showTime
+										showSeconds
 									/>
-									<label htmlFor="name" className={classNames({ "p-error": isFormFieldValid("name") })}>
-										Name*
-									</label>
+									<label htmlFor="toDate">To date</label>
 								</span>
-								{getFormErrorMessage("name")}
 							</div>
 
-							<Button type="submit" label="Submit" className="mt-2" />
-						</form>
-
-						<div>
 							<Toast ref={toast}></Toast>
 
 							<Tooltip target=".custom-choose-btn" content="Choose" position="bottom" />
@@ -194,17 +206,19 @@ const SubmissionDetail = () => {
 								<h5>Submission</h5>
 								<FileUpload
 									name="demo[]"
-									url="https://primefaces.org/primereact/showcase/upload.php"
+									onChange={(event) => setFile(event.target.files[0])}
 									onUpload={onUpload}
 									multiple
-									accept="image/*"
+									accept="ALL Files/*"
 									maxFileSize={10000000}
 									emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}
 								/>
 							</div>
-						</div>
+
+							<Button type="submit" label="Submit" className="mt-2" />
+						</form>
 					</div>
-				</div> */}
+				</div>
 			</div>
 		</div>
 	);
