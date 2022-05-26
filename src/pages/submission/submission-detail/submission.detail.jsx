@@ -13,6 +13,7 @@ import { Dropdown } from "primereact/dropdown";
 import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "./submission.detail.scss";
+import { DateRangeTwoTone } from "@mui/icons-material";
 const SubmissionDetail = () => {
 	const types = [
 		{ name: "Proposal", code: "NY" },
@@ -33,9 +34,14 @@ const SubmissionDetail = () => {
 		setSubmisstionType(types);
 	}, []);
 
-	const onUpload = () => {
-		const name = new Date().getTime() + file.name;
-		const storageRef = ref(storage, file.name);
+	const onUpload = (data) => {
+		console.log(data);
+
+		const name = new Date().getTime() + data.files[0].name;
+
+		const file = data.files[0];
+		console.log(file);
+		const storageRef = ref(storage, name);
 		const uploadTask = uploadBytesResumable(storageRef, file);
 
 		uploadTask.on(
@@ -63,7 +69,6 @@ const SubmissionDetail = () => {
 				});
 			}
 		);
-
 		toast.current.show({ severity: "info", summary: "Success", detail: "File Uploaded" });
 	};
 
@@ -198,22 +203,14 @@ const SubmissionDetail = () => {
 
 							<Toast ref={toast}></Toast>
 
-							<Tooltip target=".custom-choose-btn" content="Choose" position="bottom" />
-							<Tooltip target=".custom-upload-btn" content="Upload" position="bottom" />
-							<Tooltip target=".custom-cancel-btn" content="Clear" position="bottom" />
-
-							<div className="card">
-								<h5>Submission</h5>
-								<FileUpload
-									name="demo[]"
-									onChange={(event) => setFile(event.target.files[0])}
-									onUpload={onUpload}
-									multiple
-									accept="ALL Files/*"
-									maxFileSize={10000000}
-									emptyTemplate={<p className="m-0">Drag and drop files to here to upload.</p>}
-								/>
-							</div>
+							<FileUpload
+								mode="basic"
+								name="demo[]"
+								onChange={(e) => setFile(e.target.files[0])}
+								accept="All Files/*"
+								uploadHandler={onUpload}
+								customUpload
+							/>
 
 							<Button type="submit" label="Submit" className="mt-2" />
 						</form>
