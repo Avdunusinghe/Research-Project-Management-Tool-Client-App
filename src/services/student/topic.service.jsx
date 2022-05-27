@@ -3,8 +3,8 @@ import axios from "axios";
 import environment from "../../../environment.prod";
 
 class TopicService {
-	registerTopic(studentGroupModel) {
-		return axios.post(`${environment.apiUrl}topic/`, studentGroupModel);
+	registerTopic(topicModel) {
+		return axios.post(`${environment.apiUrl}topic/`, topicModel);
 	}
 
 	getAllTopics() {

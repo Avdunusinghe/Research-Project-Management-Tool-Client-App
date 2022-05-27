@@ -1,28 +1,28 @@
 import "./studentGroup-detail.scss";
 import SideBar from "./../../../components/sidebar/sidebar";
 import NavBar from "./../../../components/navbar/navbar";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
 import React, { Component, useState } from "react";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import FormLabel from "@mui/material/FormLabel";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
 import studentService from "../../../services/student/studentGroup.service";
 import requestService from "../../../services/student/request.service";
 import { ToastContainer, toast } from "react-toastify";
+import Radio from "@mui/material/Radio";
+import RadioGroup from "@mui/material/RadioGroup";
+import Container from "@mui/material/Container";
 import { useNavigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Modal, Form } from "react-bootstrap";
 
+const theme = createTheme();
 const StudentGroupDetail = () => {
 	const [groupName, setGroupName] = useState("");
 	const [subjectName, setSubjectName] = useState("");
@@ -39,11 +39,8 @@ const StudentGroupDetail = () => {
 	const [fourthMemberEmail, setFourthMemberEmail] = useState("");
 	const [fourthMemberRegNumber, setFourthMemberRegNumber] = useState("");
 
-	const [groupleaderName, setgroupleaderName] = useState("");
-	const [groupleaderId, setgroupleaderId] = useState("");
-	const [groupleaderEmail, setgroupleaderEmail] = useState("");
-	const [group, setgroup] = useState("");
-	const [description, setdescription] = useState("");
+	let navigate = useNavigate();
+	let location = useLocation();
 
 	const handleSubmit = (event) => {
 		event.preventDefault();
@@ -73,9 +70,15 @@ const StudentGroupDetail = () => {
 			}
 		});
 	};
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
-	let navigate = useNavigate();
-	let location = useLocation();
+	const [groupleaderName, setgroupleaderName] = useState("");
+	const [groupleaderId, setgroupleaderId] = useState("");
+	const [groupleaderEmail, setgroupleaderEmail] = useState("");
+	const [group, setgroup] = useState("");
+	const [description, setdescription] = useState("");
 
 	const handleModalSubmit = (event) => {
 		event.preventDefault();
@@ -96,9 +99,6 @@ const StudentGroupDetail = () => {
 			}
 		});
 	};
-	const [show, setShow] = useState(false);
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
 
 	return (
 		<div className="new">
@@ -113,198 +113,294 @@ const StudentGroupDetail = () => {
 				</div>
 				<div className="bottom">
 					<div className="right">
-						<form className="needs-validation" onSubmit={handleSubmit} noValidate>
-							<div className="formInput">
-								<label>Group Name</label>
-								<input
-									type="text"
-									placeholder="Enter Group Name"
-									required
-									id="groupName"
-									name="groupName"
-									value={groupName}
-									onChange={(e) => setGroupName(e.target.value)}
-								></input>
-							</div>
+						<ThemeProvider theme={theme}>
+							<Container component="main" maxWidth="xl">
+								<CssBaseline />
+								<Box
+									sx={{
+										marginTop: 0,
+										display: "flex",
+										flexDirection: "column",
+										alignItems: "center",
+									}}
+								>
+									<Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+										<Table>
+											<tr>
+												<td className="textfield">
+													<Grid container spacing={0}>
+														<Grid item xs={20}>
+															<TextField
+																autoComplete="given-name"
+																name="groupName"
+																required
+																value={groupName}
+																onChange={(event) => setGroupName(event.target.value)}
+																fullWidth
+																id="groupName"
+																label="Group Name"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
 
-							<div className="formInput">
-								<label>Subject Name</label>
-								<input
-									type="text"
-									placeholder="Select Group Name"
-									required
-									id="subjectName"
-									name="subjectName"
-									value={subjectName}
-									onChange={(e) => setSubjectName(e.target.value)}
-								></input>
-							</div>
-
-							<div className="formInput">
-								<label>Group Leader Name</label>
-								<input
-									type="text"
-									placeholder="Enter Group Leader Name"
-									required
-									id="firstMemberName"
-									name="firstMemberName"
-									value={firstMemberName}
-									onChange={(e) => setFirstMemberName(e.target.value)}
-								></input>
-							</div>
-
-							<div className="formInput">
-								<label>Group Leader Email</label>
-								<input
-									type="text"
-									placeholder="Enter Group Leader Email"
-									required
-									id="firstMemberEmail"
-									name="firstMemberEmail"
-									value={firstMemberEmail}
-									onChange={(e) => setFirstMemberEmail(e.target.value)}
-								></input>
-							</div>
-
-							<div className="formInput">
-								<label>Group Leader Reg No</label>
-								<input
-									type="text"
-									placeholder="Enter Leader Reg No"
-									required
-									id="firstMemberRegNumber"
-									name="firstMemberRegNumber"
-									value={firstMemberRegNumber}
-									onChange={(e) => setFirstMemberRegNumber(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>First Member Name</label>
-								<input
-									type="text"
-									placeholder="Enter first Member Name"
-									required
-									id="secondMemberName"
-									name="secondMemberName"
-									value={secondMemberName}
-									onChange={(e) => setSecondMemberName(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>First Member Email</label>
-								<input
-									type="text"
-									placeholder="Enter first Member Email"
-									required
-									id="secondMemberEmail"
-									name="secondMemberEmail"
-									value={secondMemberEmail}
-									onChange={(e) => setSecondMemberEmail(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>First Member Reg No</label>
-								<input
-									type="text"
-									placeholder="Enter first Member Reg No"
-									required
-									id="secondMemberRegNumber"
-									name="secondMemberRegNumber"
-									value={secondMemberRegNumber}
-									onChange={(e) => setSecondMemberRegNumber(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>Second Member Name</label>
-								<input
-									type="text"
-									placeholder="Enter second Member Name"
-									required
-									id="thirdMemberName"
-									name="thirdMemberName"
-									value={thirdMemberName}
-									onChange={(e) => setThirdMemberName(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>Second Member Email</label>
-								<input
-									type="text"
-									placeholder="Enter second Member Email"
-									required
-									id="thirdMemberEmail"
-									name="thirdMemberEmail"
-									value={thirdMemberEmail}
-									onChange={(e) => setThirdMemberEmail(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>Second Member Reg No</label>
-								<input
-									type="text"
-									placeholder="Enter second Member Reg No"
-									required
-									id="thirdMemberRegNumber"
-									name="thirdMemberRegNumber"
-									value={thirdMemberRegNumber}
-									onChange={(e) => setThirdMemberRegNumber(e.target.value)}
-								></input>
-							</div>
-
-							<div className="formInput">
-								<label>Third Member Name</label>
-								<input
-									type="text"
-									placeholder="Enter third Member Name"
-									required
-									id="fourthMemberName"
-									name="fourthMemberName"
-									value={fourthMemberName}
-									onChange={(e) => setFourthMemberName(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>Third Member Email</label>
-								<input
-									type="text"
-									placeholder="Enter third Member Email"
-									required
-									id="fourthMemberEmail"
-									name="fourthMemberEmail"
-									value={fourthMemberEmail}
-									onChange={(e) => setFourthMemberEmail(e.target.value)}
-								></input>
-							</div>
-							<div className="formInput">
-								<label>Third Member Reg No</label>
-								<input
-									type="text"
-									placeholder="Enter Third Member Reg No"
-									required
-									id="fourthMemberRegNumber"
-									name="fourthMemberRegNumber"
-									value={fourthMemberRegNumber}
-									onChange={(e) => setFourthMemberRegNumber(e.target.value)}
-								></input>
-							</div>
-
-							<div className="formInput">
-								<label> Need Suppervisor</label> <br />
-								<label>
-									<input type="radio" name="needSuppervisor" id="needSuppervisor" onClick={handleShow}></input>
-									YES
-								</label>
-								<label style={{ marginLeft: "15px" }}>
-									<input type="radio" name="needSuppervisor" id="needSuppervisor" value={"no"}></input>
-									NO (ckecked key word eka npmdapan)
-								</label>
-							</div>
-
-							<div className="formInput">
-								<button onClick={handleSubmit}>Submit</button>
-							</div>
-						</form>
-
+												<td className="textfield">
+													<Grid container spacing={0}>
+														<Grid item xs={20}>
+															<TextField
+																autoComplete="given-name"
+																name="subjectName"
+																required
+																value={subjectName}
+																onChange={(event) => setSubjectName(event.target.value)}
+																fullWidth
+																id="subjectName"
+																label="Subject Name"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+											</tr>
+										</Table>
+										<Table>
+											<tr>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="firstMemberName"
+																required
+																value={firstMemberName}
+																onChange={(event) => setFirstMemberName(event.target.value)}
+																fullWidth
+																id="firstMemberName"
+																label="Group Leader Name"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="firstMemberEmail"
+																required
+																value={firstMemberEmail}
+																onChange={(event) => setFirstMemberEmail(event.target.value)}
+																fullWidth
+																id="firstMemberEmail"
+																label="Group Member Email"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="firstMemberRegNumber"
+																required
+																value={firstMemberRegNumber}
+																onChange={(event) => setFirstMemberRegNumber(event.target.value)}
+																fullWidth
+																id="firstMemberRegNumber"
+																label="Group Leader ID"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+											</tr>
+											<br></br>
+											<tr>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="secondMemberName"
+																required
+																value={secondMemberName}
+																onChange={(event) => setSecondMemberName(event.target.value)}
+																fullWidth
+																id="secondMemberName"
+																label="First Member Name"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="secondMemberEmail"
+																required
+																value={secondMemberEmail}
+																onChange={(event) => setSecondMemberEmail(event.target.value)}
+																fullWidth
+																id="secondMemberEmail"
+																label=" First Member Email"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="secondMemberRegNumber"
+																required
+																value={secondMemberRegNumber}
+																onChange={(event) => setSecondMemberRegNumber(event.target.value)}
+																fullWidth
+																id="secondMemberRegNumber"
+																label="First Member ID"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+											</tr>
+											<br />
+											<tr>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="thirdMemberName"
+																required
+																value={thirdMemberName}
+																onChange={(event) => setThirdMemberName(event.target.value)}
+																fullWidth
+																id="thirdMemberName"
+																label="Second Member Name"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="thirdMemberEmail"
+																required
+																value={thirdMemberEmail}
+																onChange={(event) => setThirdMemberEmail(event.target.value)}
+																fullWidth
+																id="thirdMemberEmail"
+																label="Second Member Email"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="thirdMemberRegNumber"
+																required
+																value={thirdMemberRegNumber}
+																onChange={(event) => setThirdMemberRegNumber(event.target.value)}
+																fullWidth
+																id="thirdMemberRegNumber"
+																label="Second Member Reg ID"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+											</tr>
+											<br />
+											<tr>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="fourthMemberName"
+																required
+																value={fourthMemberName}
+																onChange={(event) => setFourthMemberName(event.target.value)}
+																fullWidth
+																id="fourthMemberName"
+																label="Third Member Name"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="fourthMemberEmail"
+																required
+																value={fourthMemberEmail}
+																onChange={(event) => setFourthMemberEmail(event.target.value)}
+																fullWidth
+																id="fourthMemberEmail"
+																label="Third Member Email"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+												<td>
+													<Grid container spacing={2}>
+														<Grid item xs={12}>
+															<TextField
+																autoComplete="given-name"
+																name="fourthMemberRegNumber"
+																required
+																value={fourthMemberRegNumber}
+																onChange={(event) => setFourthMemberRegNumber(event.target.value)}
+																fullWidth
+																id="fourthMemberRegNumber"
+																label="Third Member Reg ID"
+																autoFocus
+															/>
+														</Grid>
+													</Grid>
+												</td>
+											</tr>
+										</Table>
+										<Grid item xs={12}>
+											<FormControl>
+												<FormLabel id="demo-row-radio-buttons-group-label">Need a Supervisor</FormLabel>
+												<RadioGroup
+													row
+													aria-labelledby="demo-row-radio-buttons-group-label"
+													name="controlled-radio-buttons-group"
+												>
+													<FormControlLabel value="Need" control={<Radio />} label="Yes" onClick={handleShow} />
+													<FormControlLabel value="NotNeed" control={<Radio />} label="No" />
+												</RadioGroup>
+											</FormControl>
+										</Grid>
+										<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled>
+											Submit
+										</Button>
+									</Box>
+								</Box>
+							</Container>
+						</ThemeProvider>
 						<Modal show={show} onHide={handleClose}>
 							<Modal.Header closeButton>
 								<Modal.Title> REQUEST SUPERVISOR/CO-SUPERVISOR</Modal.Title>
@@ -319,7 +415,7 @@ const StudentGroupDetail = () => {
 											id="groupleaderId"
 											placeholder="Group Leader Registration Number"
 											value={groupleaderId}
-											onChange={(e) => setgroupleaderId(e.target.value)}
+											onChange={(event) => setgroupleaderId(event.target.value)}
 											autoComplete="groupleaderId"
 											autoFocus
 										/>
@@ -332,7 +428,7 @@ const StudentGroupDetail = () => {
 											id="groupleaderName"
 											placeholder="Group Leader Name"
 											value={groupleaderName}
-											onChange={(e) => setgroupleaderName(e.target.value)}
+											onChange={(event) => setgroupleaderName(event.target.value)}
 											autoComplete="groupleaderName"
 											autoFocus
 										/>
@@ -345,7 +441,7 @@ const StudentGroupDetail = () => {
 											id="groupleaderEmail"
 											placeholder="Group Leader Email"
 											value={groupleaderEmail}
-											onChange={(e) => setgroupleaderEmail(e.target.value)}
+											onChange={(event) => setgroupleaderEmail(event.target.value)}
 											autoComplete="groupleaderEmail"
 											autoFocus
 										/>
@@ -358,27 +454,32 @@ const StudentGroupDetail = () => {
 											id="group"
 											placeholder="Group Name"
 											value={group}
-											onChange={(e) => setgroup(e.target.value)}
-											autoComplete="groupId"
+											onChange={(event) => setgroup(event.target.value)}
+											autoComplete="group"
 											autoFocus
 										/>
 									</Form.Group>
 									<Form.Group className="mb-3">
-										<Form.Label>Description:</Form.Label> <br />
-										<textarea
+										<Form.Label>
+											Description: <br></br>
+											Mention whether you need co-supervisor or supervisor in text area.
+										</Form.Label>{" "}
+										<br />
+										<textArea
 											rows="5"
+											cols="69"
 											value={description}
-											onChange={(e) => setdescription(e.target.value)}
+											onChange={(even) => setdescription(e.target.value)}
 											autoComplete="description"
 											autoFocus
-										>
-											Mention whether you need co-supervisor or supervisor in text area.
-										</textarea>
+										></textArea>
 									</Form.Group>
 								</Form>
 							</Modal.Body>
 							<Modal.Footer>
-								<Button variant="success">REQUEST</Button>
+								<Button variant="contained" color="success">
+									REQUEST
+								</Button>
 							</Modal.Footer>
 						</Modal>
 					</div>

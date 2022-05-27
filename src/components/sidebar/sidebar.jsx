@@ -12,6 +12,11 @@ import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { Link } from "react-router-dom";
 
 const SideBar = () => {
+<<<<<<< HEAD
+=======
+	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+>>>>>>> 2fd9ff5e16e555411a927b96016c232aa5a40567
 	return (
 		<div className="sidebar">
 			<div className="top">
@@ -28,12 +33,73 @@ const SideBar = () => {
 						<span>Dashboard</span>
 					</li>
 					<p className="title">CORE MODULES</p>
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/users" style={{ textDecoration: "none" }}>
+								<PersonOutlineOutlinedIcon className="icon" />
+								<span>Users</span>
+							</Link>
+						</li>
+					)}
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/studentGroupslist" style={{ textDecoration: "none" }}>
+								<GroupsRoundedIcon className="icon" />
+								<span>Student Groups</span>
+							</Link>
+						</li>
+					)}
+
+					<li>
+						<Link to="/topiclist" style={{ textDecoration: "none" }}>
+							<TopicIcon className="icon" />
+							<span>Registered Topic</span>
+						</Link>
+					</li>
+<<<<<<< HEAD
+=======
+
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
+								<GroupAddIcon className="icon" />
+								<span>Register Groups</span>
+							</Link>
+						</li>
+					)}
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
+								<GroupAddIcon className="icon" />
+								<span>Assignments</span>
+							</Link>
+						</li>
+					)}
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/templatelist" style={{ textDecoration: "none" }}>
+								<GroupAddIcon className="icon" />
+								<span>Templates</span>
+							</Link>
+						</li>
+					)}
+
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/topicform" style={{ textDecoration: "none" }}>
+								<TopicIcon className="icon" />
+								<span>Topic Registration</span>
+							</Link>
+						</li>
+					)}
+
 					<li>
 						<Link to="/users" style={{ textDecoration: "none" }}>
 							<PersonOutlineOutlinedIcon className="icon" />
 							<span>Users</span>
 						</Link>
 					</li>
+>>>>>>> 2fd9ff5e16e555411a927b96016c232aa5a40567
 					<li>
 						<Link to="/submission" style={{ textDecoration: "none" }}>
 							<FileCopyOutlinedIcon className="icon" />
