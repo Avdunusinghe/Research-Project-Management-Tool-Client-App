@@ -9,6 +9,7 @@ import StudentGroupDetail from "./pages/studentgroups/studentGroups-detail/stude
 import TemplateList from "./pages/templates/template.detail";
 import TopicDetail from "./pages/topic/topic-detail/topic.detail";
 import TopicList from "./pages/topic/topic-list/topic-list";
+import SubmissionDetails from "./pages/submission/submission-detail/submission.detail";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
 
@@ -39,6 +40,9 @@ export function App() {
 						</Route>
 						<Route path="templatelist">
 							<Route index element={<TemplateList></TemplateList>}></Route>
+							<Route path="submission">
+								<Route index element={<SubmissionDetails></SubmissionDetails>}></Route>
+							</Route>
 						</Route>
 					</Route>
 				</Routes>

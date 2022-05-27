@@ -8,6 +8,7 @@ import AddCardIcon from "@mui/icons-material/AddCard";
 import TopicIcon from "@mui/icons-material/Topic";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { Link } from "react-router-dom";
 
 const SideBar = () => {
@@ -87,6 +88,22 @@ const SideBar = () => {
 						</li>
 					)}
 
+					<li>
+						<Link to="/users" style={{ textDecoration: "none" }}>
+							<PersonOutlineOutlinedIcon className="icon" />
+							<span>Users</span>
+						</Link>
+					</li>
+					<li>
+						<Link to="/submission" style={{ textDecoration: "none" }}>
+							<FileCopyOutlinedIcon className="icon" />
+							<span>Submission</span>
+						</Link>
+					</li>
+					<li>
+						<GroupsRoundedIcon className="icon" />
+						<span>Student Groups</span>
+					</li>
 					<p className="title">SETTINGS</p>
 					<li>
 						<AccountCircleOutlinedIcon className="icon" />
