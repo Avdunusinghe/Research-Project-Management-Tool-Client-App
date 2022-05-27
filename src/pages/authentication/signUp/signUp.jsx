@@ -15,19 +15,18 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./signup.scss";
-import userService from "../../../services/user/user.service";
 import authService from "../../../services/auth/auth.service";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
 const theme = createTheme();
 
 const SignUp = () => {
-	const [fullName, setFullName] = React.useState("");
-	const [studentid, setStudentid] = React.useState("");
-	const [mobileNumber, setMobileNumber] = React.useState("");
-	const [department, setDepartment] = React.useState([]);
-	const [email, setEmail] = React.useState("");
-	const [password, setPassword] = React.useState("");
+	const [fullName, setFullName] = useState("");
+	const [studentid, setStudentid] = useState("");
+	const [mobileNumber, setMobileNumber] = useState("");
+	const [department, setDepartment] = useState([]);
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 
 	let navigate = useNavigate();
 	let location = useLocation();
@@ -35,7 +34,7 @@ const SignUp = () => {
 	const handleSubmit = (event) => {
 		event.preventDefault();
 
-		const userModel = {
+		const studentModel = {
 			fullName: fullName,
 			studentid: studentid,
 			mobileNumber: mobileNumber,
@@ -45,8 +44,9 @@ const SignUp = () => {
 			isStudent: true,
 		};
 
-		userService.saveUser(userModel).then((response) => {
+		authService.saveStudent(studentModel).then((response) => {
 			if (response) {
+				console.log(response);
 				toast(response.data.message);
 				navigate("/" + location.search);
 			}
@@ -86,7 +86,6 @@ const SignUp = () => {
 								name="fullName"
 								value={fullName}
 								onChange={(e) => setFullName(e.target.value)}
-								//autoComplete="email"
 								autoFocus
 							/>
 							<TextField
@@ -98,8 +97,6 @@ const SignUp = () => {
 								name="studentid"
 								value={studentid}
 								onChange={(e) => setStudentid(e.target.value)}
-								//autoComplete="email"
-								//autoFocus
 							/>
 							<TextField
 								margin="normal"
@@ -110,7 +107,6 @@ const SignUp = () => {
 								name="mobileNumber"
 								value={mobileNumber}
 								onChange={(e) => setMobileNumber(e.target.value)}
-								//autoComplete="email"
 							/>
 
 							<FormControl fullWidth>
@@ -140,7 +136,6 @@ const SignUp = () => {
 								name="email"
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
-								//autoComplete="email"
 							/>
 							<TextField
 								margin="normal"
@@ -152,7 +147,6 @@ const SignUp = () => {
 								label="Password"
 								type="password"
 								id="password"
-								//autoComplete="current-password"
 							/>
 							<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
 							<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>

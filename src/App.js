@@ -12,6 +12,7 @@ import TopicList from "./pages/topic/topic-list/topic-list";
 import SubmissionDetails from "./pages/submission/submission-detail/submission.detail";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
+import CardDemo from "./pages/assignments/assignment-detail/assignment.detail";
 
 export function App() {
 	return (
@@ -40,9 +41,12 @@ export function App() {
 						</Route>
 						<Route path="templatelist">
 							<Route index element={<TemplateList></TemplateList>}></Route>
-							<Route path="submission">
-								<Route index element={<SubmissionDetails></SubmissionDetails>}></Route>
-							</Route>
+						</Route>
+						<Route path="submission">
+							<Route index element={<SubmissionDetails></SubmissionDetails>}></Route>
+						</Route>
+						<Route path="assignmentlist">
+							<Route index element={<CardDemo></CardDemo>}></Route>
 						</Route>
 					</Route>
 				</Routes>

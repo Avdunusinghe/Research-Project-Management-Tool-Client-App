@@ -62,14 +62,14 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)}
-					{currentUser.isStudent === true && (
+					{/* {currentUser.isStudent === true && (
 						<li>
 							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
 								<GroupAddIcon className="icon" />
 								<span>Assignments</span>
 							</Link>
 						</li>
-					)}
+					)} */}
 					{currentUser.isStudent === true && (
 						<li>
 							<Link to="/templatelist" style={{ textDecoration: "none" }}>
@@ -88,22 +88,22 @@ const SideBar = () => {
 						</li>
 					)}
 
-					<li>
-						<Link to="/users" style={{ textDecoration: "none" }}>
-							<PersonOutlineOutlinedIcon className="icon" />
-							<span>Users</span>
-						</Link>
-					</li>
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/assignmentlist" style={{ textDecoration: "none" }}>
+								<TopicIcon className="icon" />
+								<span>Assignment List</span>
+							</Link>
+						</li>
+					)}
+
 					<li>
 						<Link to="/submission" style={{ textDecoration: "none" }}>
 							<FileCopyOutlinedIcon className="icon" />
 							<span>Submission</span>
 						</Link>
 					</li>
-					<li>
-						<GroupsRoundedIcon className="icon" />
-						<span>Student Groups</span>
-					</li>
+
 					<p className="title">SETTINGS</p>
 					<li>
 						<AccountCircleOutlinedIcon className="icon" />
