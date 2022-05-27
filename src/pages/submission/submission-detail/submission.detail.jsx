@@ -64,10 +64,10 @@ const SubmissionDetail = () => {
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					setsubmisstionfile(downloadURL);
+					toast.current.show({ severity: "info", summary: "Success", detail: "File Uploaded" });
 				});
 			}
 		);
-		toast.current.show({ severity: "info", summary: "Success", detail: "File Uploaded" });
 	};
 
 	const formik = useFormik({
