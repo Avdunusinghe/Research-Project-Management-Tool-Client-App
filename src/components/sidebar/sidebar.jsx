@@ -12,11 +12,8 @@ import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { Link } from "react-router-dom";
 
 const SideBar = () => {
-<<<<<<< HEAD
-=======
 	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
->>>>>>> 2fd9ff5e16e555411a927b96016c232aa5a40567
 	return (
 		<div className="sidebar">
 			<div className="top">
@@ -56,8 +53,6 @@ const SideBar = () => {
 							<span>Registered Topic</span>
 						</Link>
 					</li>
-<<<<<<< HEAD
-=======
 
 					{currentUser.isStudent === true && (
 						<li>
@@ -99,7 +94,6 @@ const SideBar = () => {
 							<span>Users</span>
 						</Link>
 					</li>
->>>>>>> 2fd9ff5e16e555411a927b96016c232aa5a40567
 					<li>
 						<Link to="/submission" style={{ textDecoration: "none" }}>
 							<FileCopyOutlinedIcon className="icon" />
