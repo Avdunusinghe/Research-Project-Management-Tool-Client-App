@@ -8,10 +8,14 @@ import AddCardIcon from "@mui/icons-material/AddCard";
 import TopicIcon from "@mui/icons-material/Topic";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
+import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { Link } from "react-router-dom";
 
 const SideBar = () => {
+<<<<<<< HEAD
 	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+=======
+>>>>>>> 8d789e6309f48e19ceeed9a3a1dd82e51267f7a8
 	return (
 		<div className="sidebar">
 			<div className="top">
@@ -34,6 +38,7 @@ const SideBar = () => {
 							<span>Users</span>
 						</Link>
 					</li>
+<<<<<<< HEAD
 					{currentUser.isStudent === true && (
 						<li>
 							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
@@ -56,6 +61,18 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)}
+=======
+					<li>
+						<Link to="/submission" style={{ textDecoration: "none" }}>
+							<FileCopyOutlinedIcon className="icon" />
+							<span>Submission</span>
+						</Link>
+					</li>
+					<li>
+						<GroupsRoundedIcon className="icon" />
+						<span>Student Groups</span>
+					</li>
+>>>>>>> 8d789e6309f48e19ceeed9a3a1dd82e51267f7a8
 					<p className="title">SETTINGS</p>
 					<li>
 						<AccountCircleOutlinedIcon className="icon" />
