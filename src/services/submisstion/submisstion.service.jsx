@@ -6,7 +6,7 @@ class SubmisstionService {
 	}
 
 	getAllSubmission() {
-		return axios.get(`${environment.apiUrl}submission/all`);
+		return axios.get(`${environment.apiUrl}submisstion/all`);
 	}
 }
 

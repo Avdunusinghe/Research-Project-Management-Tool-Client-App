@@ -8,15 +8,97 @@ import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import { FileUpload } from "primereact/fileupload";
 import "./assignment.detail.scss";
-import submisstionService from "../../../services/submisstion/submisstion.service";
+import submissionService from "../../../services/submisstion/submisstion.service";
 import ReactDOM from "react-dom";
 import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import React, { useState, useCallback, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
+import { style } from "@mui/system";
+
+const assignments = [
+	{ field: "submisstionName", headerName: "Submission name" },
+	{ field: "submissionType", headerName: "Submission Type" },
+	{
+		field: "fromDate",
+		headerName: "Start Date",
+	},
+	{
+		field: "toDate",
+		headerName: "Due date",
+	},
+	{
+		field: "submisstionfile",
+		headerName: "Submission doc / template",
+	},
+	{
+		field: "studentAnswerfile",
+		headerName: "Submission fiels",
+	},
+];
 
 const CardDemo = () => {
-	/* const [activeIndex, setActiveIndex] = useState(null);
+	// const [counter, setCounter] = useState(0);
+	const [submisstions, setSubmisstions] = React.useState([]);
+
+	useEffect(() => {
+		getAllSubmission();
+	}, [getAllSubmission]);
+
+	const getAllSubmission = useCallback(() => {
+		submissionService
+			.getAllSubmission()
+			.then((response) => {
+				setSubmisstions(response.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}, []);
+
+	const onClick = (itemIndex) => {
+		let _activeIndex = activeIndex ? [...activeIndex] : [];
+
+		if (_activeIndex.length === 0) {
+			_activeIndex.push(itemIndex);
+		} else {
+			const index = _activeIndex.indexOf(itemIndex);
+			if (index === -1) {
+				_activeIndex.push(itemIndex);
+			} else {
+				_activeIndex.splice(index, 1);
+			}
+		}
+
+		setActiveIndex(_activeIndex);
+	};
+
+	return (
+		<div className="new">
+			<SideBar />
+			<div className="newContainer">
+				<NavBar />
+				<div className="top">
+					<h1>Assignments</h1>
+				</div>
+				<div className="bottom">
+					<div className="AccordingConfig">
+						{submisstions.map((item, key) => (
+							//<p key={key}>{item._id}</p>
+							<Accordion activeIndex={0}>
+								<AccordionTab key={key} header={item.submisstionName}>
+									<div className="formgrid grid">
+										<div className="field col">{item.submisstionName}</div>
+									</div>
+								</AccordionTab>
+							</Accordion>
+						))}
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+	/*const [activeIndex, setActiveIndex] = useState(null);
 	const [assignments, setAssignments] = useState([]);
 	const [file, setFile] = useState("");
 	const [submisstionfile, setsubmisstionfile] = useState("");
