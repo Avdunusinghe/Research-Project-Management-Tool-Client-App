@@ -38,7 +38,7 @@ const SubmissionList = () => {
 	const handleCreateNewSubmission = () => {
 		navigate("/submission/0" + location.search);
 	};
-	const hadleSubmissionDelete = (id) => {
+	const handleSubmissionDelete = (id) => {
 		confirmDialog({
 			message: "Do you want to delete this record?",
 			header: "Delete Confirmation",
@@ -157,7 +157,7 @@ const SubmissionList = () => {
 																			type="button"
 																			icon="pi pi-trash"
 																			className="p-button-danger mr-2"
-																			onClick={() => hadleSubmissionDelete(rowData._id)}
+																			onClick={() => handleSubmissionDelete(rowData._id)}
 																		/>
 																		<InputSwitch checked={hide} className="mr-2" onChange={(e) => setHide(e.value)} />
 																	</div>
