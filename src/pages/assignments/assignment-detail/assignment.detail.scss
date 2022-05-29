@@ -34,7 +34,7 @@
 	}
 }
 
-/* @include media("<=phone") {
+@include media("<=phone") {
 	.new {
 		width: 100%;
 		display: flex;
@@ -55,8 +55,8 @@
 			}
 		}
 	}
-} */
-/* @include media(">=phone", "<tablet") {
+}
+@include media(">=phone", "<tablet") {
 	.new {
 		width: 100%;
 		display: flex;
@@ -77,7 +77,7 @@
 			}
 		}
 	}
-} */
+}
 @include media(">=smalldesktop", "<desktop") {
 	.new {
 		width: 100%;
@@ -170,4 +170,23 @@
 
 .AccordingConfig {
 	width: 100%;
+}
+.table {
+	width: 100%;
+}
+.assignments {
+	border-style: double;
+}
+.rane3 {
+	font-weight: bold;
+}
+
+.rane2 {
+	padding-left: 20px;
+	height: 25px;
+	width: 50%;
+}
+.rane4 {
+	padding-left: 20px;
+	height: 100px;
 }

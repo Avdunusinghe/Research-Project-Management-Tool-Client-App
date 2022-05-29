@@ -14,32 +14,13 @@ import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import React, { useState, useCallback, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
-import { style } from "@mui/system";
-
-const assignments = [
-	{ field: "submisstionName", headerName: "Submission name" },
-	{ field: "submissionType", headerName: "Submission Type" },
-	{
-		field: "fromDate",
-		headerName: "Start Date",
-	},
-	{
-		field: "toDate",
-		headerName: "Due date",
-	},
-	{
-		field: "submisstionfile",
-		headerName: "Submission doc / template",
-	},
-	{
-		field: "studentAnswerfile",
-		headerName: "Submission fiels",
-	},
-];
+import { fontStyle, style } from "@mui/system";
+import { CardHeader } from "@mui/material";
 
 const CardDemo = () => {
 	// const [counter, setCounter] = useState(0);
 	const [submisstions, setSubmisstions] = React.useState([]);
+	const [activeIndex, setActiveIndex] = useState(null);
 
 	useEffect(() => {
 		getAllSubmission();
@@ -85,10 +66,84 @@ const CardDemo = () => {
 					<div className="AccordingConfig">
 						{submisstions.map((item, key) => (
 							//<p key={key}>{item._id}</p>
-							<Accordion activeIndex={0}>
+							<Accordion multiple activeIndex={0}>
 								<AccordionTab key={key} header={item.submisstionName}>
 									<div className="formgrid grid">
-										<div className="field col">{item.submisstionName}</div>
+										<div className="field col">
+											<table className="table">
+												<thead>
+													<h2>{item.submisstionName}</h2>
+												</thead>
+												<tbody>
+													<tr>
+														<td className="rane3">SUBMISSION STATUS</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid  rane2">
+																<div className="field col ">
+																	<p>SUBMISSION TYPE</p>
+																</div>
+																<div className="field col">
+																	<p>{item.submissionType}</p>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane2">
+																<div className="field col">
+																	<p>SUBMISSION DATE</p>
+																</div>
+																<div className="field col">
+																	<p>{item.fromDate}</p>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane2">
+																<div className="field col">
+																	<p>DUE DATE</p>
+																</div>
+																<div className="field col">
+																	<p>{item.toDate}</p>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane4">
+																<div className="field col">
+																	<p>ASSIGNMENT FILES </p>
+																</div>
+																<div className="field col">
+																	<p>{item.submisstionfile}</p>
+																</div>
+																<div className="field col">
+																	<button>rane</button>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane4">
+																<div className="field col">
+																	<p>SUBMISSION FILES </p>
+																</div>
+																<div className="field col">
+																	<p>{item.studentAnswerfile}</p>
+																</div>
+															</div>
+														</td>
+													</tr>
+												</tbody>
+											</table>
+										</div>
 									</div>
 								</AccordionTab>
 							</Accordion>
