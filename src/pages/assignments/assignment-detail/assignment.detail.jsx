@@ -8,19 +8,51 @@ import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import { FileUpload } from "primereact/fileupload";
 import "./assignment.detail.scss";
+import { Toast } from "primereact/toast";
 import submissionService from "../../../services/submisstion/submisstion.service";
 import ReactDOM from "react-dom";
 import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { fontStyle, style } from "@mui/system";
-import { CardHeader } from "@mui/material";
+import { CardHeader, getScopedCssBaselineUtilityClass } from "@mui/material";
 
 const CardDemo = () => {
-	// const [counter, setCounter] = useState(0);
 	const [submisstions, setSubmisstions] = React.useState([]);
 	const [activeIndex, setActiveIndex] = useState(null);
+	const [file, setFile] = useState("");
+	const toast = useRef(null);
+	const [download, setDownload] = useState([]);
+	const fileDownloadRef = useRef();
+
+	const downloadTask = (url) => {
+		console.log(url);
+		const storage = getStorage();
+		const downloads = ref(storage, url);
+
+		getDownloadURL(downloads)
+			.then((url) => {
+				//<a href="file:///C:/Users/Dell/Downloads"></a>;
+			})
+			.catch((error) => {
+				switch (error.code) {
+					case "storage/object-not-found":
+						console.log("storage/object-not-found");
+						break;
+					case "storage/unauthorized":
+						console.log("storage/unauthorized");
+						break;
+					case "storage/canceled":
+						console.log("storage/canceled");
+						break;
+
+					case "storage/unknown":
+						console.log("storage/unknown");
+						break;
+				}
+			});
+	};
 
 	useEffect(() => {
 		getAllSubmission();
@@ -54,6 +86,42 @@ const CardDemo = () => {
 		setActiveIndex(_activeIndex);
 	};
 
+	const onUpload = (data) => {
+		const name = new Date().getTime() + data.files[0].name;
+
+		const file = data.files[0];
+
+		const storageRef = ref(storage, name);
+		const uploadTask = uploadBytesResumable(storageRef, file);
+
+		uploadTask.on(
+			"state_changed",
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				console.log("Upload is " + progress + "% done");
+				switch (snapshot.state) {
+					case "paused":
+						console.log("Upload is paused");
+						break;
+					case "running":
+						console.log("Upload is running");
+						break;
+					default:
+						break;
+				}
+			},
+			(error) => {
+				console.log(error);
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					setsubmisstionfile(downloadURL);
+					toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
+				});
+			}
+		);
+	};
+
 	return (
 		<div className="new">
 			<SideBar />
@@ -65,7 +133,6 @@ const CardDemo = () => {
 				<div className="bottom">
 					<div className="AccordingConfig">
 						{submisstions.map((item, key) => (
-							//<p key={key}>{item._id}</p>
 							<Accordion multiple activeIndex={0}>
 								<AccordionTab key={key} header={item.submisstionName}>
 									<div className="formgrid grid">
@@ -121,10 +188,7 @@ const CardDemo = () => {
 																	<p>ASSIGNMENT FILES </p>
 																</div>
 																<div className="field col">
-																	<p>{item.submisstionfile}</p>
-																</div>
-																<div className="field col">
-																	<button>rane</button>
+																	<button onClick={(e) => downloadTask(item.submisstionfile)}>FIle Download</button>
 																</div>
 															</div>
 														</td>
@@ -136,7 +200,15 @@ const CardDemo = () => {
 																	<p>SUBMISSION FILES </p>
 																</div>
 																<div className="field col">
-																	<p>{item.studentAnswerfile}</p>
+																	<Toast ref={toast}></Toast>
+																	<FileUpload
+																		mode="basic"
+																		name="demo[]"
+																		onChange={(e) => setFile(e.target.files[0])}
+																		accept="All Files/*"
+																		uploadHandler={onUpload}
+																		customUpload
+																	/>
 																</div>
 															</div>
 														</td>
@@ -153,116 +225,5 @@ const CardDemo = () => {
 			</div>
 		</div>
 	);
-	/*const [activeIndex, setActiveIndex] = useState(null);
-	const [assignments, setAssignments] = useState([]);
-	const [file, setFile] = useState("");
-	const [submisstionfile, setsubmisstionfile] = useState("");
-
-	const Assignment = [assignments];
-	const doubled = Assignment.map((assignment) => assignments.);
-	console.log(doubled);
-
-	// const items = assignments;
-	// setAssignments([...items, `item-${items.length}`]);
-
-	const getAllSubs = useCallback(() => {
-		submissionService.getAllSubmission().then((response) => {
-			setAssignments({ assignments: response.data });
-			console.log(getAllSubmission);
-		});
-	}, []);
-	const onUpload = (data) => {
-		const name = new Date().getTime() + data.files[0].name;
-
-		const file = data.files[0];
-
-		const storageRef = ref(storage, name);
-		const uploadTask = uploadBytesResumable(storageRef, file);
-
-		uploadTask.on(
-			"state_changed",
-			(snapshot) => {
-				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-				console.log("Upload is " + progress + "% done");
-				switch (snapshot.state) {
-					case "paused":
-						console.log("Upload is paused");
-						break;
-					case "running":
-						console.log("Upload is running");
-						break;
-					default:
-						break;
-				}
-			},
-			(error) => {
-				console.log(error);
-			},
-			() => {
-				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-					setsubmisstionfile(downloadURL);
-				});
-			}
-		);
-		toast.current.show({ severity: "info", summary: "Success", detail: "File Uploaded" });
-	};
-
-	const actionColumn = [
-		<div className="cellAction">
-			<FileUpload
-				mode="basic"
-				name="demo[]"
-				onChange={(e) => setFile(e.target.files[0])}
-				accept="All Files/*"
-				uploadHandler={onUpload}
-				customUpload
-			/>
-		</div>,
-	];
-
-	const onClick = (itemIndex) => {
-		let _activeIndex = activeIndex ? [...activeIndex] : [];
-
-		if (_activeIndex.length === 0) {
-			_activeIndex.push(itemIndex);
-		} else {
-			const index = _activeIndex.indexOf(itemIndex);
-			if (index === -1) {
-				_activeIndex.push(itemIndex);
-			} else {
-				_activeIndex.splice(index, 1);
-			}
-		}
-
-		setActiveIndex(_activeIndex);
-	};
-	const footer = (
-		<span>
-			<Button label="Save" icon="pi pi-check" />
-			<Button label="Cancel" icon="pi pi-times" className="p-button-secondary ml-2" />
-		</span>
-	);
-	return (
-		<div className="new">
-			<SideBar />
-			<div className="newContainer">
-				<NavBar />
-				<div className="top">
-					<h1>ASSIGNMENTS</h1>
-				</div>
-				<div>
-					<Card>
-						<Card.Header>
-							{/* <ul>
-								{assignments.map((item, index) => (
-									<li key={index}>{item}</li>
-								))}
-							</ul> 
-						</Card.Header>
-					</Card>
-				</div>
-			</div>
-		</div>
-	); */
 };
 export default CardDemo;
