@@ -11,10 +11,11 @@ import { classNames } from "primereact/utils";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { storage } from "../../../../firebase";
+
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "./submission.detail.scss";
-import { DateRangeTwoTone } from "@mui/icons-material";
-import submisstionService from "../../../services/submisstion/submisstion.service";
+import submissionService from "../../../services/submission/submisstion.service";
+
 const SubmissionDetail = () => {
 	const types = [
 		{ name: "Proposal", code: "NY" },
@@ -78,6 +79,7 @@ const SubmissionDetail = () => {
 			submisstionType: null,
 			accept: false,
 		},
+
 		validate: (data) => {
 			let errors = {};
 
@@ -87,6 +89,7 @@ const SubmissionDetail = () => {
 
 			return errors;
 		},
+
 		onSubmit: (data) => {
 			setFormData(data);
 
@@ -98,7 +101,7 @@ const SubmissionDetail = () => {
 				submisstionfile: submisstionfile,
 			};
 
-			submisstionService.saveSubmisstion(submisstionModel).then((response) => {
+			submissionService.saveSubmisstion(submisstionModel).then((response) => {
 				if (response.data.isSuccess === true) {
 					toast.current.show({ severity: "success", summary: "Success", detail: response.data.message });
 				}
@@ -158,37 +161,39 @@ const SubmissionDetail = () => {
 									</span>
 								</div>
 							</div>
-							<div className="field">
-								<span className="p-float-label">
-									<Calendar
-										id="fromDate"
-										name="fromDate"
-										value={formik.values.fromDate}
-										onChange={formik.handleChange}
-										dateFormat="dd/mm/yy"
-										mask="99/99/9999"
-										showIcon
-										showTime
-										showSeconds
-									/>
-									<label htmlFor="fromDate">From Date</label>
-								</span>
-							</div>
-							<div className="field">
-								<span className="p-float-label">
-									<Calendar
-										id="toDate"
-										name="toDate"
-										value={formik.values.toDate}
-										onChange={formik.handleChange}
-										dateFormat="dd/mm/yy"
-										mask="99/99/9999"
-										showIcon
-										showTime
-										showSeconds
-									/>
-									<label htmlFor="toDate">To date</label>
-								</span>
+							<div className="formgrid grid">
+								<div className="field col">
+									<span className="p-float-label">
+										<Calendar
+											id="fromDate"
+											name="fromDate"
+											value={formik.values.fromDate}
+											onChange={formik.handleChange}
+											dateFormat="dd/mm/yy"
+											mask="99/99/9999"
+											showIcon
+											showTime
+											showSeconds
+										/>
+										<label htmlFor="fromDate">From Date</label>
+									</span>
+								</div>
+								<div className="field col">
+									<span className="p-float-label">
+										<Calendar
+											id="toDate"
+											name="toDate"
+											value={formik.values.toDate}
+											onChange={formik.handleChange}
+											dateFormat="dd/mm/yy"
+											mask="99/99/9999"
+											showIcon
+											showTime
+											showSeconds
+										/>
+										<label htmlFor="toDate">To date</label>
+									</span>
+								</div>
 							</div>
 
 							<Toast ref={toast}></Toast>

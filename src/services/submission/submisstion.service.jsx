@@ -1,9 +1,9 @@
 import axios from "axios";
 import environment from "../../../environment.prod";
-class SubmisstionService {
+class SubmissionService {
 	saveSubmisstion(submisstionModel) {
 		return axios.post(`${environment.apiUrl}submisstion`, submisstionModel);
 	}
 }
 
-export default new SubmisstionService();
+export default new SubmissionService();
