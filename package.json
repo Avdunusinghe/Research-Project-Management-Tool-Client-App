@@ -37,6 +37,7 @@
     "primeicons": "^5.0.0",
     "primereact": "^8.1.1",
     "react": "^18.1.0",
+    "react-bootstrap": "^2.4.0",
     "react-circular-progressbar": "^2.0.4",
     "react-dom": "^18.1.0",
     "react-final-form": "^6.5.9",

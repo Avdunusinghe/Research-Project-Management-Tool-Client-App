@@ -4,6 +4,10 @@ class AuthService {
 	login(loginModel) {
 		return axios.post(`${environment.apiUrl}auth`, loginModel);
 	}
+
+	saveStudent(studentModel) {
+		return axios.post(`${environment.apiUrl}student/`, studentModel);
+	}
 }
 
 export default new AuthService();

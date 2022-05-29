@@ -1,0 +1,192 @@
+.accordion-demo .accordion-custom i,
+.accordion-demo .accordion-custom span {
+	vertical-align: middle;
+}
+
+.accordion-demo .accordion-custom span {
+	margin: 0 0.5rem;
+}
+
+.accordion-demo .p-accordion p {
+	line-height: 1.5;
+	margin: 0;
+}
+
+@import "/src/styles/breakpoints.scss";
+\ .new {
+	width: 100%;
+	display: flex;
+
+	.newContainer {
+		flex: 6;
+
+		.top,
+		.bottom {
+			-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+			box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+			padding: 10px;
+			margin: 20px;
+			display: flex;
+			.form-config {
+				width: 1200px;
+			}
+		}
+	}
+}
+
+@include media("<=phone") {
+	.new {
+		width: 100%;
+		display: flex;
+
+		.newContainer {
+			flex: 6;
+
+			.top,
+			.bottom {
+				-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+				box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+				padding: 10px;
+				margin: 20px;
+				display: flex;
+				.form-config {
+					width: 1200px;
+				}
+			}
+		}
+	}
+}
+@include media(">=phone", "<tablet") {
+	.new {
+		width: 100%;
+		display: flex;
+
+		.newContainer {
+			flex: 6;
+
+			.top,
+			.bottom {
+				-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+				box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+				padding: 10px;
+				margin: 20px;
+				display: flex;
+				.form-config {
+					width: 1200px;
+				}
+			}
+		}
+	}
+}
+@include media(">=smalldesktop", "<desktop") {
+	.new {
+		width: 100%;
+		display: flex;
+
+		.newContainer {
+			flex: 6;
+
+			.top,
+			.bottom {
+				-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+				box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+				padding: 10px;
+				margin: 20px;
+				display: flex;
+				.form-config {
+					width: 1200px;
+				}
+			}
+		}
+	}
+}
+@include media(">=tablet", "<smalldesktop") {
+	.new {
+		width: 100%;
+		display: flex;
+
+		.newContainer {
+			flex: 6;
+
+			.top,
+			.bottom {
+				-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+				box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+				padding: 10px;
+				margin: 20px;
+				display: flex;
+				.form-config {
+					width: 1200px;
+				}
+			}
+		}
+	}
+}
+@include media(">=desktop", "<largedesktop") {
+	.new {
+		width: 100%;
+		display: flex;
+
+		.newContainer {
+			flex: 6;
+
+			.top,
+			.bottom {
+				-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+				box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+				padding: 10px;
+				margin: 20px;
+				display: flex;
+				.form-config {
+					width: 1200px;
+				}
+			}
+		}
+	}
+}
+@include media(">=largedesktop") {
+	.new {
+		width: 100%;
+		display: flex;
+
+		.newContainer {
+			flex: 6;
+
+			.top,
+			.bottom {
+				-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+				box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+				padding: 10px;
+				margin: 20px;
+				display: flex;
+
+				.form-config {
+					width: 1200px;
+				}
+			}
+		}
+	}
+}
+
+.AccordingConfig {
+	width: 100%;
+}
+.table {
+	width: 100%;
+}
+.assignments {
+	border-style: double;
+}
+.rane3 {
+	font-weight: bold;
+}
+
+.rane2 {
+	padding-left: 20px;
+	height: 25px;
+	width: 50%;
+}
+.rane4 {
+	padding-left: 20px;
+	height: 100px;
+}
