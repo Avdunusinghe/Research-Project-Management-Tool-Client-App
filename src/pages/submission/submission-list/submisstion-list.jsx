@@ -1,7 +1,4 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { classNames } from "primereact/utils";
-import { DataTable } from "primereact/datatable";
-import { Column } from "primereact/column";
 import { Toast } from "primereact/toast";
 import { Button } from "primereact/button";
 import moment from "moment";
@@ -14,13 +11,14 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import NavBar from "./../../../components/navbar/navbar";
 import submissionService from "../../../services/submission/submisstion.service";
-import { NavItem } from "react-bootstrap";
 import { InputSwitch } from "primereact/inputswitch";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 const SubmissionList = () => {
 	const [submissions, setSubmission] = useState([]);
 	const [hide, setHide] = useState(false);
 
 	const toast = useRef(null);
+
 	let navigate = useNavigate();
 	let location = useLocation();
 
@@ -40,7 +38,41 @@ const SubmissionList = () => {
 	const handleCreateNewSubmission = () => {
 		navigate("/submission/0" + location.search);
 	};
+	const hadleSubmissionDelete = (id) => {
+		confirmDialog({
+			message: "Do you want to delete this record?",
+			header: "Delete Confirmation",
+			icon: "pi pi-info-circle",
+			acceptClassName: "p-button-danger",
+			accept: () => acceptFunc(id),
+			reject,
+		});
+	};
 
+	const acceptFunc = (id) => {
+		submissionService
+			.deleteSubmission(id)
+			.then((response) => {
+				if (response.data.isSuccess === true) {
+					toast.current.show({ severity: "success", summary: "Confirmed", detail: response.data.message, life: 3000 });
+					getAllSubmission();
+				} else {
+					toast.current.show({ severity: "error", summary: "Rejected", detail: response.data.message, life: 3000 });
+				}
+			})
+			.catch((error) => {
+				toast.current.show({
+					severity: "error",
+					summary: "Rejected",
+					detail: "Error has been occred.Please try again",
+					life: 3000,
+				});
+			});
+	};
+
+	const reject = () => {
+		toast.current.show({ severity: "warn", summary: "Rejected", detail: "You have rejected", life: 3000 });
+	};
 	return (
 		<div className="new">
 			<SideBar />
@@ -121,7 +153,12 @@ const SubmissionList = () => {
 																			className="p-button-success mr-2"
 																			data-pr-tooltip="PDF"
 																		/>
-																		<Button type="button" icon="pi pi-trash" className="p-button-danger mr-2" />
+																		<Button
+																			type="button"
+																			icon="pi pi-trash"
+																			className="p-button-danger mr-2"
+																			onClick={() => hadleSubmissionDelete(rowData._id)}
+																		/>
 																		<InputSwitch checked={hide} className="mr-2" onChange={(e) => setHide(e.value)} />
 																	</div>
 																</div>
@@ -150,7 +187,8 @@ const SubmissionList = () => {
 					</div>
 				</div>
 
-				<Toast ref={toast}></Toast>
+				<Toast ref={toast} />
+				<ConfirmDialog />
 			</div>
 		</div>
 	);

@@ -8,6 +8,9 @@ class SubmissionService {
 	getAllSubmission() {
 		return axios.get(`${environment.apiUrl}submisstion/all`);
 	}
+	deleteSubmission(id) {
+		return axios.delete(`${environment.apiUrl}submisstion/` + id);
+	}
 }
 
 export default new SubmissionService();
