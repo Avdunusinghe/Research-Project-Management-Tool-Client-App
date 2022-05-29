@@ -8,7 +8,7 @@ import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
 import { FileUpload } from "primereact/fileupload";
 import "./assignment.detail.scss";
-import submissionService from "../../../services/submisstion/submisstion.service";
+import submissionService from "../../../services/submission/submisstion.service";
 import ReactDOM from "react-dom";
 import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";

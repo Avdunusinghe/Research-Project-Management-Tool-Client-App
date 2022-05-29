@@ -11,6 +11,8 @@ import { classNames } from "primereact/utils";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { storage } from "../../../../firebase";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "./submission.detail.scss";
@@ -30,6 +32,9 @@ const SubmissionDetail = () => {
 	const [submisstionfile, setsubmisstionfile] = useState("");
 	const toast = useRef(null);
 	const fileUploadRef = useRef(null);
+
+	let navigate = useNavigate();
+	let location = useLocation();
 
 	useEffect(() => {
 		setSubmisstionType(types);
@@ -108,6 +113,7 @@ const SubmissionDetail = () => {
 			});
 
 			formik.resetForm();
+			navigate("/submission" + location.search);
 		},
 	});
 
