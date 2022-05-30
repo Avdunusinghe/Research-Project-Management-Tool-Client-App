@@ -51,10 +51,13 @@ const SubmissionList = () => {
 
 	const handleVisibilitySubmisstion = (id, isHide) => {
 		confirmDialog({
-			message: "Do you want to Hide this Submisstion?",
-			header: "Delete Confirmation",
+			message:
+				isHide === true
+					? "Do you want to Visible to Student this Submisstion?"
+					: "Do you want to Hide to Student this Submisstion?",
+			header: isHide === true ? "Visible to Student Confirmation" : "Hide to Student Confirmation",
 			icon: "pi pi-info-circle",
-			acceptClassName: "p-button-danger",
+			acceptClassName: "p-button-success",
 			accept: () => acceptHide(id, isHide),
 			reject,
 		});
