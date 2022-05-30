@@ -17,14 +17,15 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { fontStyle, style } from "@mui/system";
 import { CardHeader, getScopedCssBaselineUtilityClass } from "@mui/material";
+import studentsubmissionservice from "../../../services/studentsubmission/studentsubmission.service";
 
-const CardDemo = () => {
+const AssignmentDetail = () => {
 	const [submisstions, setSubmisstions] = React.useState([]);
 	const [activeIndex, setActiveIndex] = useState(null);
 	const [file, setFile] = useState("");
 	const toast = useRef(null);
-	const [download, setDownload] = useState([]);
 	const fileDownloadRef = useRef();
+	const [studentAnswerfile, setStudentAnswerfile] = useState("");
 
 	const downloadTask = (url) => {
 		console.log(url);
@@ -34,6 +35,14 @@ const CardDemo = () => {
 		getDownloadURL(downloads)
 			.then((url) => {
 				//<a href="file:///C:/Users/Dell/Downloads"></a>;
+
+				const xhr = new XMLHttpRequest();
+				xhr.responseType = "file";
+				xhr.onload = (event) => {
+					const file = xhr.response;
+				};
+				xhr.open("GET", url);
+				xhr.send();
 			})
 			.catch((error) => {
 				switch (error.code) {
@@ -115,11 +124,25 @@ const CardDemo = () => {
 			},
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-					setsubmisstionfile(downloadURL);
+					setStudentAnswerfile(downloadURL);
 					toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
 				});
 			}
 		);
+	};
+
+	const onSubmit = (data) => {
+		const studentsubmissionModel = {
+			studentAnswerfile: studentAnswerfile,
+		};
+		console.log(studentsubmissionModel);
+
+		studentsubmissionservice.saveStudentSubmisstion(studentsubmissionModel).then((response) => {
+			if (response.data.isSuccess === true) {
+				console.log("chanu", response.data);
+				toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded Successfully" });
+			}
+		});
 	};
 
 	return (
@@ -188,7 +211,14 @@ const CardDemo = () => {
 																	<p>ASSIGNMENT FILES </p>
 																</div>
 																<div className="field col">
-																	<button onClick={(e) => downloadTask(item.submisstionfile)}>FIle Download</button>
+																	{/* 	//<button onClick={(e) => downloadTask(item.submisstionfile)}>FIle Download</button> */}
+																	<Button
+																		type="button"
+																		icon="pi pi-file-pdf"
+																		onClick={(e) => downloadTask(item.submisstionfile)}
+																		className="p-button-warning mr-2"
+																		data-pr-tooltip="PDF"
+																	/>
 																</div>
 															</div>
 														</td>
@@ -196,19 +226,20 @@ const CardDemo = () => {
 													<tr>
 														<td>
 															<div className="formgrid grid rane4">
-																<div className="field col">
+																<div className="flex align-items-center export-buttons ">
 																	<p>SUBMISSION FILES </p>
 																</div>
-																<div className="field col">
-																	<Toast ref={toast}></Toast>
-																	<FileUpload
+
+																<div className="flex align-items-center export-buttons alignments">
+																	{/* 	<FileUpload
 																		mode="basic"
 																		name="demo[]"
 																		onChange={(e) => setFile(e.target.files[0])}
 																		accept="All Files/*"
 																		uploadHandler={onUpload}
 																		customUpload
-																	/>
+																	/> */}
+																	<Button label="Success" onClick={onMOdalHandle} className="p-button-success" />
 																</div>
 															</div>
 														</td>
@@ -222,8 +253,9 @@ const CardDemo = () => {
 						))}
 					</div>
 				</div>
+				<Toast ref={toast}></Toast>
 			</div>
 		</div>
 	);
 };
-export default CardDemo;
+export default AssignmentDetail;

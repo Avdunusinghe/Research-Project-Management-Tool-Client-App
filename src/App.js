@@ -12,7 +12,7 @@ import TopicList from "./pages/topic/topic-list/topic-list";
 import SubmissionDetails from "./pages/submission/submission-detail/submission.detail";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
-import CardDemo from "./pages/assignments/assignment-detail/assignment.detail";
+import AssignmentDetail from "./pages/assignments/assignment-detail/assignment.detail";
 
 export function App() {
 	return (
@@ -46,7 +46,7 @@ export function App() {
 							<Route index element={<SubmissionDetails></SubmissionDetails>}></Route>
 						</Route>
 						<Route path="assignmentlist">
-							<Route index element={<CardDemo></CardDemo>}></Route>
+							<Route index element={<AssignmentDetail></AssignmentDetail>}></Route>
 						</Route>
 					</Route>
 				</Routes>

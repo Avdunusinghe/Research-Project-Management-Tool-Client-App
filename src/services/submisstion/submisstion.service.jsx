@@ -8,6 +8,10 @@ class SubmisstionService {
 	getAllSubmission() {
 		return axios.get(`${environment.apiUrl}submisstion/all`);
 	}
+
+	/* saveStudentSubmisstion(studentsubmissionModel) {
+		return axios.post(`${environment.apiUrl}studentsubmisstion`, studentsubmissionModel);
+	} */
 }
 
 export default new SubmisstionService();
