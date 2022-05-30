@@ -15,7 +15,6 @@ import { InputSwitch } from "primereact/inputswitch";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 const SubmissionList = () => {
 	const [submissions, setSubmission] = useState([]);
-	const [hide, setHide] = useState(Boolean);
 
 	const toast = useRef(null);
 
