@@ -104,11 +104,12 @@ const SubmissionDetail = () => {
 				fromDate: data.fromDate,
 				toDate: data.toDate,
 				submisstionfile: submisstionfile,
+				isHide: true,
 			};
 
 			submissionService.saveSubmisstion(submisstionModel).then((response) => {
 				if (response.data.isSuccess === true) {
-					toast.current.show({ severity: "success", summary: "Success", detail: response.data.message });
+					toast.current.show({ severity: "info", summary: "Success", detail: response.data.message });
 				}
 			});
 

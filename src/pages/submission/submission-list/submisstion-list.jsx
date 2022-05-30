@@ -15,7 +15,7 @@ import { InputSwitch } from "primereact/inputswitch";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 const SubmissionList = () => {
 	const [submissions, setSubmission] = useState([]);
-	const [hide, setHide] = useState(false);
+	const [hide, setHide] = useState(Boolean);
 
 	const toast = useRef(null);
 
@@ -28,7 +28,7 @@ const SubmissionList = () => {
 
 	const getAllSubmission = useCallback(() => {
 		submissionService
-			.getAllSubmission()
+			.getAllSubmissions()
 			.then((response) => {
 				setSubmission(response.data);
 			})
@@ -47,6 +47,43 @@ const SubmissionList = () => {
 			accept: () => acceptFunc(id),
 			reject,
 		});
+	};
+
+	const handleVisibilitySubmisstion = (id, isHide) => {
+		confirmDialog({
+			message: "Do you want to Hide this Submisstion?",
+			header: "Delete Confirmation",
+			icon: "pi pi-info-circle",
+			acceptClassName: "p-button-danger",
+			accept: () => acceptHide(id, isHide),
+			reject,
+		});
+	};
+
+	const acceptHide = (id, isHide) => {
+		const vm = {
+			id: id,
+			isHide: isHide,
+		};
+
+		submissionService
+			.chengeVisiblitySubmisstion(vm)
+			.then((response) => {
+				if (response.data.isSuccess === true) {
+					toast.current.show({ severity: "success", summary: "Confirmed", detail: response.data.message, life: 3000 });
+					getAllSubmission();
+				} else {
+					toast.current.show({ severity: "error", summary: "Rejected", detail: response.data.message, life: 3000 });
+				}
+			})
+			.catch((error) => {
+				toast.current.show({
+					severity: "error",
+					summary: "Rejected",
+					detail: "Error has been occred.Please try again",
+					life: 3000,
+				});
+			});
 	};
 
 	const acceptFunc = (id) => {
@@ -159,7 +196,13 @@ const SubmissionList = () => {
 																			className="p-button-danger mr-2"
 																			onClick={() => handleSubmissionDelete(rowData._id)}
 																		/>
-																		<InputSwitch checked={hide} className="mr-2" onChange={(e) => setHide(e.value)} />
+																		<InputSwitch
+																			checked={rowData.isHide}
+																			className="mr-2"
+																			onChange={(e) => {
+																				handleVisibilitySubmisstion(rowData._id, rowData.isHide);
+																			}}
+																		/>
 																	</div>
 																</div>
 															</div>
