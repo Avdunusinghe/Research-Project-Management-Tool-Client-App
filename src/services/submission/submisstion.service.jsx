@@ -18,6 +18,9 @@ class SubmissionService {
 	chengeVisiblitySubmisstion(vm) {
 		return axios.put(`${environment.apiUrl}submisstion/`, vm);
 	}
+	getSubmissionById(id) {
+		return axios.get(`${environment.apiUrl}submisstion/`, +id);
+	}
 }
 
 export default new SubmissionService();

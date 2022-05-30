@@ -13,9 +13,9 @@ import NavBar from "./../../../components/navbar/navbar";
 import submissionService from "../../../services/submission/submisstion.service";
 import { InputSwitch } from "primereact/inputswitch";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+
 const SubmissionList = () => {
 	const [submissions, setSubmission] = useState([]);
-
 	const toast = useRef(null);
 
 	let navigate = useNavigate();
@@ -35,7 +35,7 @@ const SubmissionList = () => {
 	}, []);
 
 	const handleCreateNewSubmission = () => {
-		navigate("/submission/0" + location.search);
+		navigate("/submission/new" + location.search);
 	};
 	const handleSubmissionDelete = (id) => {
 		confirmDialog({
@@ -48,6 +48,9 @@ const SubmissionList = () => {
 		});
 	};
 
+	const handleUpdateSubmission = (id) => {
+		navigate("/submission/" + id + location.search);
+	};
 	const handleVisibilitySubmisstion = (id, isHide) => {
 		confirmDialog({
 			message:
@@ -112,6 +115,7 @@ const SubmissionList = () => {
 	const reject = () => {
 		toast.current.show({ severity: "warn", summary: "Rejected", detail: "You have rejected", life: 3000 });
 	};
+
 	return (
 		<div className="new">
 			<SideBar />
@@ -191,6 +195,7 @@ const SubmissionList = () => {
 																			icon="pi pi-pencil"
 																			className="p-button-success mr-2"
 																			data-pr-tooltip="PDF"
+																			onClick={() => handleUpdateSubmission(rowData._id)}
 																		/>
 																		<Button
 																			type="button"

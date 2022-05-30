@@ -203,8 +203,6 @@ const SubmissionDetail = () => {
 								</div>
 							</div>
 
-							<Toast ref={toast}></Toast>
-
 							<FileUpload
 								mode="basic"
 								name="demo[]"
@@ -219,6 +217,7 @@ const SubmissionDetail = () => {
 					</div>
 				</div>
 			</div>
+			<Toast ref={toast}></Toast>
 		</div>
 	);
 };
