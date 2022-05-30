@@ -6,9 +6,13 @@ import "primeicons/primeicons.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.css";
 import "primeflex/primeflex.css";
+import { useFormik } from "formik";
 import { FileUpload } from "primereact/fileupload";
 import "./assignment.detail.scss";
 import { Toast } from "primereact/toast";
+import { InputText } from "primereact/inputtext";
+import { classNames } from "primereact/utils";
+
 import submissionService from "../../../services/submisstion/submisstion.service";
 import ReactDOM from "react-dom";
 import { storage } from "../../../../firebase";
@@ -18,13 +22,15 @@ import { Accordion, AccordionTab } from "primereact/accordion";
 import { fontStyle, style } from "@mui/system";
 import { CardHeader, getScopedCssBaselineUtilityClass } from "@mui/material";
 import studentsubmissionservice from "../../../services/studentsubmission/studentsubmission.service";
+import { Modal, Form } from "react-bootstrap";
 
 const AssignmentDetail = () => {
 	const [submisstions, setSubmisstions] = React.useState([]);
 	const [activeIndex, setActiveIndex] = useState(null);
-	const [file, setFile] = useState("");
 	const toast = useRef(null);
 	const fileDownloadRef = useRef();
+	const [file, setFile] = useState("");
+	const [formData, setFormData] = useState({});
 	const [studentAnswerfile, setStudentAnswerfile] = useState("");
 
 	const downloadTask = (url) => {
@@ -125,24 +131,63 @@ const AssignmentDetail = () => {
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					setStudentAnswerfile(downloadURL);
-					toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
 				});
 			}
 		);
+		toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
 	};
 
-	const onSubmit = (data) => {
-		const studentsubmissionModel = {
-			studentAnswerfile: studentAnswerfile,
-		};
-		console.log(studentsubmissionModel);
+	const [show, setShow] = useState(false);
+	const handleClose = () => setShow(false);
+	const handleShow = () => setShow(true);
 
-		studentsubmissionservice.saveStudentSubmisstion(studentsubmissionModel).then((response) => {
-			if (response.data.isSuccess === true) {
-				console.log("chanu", response.data);
-				toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded Successfully" });
+	const formik = useFormik({
+		initialValues: {
+			groupleaderRegNo: "",
+			groupleaderEmail: "",
+			groupName: "",
+			studentAnswerfile: "",
+		},
+		validate: (data) => {
+			let errors = {};
+
+			if (!data.groupleaderRegNo) {
+				errors.groupleaderRegNo = "Group LeaderID is required.";
 			}
-		});
+			if (!data.groupleaderEmail) {
+				errors.groupleaderEmail = "Group Leader Email is required.";
+			}
+			if (!data.groupName) {
+				errors.groupName = "Group Name is required.";
+			}
+
+			return errors;
+		},
+
+		onSubmit: (data) => {
+			setFormData(data);
+
+			const studentsubmissionModel = {
+				groupleaderRegNo: data.groupleaderRegNo,
+				groupleaderEmail: data.groupleaderEmail,
+				groupName: data.groupName,
+				studentAnswerfile: data.studentAnswerfile,
+			};
+			console.log(studentsubmissionModel);
+
+			studentsubmissionservice.saveStudentSubmisstion(studentsubmissionModel).then((response) => {
+				if (response.data.isSuccess === true) {
+					toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission  uploaded" });
+				}
+			});
+			handleClose();
+			formik.resetForm();
+		},
+	});
+
+	const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+	const getFormErrorMessage = (name) => {
+		return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
 	};
 
 	return (
@@ -207,10 +252,10 @@ const AssignmentDetail = () => {
 													<tr>
 														<td>
 															<div className="formgrid grid rane4">
-																<div className="field col">
+																<div className="flex align-items-center export-buttons">
 																	<p>ASSIGNMENT FILES </p>
 																</div>
-																<div className="field col">
+																<div className="flex align-items-center export-buttons alignments">
 																	{/* 	//<button onClick={(e) => downloadTask(item.submisstionfile)}>FIle Download</button> */}
 																	<Button
 																		type="button"
@@ -231,15 +276,7 @@ const AssignmentDetail = () => {
 																</div>
 
 																<div className="flex align-items-center export-buttons alignments">
-																	{/* 	<FileUpload
-																		mode="basic"
-																		name="demo[]"
-																		onChange={(e) => setFile(e.target.files[0])}
-																		accept="All Files/*"
-																		uploadHandler={onUpload}
-																		customUpload
-																	/> */}
-																	<Button label="Success" onClick={onMOdalHandle} className="p-button-success" />
+																	<Button label="Success" onClick={handleShow} className="p-button-success" />
 																</div>
 															</div>
 														</td>
@@ -253,6 +290,97 @@ const AssignmentDetail = () => {
 						))}
 					</div>
 				</div>
+
+				<Modal show={show} onHide={handleClose}>
+					<Modal.Header closeButton>
+						<Modal.Title className="heading">SUBMIT ASSIGNMENT HERE</Modal.Title>
+					</Modal.Header>
+					<Modal.Body>
+						<form onSubmit={formik.handleSubmit} className="p-fluid form-config">
+							<div className="formgrid grid p-fluid form-config">
+								<div className="field col  ">
+									<span className="p-float-label">
+										<InputText
+											id="groupleaderRegNo"
+											name="groupleaderRegNo"
+											value={formik.values.groupleaderRegNo}
+											onChange={formik.handleChange}
+											autoFocus
+											className={classNames({ "p-invalid": isFormFieldValid("groupleaderRegNo") })}
+										/>
+										<label
+											htmlFor="groupleaderRegNo"
+											className={classNames({ "p-error": isFormFieldValid("groupleaderRegNo") })}
+										>
+											Group Leader ID
+										</label>
+									</span>
+									{getFormErrorMessage("groupleaderRegNo")}
+								</div>
+							</div>
+							<br />
+
+							<div className="formgrid grid p-fluid form-config">
+								<div className="field col  ">
+									<span className="p-float-label fieldwidth">
+										<InputText
+											id="groupleaderEmail"
+											name="groupleaderEmail"
+											value={formik.values.groupleaderEmail}
+											onChange={formik.handleChange}
+											autoFocus
+											className={classNames({ "p-invalid": isFormFieldValid("groupleaderEmail") })}
+										/>
+										<label
+											htmlFor="groupleaderEmail"
+											className={classNames({ "p-error": isFormFieldValid("groupleaderEmail") })}
+										>
+											Group Leader Email
+										</label>
+									</span>
+									{getFormErrorMessage("groupleaderEmail")}
+								</div>
+							</div>
+							<br />
+							<div className="formgrid grid p-fluid form-config">
+								<div className="field col  ">
+									<span className="p-float-label">
+										<InputText
+											id="groupName"
+											name="groupName"
+											value={formik.values.groupName}
+											onChange={formik.handleChange}
+											autoFocus
+											className={classNames({ "p-invalid": isFormFieldValid("groupName") })}
+										/>
+										<label htmlFor="groupName" className={classNames({ "p-error": isFormFieldValid("groupName") })}>
+											Group Name
+										</label>
+									</span>
+									{getFormErrorMessage("groupName")}
+								</div>
+							</div>
+							<br />
+							<div className="formgrid grid p-fluid form-config ">
+								<div className="field col   ">
+									<FileUpload
+										mode="basic"
+										name="demo[]"
+										onChange={(e) => setFile(e.target.files[0])}
+										accept="All Files/*"
+										uploadHandler={onUpload}
+										customUpload
+									/>
+								</div>
+								<div className="field col  ">
+									<Button label="Submit" type="submit" icon="pi pi-check" className="p-button-success" />
+								</div>
+							</div>
+
+							<br />
+						</form>
+					</Modal.Body>
+				</Modal>
 				<Toast ref={toast}></Toast>
 			</div>
 		</div>
