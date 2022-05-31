@@ -39,6 +39,8 @@ const Login = () => {
 			} else {
 				const currentUser = {
 					token: response.data.token,
+					userId: response.data.userId,
+					email: response.data.email,
 					isLogged: response.data.isLogged,
 					userName: response.data.firstName,
 					isAdmin: response.data.isAdmin,
@@ -47,9 +49,6 @@ const Login = () => {
 					isLecure: response.data.isLecure,
 					isStudent: response.data.isStudent,
 				};
-
-				console.log(currentUser);
-
 				localStorage.setItem("currentUser", JSON.stringify(currentUser));
 				navigate("/home" + location.search);
 			}

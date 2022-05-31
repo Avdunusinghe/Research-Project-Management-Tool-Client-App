@@ -12,7 +12,6 @@ import "./assignment.detail.scss";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
-
 import submissionService from "../../../services/submisstion/submisstion.service";
 import ReactDOM from "react-dom";
 import { storage } from "../../../../firebase";
