@@ -167,11 +167,14 @@ const AssignmentDetail = () => {
 		onSubmit: (data) => {
 			setFormData(data);
 
+			const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
 			const studentsubmissionModel = {
 				groupleaderRegNo: data.groupleaderRegNo,
 				groupleaderEmail: data.groupleaderEmail,
 				groupName: data.groupName,
 				studentAnswerfile: data.studentAnswerfile,
+				currentUserId: currentUser.userId,
 			};
 			console.log(studentsubmissionModel);
 
