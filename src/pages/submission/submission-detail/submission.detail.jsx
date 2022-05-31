@@ -13,10 +13,9 @@ import { Dropdown } from "primereact/dropdown";
 import { storage } from "../../../../firebase";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import "./submission.detail.scss";
-import submissionService from "../../../services/submission/submisstion.service";
+import submissionService from "../../../services/submission/submission.service";
 
 const SubmissionDetail = () => {
 	const types = [

@@ -10,9 +10,9 @@ import SideBar from "../../../components/sidebar/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import NavBar from "./../../../components/navbar/navbar";
-import submissionService from "../../../services/submission/submisstion.service";
 import { InputSwitch } from "primereact/inputswitch";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import submissionService from "../../../services/submission/submission.service";
 
 const SubmissionList = () => {
 	const [submissions, setSubmission] = useState([]);

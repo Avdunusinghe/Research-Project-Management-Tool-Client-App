@@ -7,11 +7,12 @@ import { Toast } from "primereact/toast";
 import { Calendar } from "primereact/calendar";
 import { Dropdown } from "primereact/dropdown";
 import { useEffect, useState, useRef } from "react";
-import submisstionService from "../../../services/submission/submisstion.service";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Button } from "primereact/button";
+import submissionService from "../../../services/submission/submission.service";
+
 const SubmissionUpdate = () => {
 	const types = [
 		{ name: "Proposal", code: "NY" },
@@ -33,7 +34,7 @@ const SubmissionUpdate = () => {
 
 	useEffect(() => {
 		setSubmissionTypes(types);
-		submisstionService.getSubmissionById(params.id).then((response) => {
+		submissionService.getSubmissionById(params.id).then((response) => {
 			console.log(response);
 			setSubmissionName(response.data.submissionName);
 			for (let index = 0; index < types.length; index++) {
@@ -100,7 +101,7 @@ const SubmissionUpdate = () => {
 									<Dropdown
 										id="submissionTypes"
 										name="submissionTypes"
-										value={submissionType?.name}
+										value={submissionType}
 										options={submissionTypes}
 										onChange={(event) => setSubmissionType(event.target.value)}
 										optionLabel="name"
