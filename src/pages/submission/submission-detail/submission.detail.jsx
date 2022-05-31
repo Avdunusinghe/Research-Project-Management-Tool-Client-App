@@ -27,9 +27,9 @@ const SubmissionDetail = () => {
 		{ name: "project", code: "PRS" },
 	];
 	const [formData, setFormData] = useState({});
-	const [submisstionType, setSubmisstionType] = useState({});
+	const [submissionType, setSubmissionType] = useState({});
 	const [file, setFile] = useState("");
-	const [submisstionfile, setsubmisstionfile] = useState("");
+	const [submissionfile, setSubmissionfile] = useState("");
 	const toast = useRef(null);
 	const fileUploadRef = useRef(null);
 
@@ -37,7 +37,7 @@ const SubmissionDetail = () => {
 	let location = useLocation();
 
 	useEffect(() => {
-		setSubmisstionType(types);
+		setSubmissionType(types);
 	}, []);
 
 	const onUpload = (data) => {
@@ -69,7 +69,7 @@ const SubmissionDetail = () => {
 			},
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-					setsubmisstionfile(downloadURL);
+					setSubmissionfile(downloadURL);
 					toast.current.show({ severity: "info", summary: "Success", detail: "File Uploaded" });
 				});
 			}
@@ -78,17 +78,17 @@ const SubmissionDetail = () => {
 
 	const formik = useFormik({
 		initialValues: {
-			submisstionName: "",
+			submissionName: "",
 			fromDate: null,
 			toDate: null,
-			submisstionType: null,
+			submissionType: null,
 			accept: false,
 		},
 
 		validate: (data) => {
 			let errors = {};
 
-			if (!data.submisstionName) {
+			if (!data.submissionName) {
 				errors.submisstionName = "Submisstion Name is required.";
 			}
 
@@ -99,22 +99,21 @@ const SubmissionDetail = () => {
 			setFormData(data);
 
 			const submisstionModel = {
-				submisstionName: data.submisstionName,
-				submissionType: data.submisstionType.name,
+				submissionName: data.submissionName,
+				submissionType: data.submissionType.name,
 				fromDate: data.fromDate,
 				toDate: data.toDate,
-				submisstionfile: submisstionfile,
+				submissionfile: submissionfile,
 				isHide: true,
 			};
-
+			console.log(submisstionModel);
 			submissionService.saveSubmisstion(submisstionModel).then((response) => {
 				if (response.data.isSuccess === true) {
 					toast.current.show({ severity: "info", summary: "Success", detail: response.data.message });
+					formik.resetForm();
+					navigate("/submission" + location.search);
 				}
 			});
-
-			formik.resetForm();
-			navigate("/submission" + location.search);
 		},
 	});
 
@@ -138,33 +137,33 @@ const SubmissionDetail = () => {
 								<div className="field col">
 									<span className="p-float-label">
 										<InputText
-											id="submisstionName"
-											name="submisstionName"
-											value={formik.values.submisstionName}
+											id="submissionName"
+											name="submissionName"
+											value={formik.values.submissionName}
 											onChange={formik.handleChange}
 											autoFocus
-											className={classNames({ "p-invalid": isFormFieldValid("submisstionName") })}
+											className={classNames({ "p-invalid": isFormFieldValid("submissionName") })}
 										/>
 										<label
-											htmlFor="submisstionName"
-											className={classNames({ "p-error": isFormFieldValid("submisstionName") })}
+											htmlFor="submissionName"
+											className={classNames({ "p-error": isFormFieldValid("submissionName") })}
 										>
 											Submisstion Name
 										</label>
 									</span>
-									{getFormErrorMessage("submisstionName")}
+									{getFormErrorMessage("submissionName")}
 								</div>
 								<div className="field col">
 									<span className="p-float-label">
 										<Dropdown
-											id="submisstionType"
-											name="submisstionType"
-											value={formik.values.submisstionType}
+											id="submissionType"
+											name="submissionType"
+											value={formik.values.submissionType}
 											onChange={formik.handleChange}
-											options={submisstionType}
+											options={submissionType}
 											optionLabel="name"
 										/>
-										<label htmlFor="submisstionType">Submisstion Type</label>
+										<label htmlFor="submissionType">Submisstion Type</label>
 									</span>
 								</div>
 							</div>

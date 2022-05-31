@@ -29,6 +29,7 @@ const SubmissionList = () => {
 		submissionService
 			.getAllSubmissions()
 			.then((response) => {
+				console.log(response);
 				setSubmission(response.data);
 			})
 			.catch((error) => {});
@@ -129,7 +130,7 @@ const SubmissionList = () => {
 					<div className="AccordingConfig">
 						{submissions.map((rowData, key) => (
 							<Accordion multiple activeIndex={0}>
-								<AccordionTab key={key} header={rowData.submisstionName}>
+								<AccordionTab key={key} header={rowData.submissionName}>
 									<div className="formgrid grid">
 										<div className="field col">
 											<table className="table">

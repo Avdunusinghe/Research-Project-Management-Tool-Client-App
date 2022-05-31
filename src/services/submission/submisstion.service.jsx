@@ -19,7 +19,7 @@ class SubmissionService {
 		return axios.put(`${environment.apiUrl}submisstion/`, vm);
 	}
 	getSubmissionById(id) {
-		return axios.get(`${environment.apiUrl}submisstion/`, +id);
+		return axios.get(`${environment.apiUrl}submisstion/${id}`);
 	}
 }
 

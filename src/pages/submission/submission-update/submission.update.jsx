@@ -13,13 +13,19 @@ import { useLocation } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { Button } from "primereact/button";
 const SubmissionUpdate = () => {
-	const types = [{ name: "Proposal" }, { name: "Final" }, { name: "Ui" }, { name: "Data" }, { name: "project" }];
+	const types = [
+		{ name: "Proposal", code: "NY" },
+		{ name: "Final", code: "RM" },
+		{ name: "Ui", code: "LDN" },
+		{ name: "Data", code: "IST" },
+		{ name: "project", code: "PRS" },
+	];
 	const toast = useRef(null);
 	const [submissionTypes, setSubmissionTypes] = useState({});
 	const [submissionName, setSubmissionName] = useState("");
-	const [submissionType, setSubmissionType] = useState({});
-	const [toDate, setToDate] = useState(new Date());
-	const [fromDate, setFromDate] = useState(new Date());
+	const [submissionType, setSubmissionType] = useState(null);
+	const [toDate, setToDate] = useState(null);
+	const [fromDate, setFromDate] = useState(null);
 
 	let navigate = useNavigate();
 	let location = useLocation();
@@ -30,9 +36,15 @@ const SubmissionUpdate = () => {
 		submisstionService.getSubmissionById(params.id).then((response) => {
 			console.log(response);
 			setSubmissionName(response.data.submissionName);
-			setToDate(response.data.toDate);
+			for (let index = 0; index < types.length; index++) {
+				if (response.data.submissionType === types[index].name) {
+					console.log(types[index]);
+					setSubmissionType(types[index]);
+				}
+			}
+			setToDate(new Date(response.data.toDate));
 			setSubmissionType(response.data.submissionType);
-			setFromDate(response.data.fromDate);
+			setFromDate(new Date(response.data.fromDate));
 		});
 		onSubmitForm.bind(this);
 	}, []);
@@ -84,17 +96,17 @@ const SubmissionUpdate = () => {
 								</span>
 							</div>
 							<div className="field col">
-								{/* <span className="p-float-label">
+								<span className="p-float-label">
 									<Dropdown
 										id="submissionTypes"
-										value={submissionType}
 										name="submissionTypes"
+										value={submissionType?.name}
 										options={submissionTypes}
 										onChange={(event) => setSubmissionType(event.target.value)}
 										optionLabel="name"
 									/>
 									<label htmlFor="submisstionType">Submisstion Type</label>
-								</span> */}
+								</span>
 							</div>
 						</div>
 						<div className="formgrid grid">
