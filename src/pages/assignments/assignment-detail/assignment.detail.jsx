@@ -12,7 +12,7 @@ import "./assignment.detail.scss";
 import { Toast } from "primereact/toast";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
-import submissionService from "../../../services/submisstion/submisstion.service";
+import submissionService from "../../../services/submission/submisstion.service";
 import ReactDOM from "react-dom";
 import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
@@ -20,7 +20,7 @@ import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import { fontStyle, style } from "@mui/system";
 import { CardHeader, getScopedCssBaselineUtilityClass } from "@mui/material";
-import studentsubmissionservice from "../../../services/studentsubmission/studentsubmission.service";
+import StudentSubmissionService from "../../../services/studentsubmission/studentsubmission.service";
 import { Modal, Form } from "react-bootstrap";
 
 const AssignmentDetail = () => {
@@ -29,7 +29,6 @@ const AssignmentDetail = () => {
 	const toast = useRef(null);
 	const fileDownloadRef = useRef();
 	const [file, setFile] = useState("");
-	const [formData, setFormData] = useState({});
 	const [studentAnswerfile, setStudentAnswerfile] = useState("");
 
 	const downloadTask = (url) => {
@@ -69,12 +68,12 @@ const AssignmentDetail = () => {
 	};
 
 	useEffect(() => {
-		getAllSubmission();
-	}, [getAllSubmission]);
+		getAllSubmissions();
+	}, [getAllSubmissions]);
 
-	const getAllSubmission = useCallback(() => {
+	const getAllSubmissions = useCallback(() => {
 		submissionService
-			.getAllSubmission()
+			.getAllSubmissions()
 			.then((response) => {
 				setSubmisstions(response.data);
 			})
@@ -130,16 +129,16 @@ const AssignmentDetail = () => {
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					setStudentAnswerfile(downloadURL);
+					toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
 				});
 			}
 		);
-		toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
 	};
 
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
-
+	/* 
 	const formik = useFormik({
 		initialValues: {
 			groupleaderRegNo: "",
@@ -191,6 +190,25 @@ const AssignmentDetail = () => {
 	const getFormErrorMessage = (name) => {
 		return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
 	};
+ */
+
+	const onSubmit = (id) => {
+		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+		const studentsubmissionModel = {
+			studentAnswerfile: studentAnswerfile,
+			submissionId: id,
+			submittedById: currentUser.userId,
+		};
+
+		StudentSubmissionService.saveStudentSubmission(studentsubmissionModel).then((response) => {
+			if (response.data.isSuccess === true) {
+				console.log("model", response.data);
+				console.log("haai", studentsubmissionModel);
+				toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission sent" });
+			}
+		});
+	};
 
 	return (
 		<div className="new">
@@ -204,12 +222,12 @@ const AssignmentDetail = () => {
 					<div className="AccordingConfig">
 						{submisstions.map((item, key) => (
 							<Accordion multiple activeIndex={0}>
-								<AccordionTab key={key} header={item.submisstionName}>
+								<AccordionTab key={key} header={item.submissionName}>
 									<div className="formgrid grid">
 										<div className="field col">
 											<table className="table">
 												<thead>
-													<h2>{item.submisstionName}</h2>
+													<h2>{item.submissionName}</h2>
 												</thead>
 												<tbody>
 													<tr>
@@ -258,7 +276,6 @@ const AssignmentDetail = () => {
 																	<p>ASSIGNMENT FILES </p>
 																</div>
 																<div className="flex align-items-center export-buttons alignments">
-																	{/* 	//<button onClick={(e) => downloadTask(item.submisstionfile)}>FIle Download</button> */}
 																	<Button
 																		type="button"
 																		icon="pi pi-file-pdf"
@@ -278,7 +295,20 @@ const AssignmentDetail = () => {
 																</div>
 
 																<div className="flex align-items-center export-buttons alignments">
-																	<Button label="Success" onClick={handleShow} className="p-button-success" />
+																	<FileUpload
+																		mode="basic"
+																		name="demo[]"
+																		onChange={(e) => setFile(e.target.files[0])}
+																		accept="All Files/*"
+																		uploadHandler={onUpload}
+																		customUpload
+																	/>
+
+																	<Button
+																		label="Submit Assignment"
+																		onClick={() => onSubmit(item._id)}
+																		className="p-button-success buttonconfig"
+																	/>
 																</div>
 															</div>
 														</td>
@@ -293,7 +323,7 @@ const AssignmentDetail = () => {
 					</div>
 				</div>
 
-				<Modal show={show} onHide={handleClose}>
+				{/* 	<Modal show={show} onHide={handleClose}>
 					<Modal.Header closeButton>
 						<Modal.Title className="heading">SUBMIT ASSIGNMENT HERE</Modal.Title>
 					</Modal.Header>
@@ -382,7 +412,7 @@ const AssignmentDetail = () => {
 							<br />
 						</form>
 					</Modal.Body>
-				</Modal>
+				</Modal> */}
 				<Toast ref={toast}></Toast>
 			</div>
 		</div>
