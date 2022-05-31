@@ -117,6 +117,7 @@ const StudentGroupDetail = () => {
 
 			return errors;
 		},
+
 		onSubmit: (data) => {
 			setFormData(data);
 
@@ -141,8 +142,7 @@ const StudentGroupDetail = () => {
 			//navigate("/home" + location.search);
 			studentService.saveStudentGroup(studentGroupModel).then((response) => {
 				if (response.data.isSuccess === true) {
-					toast.current.show({ severity: "success", summary: "Success", detail: response.data.message });
-					navigate("/home" + location.search);
+					toast.current.show({ severity: "success", summary: "Success", detail: "Student Group Saved Successfully" });
 				}
 			});
 
@@ -154,9 +154,6 @@ const StudentGroupDetail = () => {
 	const getFormErrorMessage = (name) => {
 		return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
 	};
-
-	let navigate = useNavigate();
-	let location = useLocation();
 
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
@@ -174,9 +171,8 @@ const StudentGroupDetail = () => {
 		};
 
 		requestService.requestSupervisor(registerModel).then((response) => {
-			console.log(response);
-			console.log(registerModel);
 			handleClose();
+			toast.current.show({ severity: "success", summary: "Success", detail: "Request send" });
 		});
 	};
 
@@ -486,7 +482,6 @@ const StudentGroupDetail = () => {
 							<div className="formgrid grid">
 								<div className="field col"></div>
 								<div className="field col">
-									<Toast ref={toast}></Toast>
 									<Button type="submit" label="Submit" className="mt-2" />
 								</div>
 								<div className="field col"></div>
@@ -571,14 +566,13 @@ const StudentGroupDetail = () => {
 							</Form>
 						</Modal.Body>
 						<Modal.Footer>
-							<Toast ref={toast}></Toast>
-
 							<Button onClick={handleModalSubmit} variant="contained" color="success">
 								REQUEST
 							</Button>
 						</Modal.Footer>
 					</Modal>
 				</div>
+				<Toast ref={toast}></Toast>
 			</div>
 		</div>
 	);

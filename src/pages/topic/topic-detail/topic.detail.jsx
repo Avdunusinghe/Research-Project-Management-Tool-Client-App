@@ -73,7 +73,7 @@ const TopicDetail = () => {
 						></img>
 					</div>
 					<div className="right">
-						<ThemeProvider theme={theme}>
+						{/* <ThemeProvider theme={theme}>
 							<Container component="main" maxWidth="xs">
 								<CssBaseline />
 								<Box
@@ -193,8 +193,92 @@ const TopicDetail = () => {
 									</Box>
 								</Box>
 							</Container>
-						</ThemeProvider>
+						</ThemeProvider> */}
 						<ToastContainer />
+
+						<form onSubmit={formik.handleSubmit} className="p-fluid form-config">
+							<div className="formgrid grid p-fluid form-config">
+								<div className="field col  ">
+									<span className="p-float-label">
+										<InputText
+											id="groupleaderRegNo"
+											name="groupleaderRegNo"
+											value={formik.values.groupleaderRegNo}
+											onChange={formik.handleChange}
+											autoFocus
+											className={classNames({ "p-invalid": isFormFieldValid("groupleaderRegNo") })}
+										/>
+										<label
+											htmlFor="groupleaderRegNo"
+											className={classNames({ "p-error": isFormFieldValid("groupleaderRegNo") })}
+										>
+											Group Leader ID
+										</label>
+									</span>
+									{getFormErrorMessage("groupleaderRegNo")}
+								</div>
+							</div>
+							<br />
+
+							<div className="formgrid grid p-fluid form-config">
+								<div className="field col  ">
+									<span className="p-float-label fieldwidth">
+										<InputText
+											id="groupleaderEmail"
+											name="groupleaderEmail"
+											value={formik.values.groupleaderEmail}
+											onChange={formik.handleChange}
+											autoFocus
+											className={classNames({ "p-invalid": isFormFieldValid("groupleaderEmail") })}
+										/>
+										<label
+											htmlFor="groupleaderEmail"
+											className={classNames({ "p-error": isFormFieldValid("groupleaderEmail") })}
+										>
+											Group Leader Email
+										</label>
+									</span>
+									{getFormErrorMessage("groupleaderEmail")}
+								</div>
+							</div>
+							<br />
+							<div className="formgrid grid p-fluid form-config">
+								<div className="field col  ">
+									<span className="p-float-label">
+										<InputText
+											id="groupName"
+											name="groupName"
+											value={formik.values.groupName}
+											onChange={formik.handleChange}
+											autoFocus
+											className={classNames({ "p-invalid": isFormFieldValid("groupName") })}
+										/>
+										<label htmlFor="groupName" className={classNames({ "p-error": isFormFieldValid("groupName") })}>
+											Group Name
+										</label>
+									</span>
+									{getFormErrorMessage("groupName")}
+								</div>
+							</div>
+							<br />
+							<div className="formgrid grid p-fluid form-config ">
+								<div className="field col   ">
+									<FileUpload
+										mode="basic"
+										name="demo[]"
+										onChange={(e) => setFile(e.target.files[0])}
+										accept="All Files/*"
+										uploadHandler={onUpload}
+										customUpload
+									/>
+								</div>
+								<div className="field col  ">
+									<Button label="Submit" type="submit" icon="pi pi-check" className="p-button-success" />
+								</div>
+							</div>
+
+							<br />
+						</form>
 					</div>
 				</div>
 			</div>

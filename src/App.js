@@ -12,8 +12,9 @@ import TopicList from "./pages/topic/topic-list/topic-list";
 import SubmissionDetails from "./pages/submission/submission-detail/submission.detail";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
+import AssignmentDetail from "./pages/assignments/assignment-detail/assignment.detail";
 import SubmissionList from "./pages/submission/submission-list/submisstion-list";
-import CardDemo from "./pages/assignments/assignment-detail/assignment.detail";
+
 import SubmissionUpdate from "./pages/submission/submission-update/submission.update";
 
 export function App() {
@@ -50,7 +51,7 @@ export function App() {
 							<Route path=":id" element={<SubmissionUpdate></SubmissionUpdate>}></Route>
 						</Route>
 						<Route path="assignmentlist">
-							<Route index element={<CardDemo></CardDemo>}></Route>
+							<Route index element={<AssignmentDetail></AssignmentDetail>}></Route>
 						</Route>
 					</Route>
 				</Routes>
