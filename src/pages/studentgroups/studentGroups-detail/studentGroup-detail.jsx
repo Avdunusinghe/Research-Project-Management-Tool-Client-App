@@ -168,6 +168,7 @@ const StudentGroupDetail = () => {
 			firstmemberEmail: firstmemberEmail,
 			firstmemberRegNumber: firstmemberRegNumber,
 			description: description,
+			isAccept: false,
 		};
 
 		requestService.requestSupervisor(registerModel).then((response) => {

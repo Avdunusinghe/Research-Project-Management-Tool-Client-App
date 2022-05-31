@@ -16,6 +16,7 @@ import AssignmentDetail from "./pages/assignments/assignment-detail/assignment.d
 import SubmissionList from "./pages/submission/submission-list/submisstion-list";
 
 import SubmissionUpdate from "./pages/submission/submission-update/submission.update";
+import RequestList from "./pages/request/request.list";
 
 export function App() {
 	return (
@@ -52,6 +53,9 @@ export function App() {
 						</Route>
 						<Route path="assignmentlist">
 							<Route index element={<AssignmentDetail></AssignmentDetail>}></Route>
+						</Route>
+						<Route path="request">
+							<Route index element={<RequestList></RequestList>}></Route>
 						</Route>
 					</Route>
 				</Routes>

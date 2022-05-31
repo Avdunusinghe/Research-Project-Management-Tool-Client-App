@@ -46,6 +46,14 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)}
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/request" style={{ textDecoration: "none" }}>
+								<GroupsRoundedIcon className="icon" />
+								<span>Panel Member Request</span>
+							</Link>
+						</li>
+					)}
 
 					<li>
 						<Link to="/topiclist" style={{ textDecoration: "none" }}>
