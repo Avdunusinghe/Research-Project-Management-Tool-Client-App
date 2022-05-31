@@ -1,0 +1,62 @@
+/* CarouselDemo.css */
+
+.carousel-demo .product-item .product-item-content {
+	border: 1px solid var(--surface-d);
+	border-radius: 3px;
+	margin: 0.3rem;
+	text-align: center;
+	padding: 2rem 0;
+}
+
+.carousel-demo .product-item .product-image {
+	width: 50%;
+	box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+.carousel {
+	overflow: hidden;
+}
+
+.inner {
+	white-space: nowrap;
+	transition: transform 0.3s;
+}
+.carousel-item {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	height: 200px;
+	background-color: gray;
+	color: black;
+}
+.CarouselAlignment {
+	height: 500px;
+}
+.image {
+	background-image: url("../../assests/9.jpg");
+	background-size: 75%;
+}
+.image1 {
+	background-image: url("../../assests/8.png");
+	background-size: 80%;
+}
+.image2 {
+	background-image: url("../../assests/7.png");
+	background-size: 80%;
+}
+.image3 {
+	background-image: url("../../assests/1.jpg");
+	background-size: 80%;
+}
+.image4 {
+	background-image: url("../../assests/2.jpg");
+	background-size: 80%;
+}
+.image5 {
+	background-image: url("../../assests/3.jpg");
+	background-size: 80%;
+}
+.image6 {
+	background-image: url("../../assests/4.jpg");
+	background-size: 80%;
+}

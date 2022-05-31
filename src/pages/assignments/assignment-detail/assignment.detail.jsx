@@ -73,7 +73,7 @@ const AssignmentDetail = () => {
 
 	const getAllSubmissions = useCallback(() => {
 		submissionService
-			.getAllSubmissions()
+			.getAllUnHideSubmissions()
 			.then((response) => {
 				setSubmisstions(response.data);
 			})
@@ -307,7 +307,8 @@ const AssignmentDetail = () => {
 																	<Button
 																		label="Submit Assignment"
 																		onClick={() => onSubmit(item._id)}
-																		className="p-button-success buttonconfig"
+																		className="p-button-success "
+																		style={{ marginLeft: "8px" }}
 																	/>
 																</div>
 															</div>

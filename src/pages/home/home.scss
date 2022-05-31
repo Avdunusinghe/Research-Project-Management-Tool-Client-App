@@ -1,31 +1,59 @@
 .home {
-  display: flex;
+	display: flex;
 
-  .homeContainer {
-    flex: 6;
+	.homeContainer {
+		flex: 6;
 
-    .widgets,
-    .charts {
-      display: flex;
-      padding: 20px;
-      gap: 20px;
-    }
+		.widgets,
+		.charts {
+			display: flex;
+			padding: 20px;
+			gap: 20px;
+		}
 
-    .charts {
-      padding: 5px 20px;
-    }
+		.charts {
+			padding: 5px 20px;
+		}
 
-    .listContainer {
-      -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-      box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-      padding: 20px;
-      margin: 20px;
+		.listContainer {
+			-webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
+			box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
+			padding: 10px;
+			margin: 20px;
 
-      .listTitle {
-        font-weight: 500;
-        color: gray;
-        margin-bottom: 15px;
-      }
-    }
-  }
+			.listTitle {
+				font-weight: 500;
+				color: gray;
+				margin-bottom: 15px;
+			}
+		}
+	}
+}
+
+.homeHeader {
+	text-align: center;
+	font-weight: bold;
+	font-family: Proza;
+}
+
+.boxStyle {
+	height: 150px;
+	width: 280px;
+	background-color: #f9f2ec;
+}
+.text1 {
+	font-style: italic;
+	font-weight: bold;
+	text-align: center;
+	font-size: large;
+}
+
+.text2 {
+	font-style: italic;
+	text-align: center;
+	font-size: large;
+}
+.button1 {
+	align-content: center;
+	margin-left: 20px;
 }
