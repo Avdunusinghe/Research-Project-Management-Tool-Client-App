@@ -12,6 +12,7 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
+
 const requestColoumns = [
 	{
 		field: "groupName",
@@ -37,7 +38,7 @@ const RequestList = () => {
 		firstmemberEmail: "",
 		firstmemberRegNumber: "",
 		description: "",
-		panelMember: "",
+		panelMember: null,
 	};
 	const [requestDialog, setRequestDialog] = React.useState(false);
 	const [requests, setRequests] = React.useState([]);
@@ -65,13 +66,18 @@ const RequestList = () => {
 	}, []);
 
 	const getPanelMemberMasterData = useCallback(() => {
-		requestService.getPanelMemberMasterData().then((response) => {
-			let memebers = [];
-			for (let index = 0; index < response.data.length; index++) {
-				memebers.push({ name: response.data[index].fullName, id: response.data[index]._id });
-			}
-			setPanelMembers(memebers);
-		}, []);
+		requestService
+			.getPanelMemberMasterData()
+			.then((response) => {
+				let memebers = [];
+				for (let index = 0; index < response.data.length; index++) {
+					memebers = [];
+					memebers.push({ name: response.data[index].fullName, id: response.data[index]._id });
+				}
+
+				setPanelMembers(memebers);
+			}, [])
+			.catch((error) => {});
 	});
 
 	const onPanelMemberChanged = (event, name) => {
@@ -89,14 +95,10 @@ const RequestList = () => {
 			renderCell: (params) => {
 				return (
 					<div className="cellAction">
-						<Link to="/users/test" style={{ textDecoration: "none" }}>
-							<div className="viewButton">Update</div>
-						</Link>
-						<Button icon="pi pi-pencil" className="p-button-rounded p-button-success mr-2" />
 						<Button
-							icon="pi pi-trash"
+							icon="pi pi-pencil"
 							onClick={() => handleSelectPanelMember(params.row)}
-							className="p-button-rounded p-button-warning"
+							className="p-button-rounded p-button-success mr-2"
 						/>
 					</div>
 				);
@@ -111,10 +113,44 @@ const RequestList = () => {
 		setRequestDialog(true);
 	};
 
+	const allocatePanelMember = () => {
+		setSubmitted(true);
+
+		let _request = { ...request };
+
+		console.log(_request);
+
+		const allocatePanelMemberModel = {
+			panelMember: _request.panelMember.name,
+			isAccept: true,
+		};
+
+		requestService
+			.allocatePanelMember(allocatePanelMemberModel)
+			.then((response) => {
+				if (response.data.isSuccess === true) {
+					toast.current.show({ severity: "info", summary: "Success", detail: response.data.message, life: 3000 });
+				} else {
+					toast.current.show({ severity: "error", summary: "Error", detail: response.data.message, life: 3000 });
+				}
+			})
+			.catch((error) => {
+				toast.current.show({
+					severity: "error",
+					summary: "Error",
+					detail: "Error has been occured,please try again",
+					life: 3000,
+				});
+			});
+
+		setRequestDialog(false);
+		setRequest(initialRequestModel);
+	};
+
 	const requestDialogFooter = (
 		<React.Fragment>
 			<Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-			<Button label="Save" icon="pi pi-check" className="p-button-text" />
+			<Button label="Save" icon="pi pi-check" className="p-button-text" onClick={allocatePanelMember} />
 		</React.Fragment>
 	);
 
@@ -173,6 +209,7 @@ const RequestList = () => {
 					/>
 				</div>
 			</Dialog>
+			<Toast ref={toast}></Toast>
 		</div>
 	);
 };

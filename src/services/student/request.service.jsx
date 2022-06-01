@@ -13,6 +13,10 @@ class RequestService {
 	getPanelMemberMasterData() {
 		return axios.get(`${environment.apiUrl}requests/masterData`);
 	}
+
+	allocatePanelMember(allocatePanelMemberModel) {
+		return axios.put(`${environment.apiUrl}requests/`, allocatePanelMemberModel);
+	}
 }
 
 export default new RequestService();
