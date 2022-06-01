@@ -20,6 +20,7 @@ import { CardHeader, getScopedCssBaselineUtilityClass } from "@mui/material";
 import StudentSubmissionService from "../../../services/studentsubmission/studentsubmission.service";
 import { Modal, Form } from "react-bootstrap";
 import BallotIcon from "@mui/icons-material/Ballot";
+import { Toast } from "primereact/toast";
 
 const AssignmentDetail = () => {
 	const [submisstions, setSubmisstions] = React.useState([]);
@@ -36,14 +37,13 @@ const AssignmentDetail = () => {
 
 		getDownloadURL(downloads)
 			.then((url) => {
-				//<a href="file:///C:/Users/Dell/Downloads"></a>;
-
 				const xhr = new XMLHttpRequest();
 				xhr.responseType = "file";
 				xhr.onload = (event) => {
 					const file = xhr.response;
 				};
 				xhr.open("GET", url);
+				console.log(url);
 				xhr.send();
 			})
 			.catch((error) => {
@@ -73,6 +73,7 @@ const AssignmentDetail = () => {
 		submissionService
 			.getAllUnHideSubmissions()
 			.then((response) => {
+				console.log(response.data);
 				setSubmisstions(response.data);
 			})
 			.catch((err) => {
