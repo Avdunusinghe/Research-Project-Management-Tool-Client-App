@@ -21,6 +21,9 @@ class SubmissionService {
 	getSubmissionById(id) {
 		return axios.get(`${environment.apiUrl}submisstion/${id}`);
 	}
+	getSubmissionAnswers(id) {
+		return axios.get(`${environment.apiUrl}submisstion/studentAnswers${id}`);
+	}
 }
 
 export default new SubmissionService();
