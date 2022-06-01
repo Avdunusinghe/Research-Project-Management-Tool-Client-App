@@ -11,6 +11,7 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { InputTextarea } from "primereact/inputtextarea";
+import { Dropdown } from "primereact/dropdown";
 const requestColoumns = [
 	{
 		field: "groupName",
@@ -41,6 +42,7 @@ const RequestList = () => {
 	const [requests, setRequests] = React.useState([]);
 	const toast = React.useRef(null);
 	const [submitted, setSubmitted] = React.useState(false);
+	const [panelMembers, setPanelMembers] = React.useState([]);
 	const [request, setRequest] = React.useState(initialRequestModel);
 
 	let navigate = useNavigate();
@@ -54,10 +56,15 @@ const RequestList = () => {
 		requestService.getAllSupervisorRequests().then((response) => {
 			console.log(response);
 			setRequests(response.data);
+			getPanelMemberMasterData();
 		});
 	}, []);
 
-	const getPanelMemberMasterData = () => {};
+	const getPanelMemberMasterData = () => {
+		requestService.getPanelMemberMasterData().then((response) => {
+			setPanelMembers[response.data];
+		});
+	};
 
 	const actionColumn = [
 		{
@@ -136,6 +143,19 @@ const RequestList = () => {
 				<div className="field">
 					<label htmlFor="description">Description</label>
 					<InputTextarea id="description" value={request.description} disabled rows={3} cols={20} />
+				</div>
+				<div className="field">
+					<Dropdown
+						value={selectedCountry}
+						options={countries}
+						onChange={(e) => setSelectedCountry(e.value)}
+						optionLabel="name"
+						filter
+						showClear
+						filterBy="name"
+						placeholder="Select a Country"
+						itemTemplate={countryOptionTemplate}
+					/>
 				</div>
 			</Dialog>
 		</div>

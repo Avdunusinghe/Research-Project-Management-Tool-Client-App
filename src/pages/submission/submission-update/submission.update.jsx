@@ -39,12 +39,10 @@ const SubmissionUpdate = () => {
 			setSubmissionName(response.data.submissionName);
 			for (let index = 0; index < types.length; index++) {
 				if (response.data.submissionType === types[index].name) {
-					console.log(types[index]);
 					setSubmissionType(types[index]);
 				}
 			}
 			setToDate(new Date(response.data.toDate));
-			setSubmissionType(response.data.submissionType);
 			setFromDate(new Date(response.data.fromDate));
 		});
 		onSubmitForm.bind(this);
@@ -60,7 +58,7 @@ const SubmissionUpdate = () => {
 			fromDate: fromDate,
 		};
 
-		submisstionService
+		submissionService
 			.saveSubmisstion(submissionModel)
 			.then((response) => {
 				if (response.data.isSuccess === true) {
@@ -74,6 +72,7 @@ const SubmissionUpdate = () => {
 				toast.current.show({ severity: "error", summary: "Error", detail: response.data.message });
 			});
 	};
+
 	return (
 		<div className="new">
 			<SideBar />
@@ -105,6 +104,8 @@ const SubmissionUpdate = () => {
 										options={submissionTypes}
 										onChange={(event) => setSubmissionType(event.target.value)}
 										optionLabel="name"
+										filter
+										filterBy="name"
 									/>
 									<label htmlFor="submisstionType">Submisstion Type</label>
 								</span>
