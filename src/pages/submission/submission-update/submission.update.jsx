@@ -47,6 +47,7 @@ const SubmissionUpdate = () => {
 		});
 		onSubmitForm.bind(this);
 	}, []);
+
 	const onSubmitForm = (event) => {
 		event.preventDefault();
 

@@ -11,7 +11,7 @@ class RequestService {
 	}
 
 	getPanelMemberMasterData() {
-		return axios.get(`${environment.apiUrl}masterData`);
+		return axios.get(`${environment.apiUrl}requests/masterData`);
 	}
 }
 

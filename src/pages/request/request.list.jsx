@@ -37,35 +37,50 @@ const RequestList = () => {
 		firstmemberEmail: "",
 		firstmemberRegNumber: "",
 		description: "",
+		panelMember: "",
 	};
 	const [requestDialog, setRequestDialog] = React.useState(false);
 	const [requests, setRequests] = React.useState([]);
 	const toast = React.useRef(null);
 	const [submitted, setSubmitted] = React.useState(false);
-	const [panelMembers, setPanelMembers] = React.useState([]);
+	const [panelMembers, setPanelMembers] = React.useState(null);
 	const [request, setRequest] = React.useState(initialRequestModel);
 
 	let navigate = useNavigate();
 	let location = useLocation();
 
-	useEffect(() => {
-		getAllSupervisorRequests();
-	}, [getAllSupervisorRequests]);
+	useEffect(
+		() => {
+			getAllSupervisorRequests();
+			getPanelMemberMasterData();
+		},
+		[getAllSupervisorRequests],
+		[getPanelMemberMasterData]
+	);
 
 	const getAllSupervisorRequests = useCallback(() => {
 		requestService.getAllSupervisorRequests().then((response) => {
-			console.log(response);
 			setRequests(response.data);
-			getPanelMemberMasterData();
 		});
 	}, []);
 
-	const getPanelMemberMasterData = () => {
+	const getPanelMemberMasterData = useCallback(() => {
 		requestService.getPanelMemberMasterData().then((response) => {
-			setPanelMembers[response.data];
-		});
-	};
+			let memebers = [];
+			for (let index = 0; index < response.data.length; index++) {
+				memebers.push({ name: response.data[index].fullName, id: response.data[index]._id });
+			}
+			setPanelMembers(memebers);
+		}, []);
+	});
 
+	const onPanelMemberChanged = (event, name) => {
+		const member = event.value;
+		let _request = { ...request };
+		_request[`${name}`] = member;
+
+		setRequest(_request);
+	};
 	const actionColumn = [
 		{
 			field: "action",
@@ -146,15 +161,15 @@ const RequestList = () => {
 				</div>
 				<div className="field">
 					<Dropdown
-						value={selectedCountry}
-						options={countries}
-						onChange={(e) => setSelectedCountry(e.value)}
+						value={request.panelMember}
+						id="panelMember"
+						name="panelMember"
+						options={panelMembers}
 						optionLabel="name"
+						onChange={(event) => onPanelMemberChanged(event, "panelMember")}
 						filter
 						showClear
 						filterBy="name"
-						placeholder="Select a Country"
-						itemTemplate={countryOptionTemplate}
 					/>
 				</div>
 			</Dialog>
