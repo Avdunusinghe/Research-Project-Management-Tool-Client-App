@@ -138,59 +138,6 @@ const AssignmentDetail = () => {
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
 	const handleShow = () => setShow(true);
-	/* 
-	const formik = useFormik({
-		initialValues: {
-			groupleaderRegNo: "",
-			groupleaderEmail: "",
-			groupName: "",
-			studentAnswerfile: "",
-		},
-		validate: (data) => {
-			let errors = {};
-
-			if (!data.groupleaderRegNo) {
-				errors.groupleaderRegNo = "Group LeaderID is required.";
-			}
-			if (!data.groupleaderEmail) {
-				errors.groupleaderEmail = "Group Leader Email is required.";
-			}
-			if (!data.groupName) {
-				errors.groupName = "Group Name is required.";
-			}
-
-			return errors;
-		},
-
-		onSubmit: (data) => {
-			setFormData(data);
-
-			const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-
-			const studentsubmissionModel = {
-				groupleaderRegNo: data.groupleaderRegNo,
-				groupleaderEmail: data.groupleaderEmail,
-				groupName: data.groupName,
-				studentAnswerfile: data.studentAnswerfile,
-				currentUserId: currentUser.userId,
-			};
-			console.log(studentsubmissionModel);
-
-			studentsubmissionservice.saveStudentSubmisstion(studentsubmissionModel).then((response) => {
-				if (response.data.isSuccess === true) {
-					toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission  uploaded" });
-				}
-			});
-			handleClose();
-			formik.resetForm();
-		},
-	});
-
-	const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
-	const getFormErrorMessage = (name) => {
-		return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
-	};
- */
 
 	const onSubmit = (id) => {
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
