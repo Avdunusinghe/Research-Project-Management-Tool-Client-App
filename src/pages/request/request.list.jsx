@@ -38,6 +38,7 @@ const RequestList = () => {
 		firstmemberEmail: "",
 		firstmemberRegNumber: "",
 		description: "",
+		researchArea: "",
 		panelMember: null,
 	};
 	const [requestDialog, setRequestDialog] = React.useState(false);
@@ -71,7 +72,6 @@ const RequestList = () => {
 			.then((response) => {
 				let memebers = [];
 				for (let index = 0; index < response.data.length; index++) {
-					memebers = [];
 					memebers.push({ name: response.data[index].fullName, id: response.data[index]._id });
 				}
 
@@ -85,7 +85,7 @@ const RequestList = () => {
 		let _request = { ...request };
 		_request[`${name}`] = member;
 
-		setRequest(_request);
+		setRequest(d);
 	};
 	const actionColumn = [
 		{
@@ -194,6 +194,10 @@ const RequestList = () => {
 				<div className="field">
 					<label htmlFor="description">Description</label>
 					<InputTextarea id="description" value={request.description} disabled rows={3} cols={20} />
+				</div>
+				<div className="field">
+					<label htmlFor="description">Research Area</label>
+					<InputText id="description" value={request.researchArea} disabled />
 				</div>
 				<div className="field">
 					<Dropdown

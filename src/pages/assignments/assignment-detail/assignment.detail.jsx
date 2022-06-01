@@ -20,6 +20,7 @@ import { CardHeader, getScopedCssBaselineUtilityClass } from "@mui/material";
 import StudentSubmissionService from "../../../services/studentsubmission/studentsubmission.service";
 import { Modal, Form } from "react-bootstrap";
 import BallotIcon from "@mui/icons-material/Ballot";
+import { Toast } from "primereact/toast";
 
 const AssignmentDetail = () => {
 	const [submisstions, setSubmisstions] = React.useState([]);
@@ -30,14 +31,11 @@ const AssignmentDetail = () => {
 	const [studentAnswerfile, setStudentAnswerfile] = useState("");
 
 	const downloadTask = (url) => {
-		console.log(url);
 		const storage = getStorage();
 		const downloads = ref(storage, url);
 
 		getDownloadURL(downloads)
 			.then((url) => {
-				//<a href="file:///C:/Users/Dell/Downloads"></a>;
-
 				const xhr = new XMLHttpRequest();
 				xhr.responseType = "file";
 				xhr.onload = (event) => {
@@ -133,10 +131,6 @@ const AssignmentDetail = () => {
 		);
 	};
 
-	const [show, setShow] = useState(false);
-	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
-
 	const onSubmit = (id) => {
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -225,7 +219,7 @@ const AssignmentDetail = () => {
 																	<Button
 																		type="button"
 																		icon="pi pi-file-pdf"
-																		onClick={(e) => downloadTask(item.submisstionfile)}
+																		onClick={() => downloadTask(item.submissionfile)}
 																		className="p-button-warning mr-2"
 																		data-pr-tooltip="PDF"
 																	/>
@@ -270,96 +264,6 @@ const AssignmentDetail = () => {
 					</div>
 				</div>
 
-				{/* 	<Modal show={show} onHide={handleClose}>
-					<Modal.Header closeButton>
-						<Modal.Title className="heading">SUBMIT ASSIGNMENT HERE</Modal.Title>
-					</Modal.Header>
-					<Modal.Body>
-						<form onSubmit={formik.handleSubmit} className="p-fluid form-config">
-							<div className="formgrid grid p-fluid form-config">
-								<div className="field col  ">
-									<span className="p-float-label">
-										<InputText
-											id="groupleaderRegNo"
-											name="groupleaderRegNo"
-											value={formik.values.groupleaderRegNo}
-											onChange={formik.handleChange}
-											autoFocus
-											className={classNames({ "p-invalid": isFormFieldValid("groupleaderRegNo") })}
-										/>
-										<label
-											htmlFor="groupleaderRegNo"
-											className={classNames({ "p-error": isFormFieldValid("groupleaderRegNo") })}
-										>
-											Group Leader ID
-										</label>
-									</span>
-									{getFormErrorMessage("groupleaderRegNo")}
-								</div>
-							</div>
-							<br />
-
-							<div className="formgrid grid p-fluid form-config">
-								<div className="field col  ">
-									<span className="p-float-label fieldwidth">
-										<InputText
-											id="groupleaderEmail"
-											name="groupleaderEmail"
-											value={formik.values.groupleaderEmail}
-											onChange={formik.handleChange}
-											autoFocus
-											className={classNames({ "p-invalid": isFormFieldValid("groupleaderEmail") })}
-										/>
-										<label
-											htmlFor="groupleaderEmail"
-											className={classNames({ "p-error": isFormFieldValid("groupleaderEmail") })}
-										>
-											Group Leader Email
-										</label>
-									</span>
-									{getFormErrorMessage("groupleaderEmail")}
-								</div>
-							</div>
-							<br />
-							<div className="formgrid grid p-fluid form-config">
-								<div className="field col  ">
-									<span className="p-float-label">
-										<InputText
-											id="groupName"
-											name="groupName"
-											value={formik.values.groupName}
-											onChange={formik.handleChange}
-											autoFocus
-											className={classNames({ "p-invalid": isFormFieldValid("groupName") })}
-										/>
-										<label htmlFor="groupName" className={classNames({ "p-error": isFormFieldValid("groupName") })}>
-											Group Name
-										</label>
-									</span>
-									{getFormErrorMessage("groupName")}
-								</div>
-							</div>
-							<br />
-							<div className="formgrid grid p-fluid form-config ">
-								<div className="field col   ">
-									<FileUpload
-										mode="basic"
-										name="demo[]"
-										onChange={(e) => setFile(e.target.files[0])}
-										accept="All Files/*"
-										uploadHandler={onUpload}
-										customUpload
-									/>
-								</div>
-								<div className="field col  ">
-									<Button label="Submit" type="submit" icon="pi pi-check" className="p-button-success" />
-								</div>
-							</div>
-
-							<br />
-						</form>
-					</Modal.Body>
-				</Modal> */}
 				<Toast ref={toast}></Toast>
 			</div>
 		</div>
