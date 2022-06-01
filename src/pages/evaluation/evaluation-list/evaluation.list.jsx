@@ -3,9 +3,12 @@ import { DataGrid } from "@mui/x-data-grid";
 import NavBar from "../../../components/navbar/navbar";
 import SideBar from "../../../components/sidebar/sidebar";
 import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
 import "./evaluation.list.scss";
 import moment from "moment";
 import evaluationService from "../../../services/evaluation/evaluation.service";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Toast } from "primereact/toast";
 
 const evaluationcolumns = [
 	{ 
@@ -53,13 +56,22 @@ const evaluationcolumns = [
 
 const EvaluationList = () => {
 	const [evaluations, setEvaluations] = React.useState([]);
+	const toast = React.useRef(null);
+
+	const accept = () => {
+		toast.current.show({ severity: "info", summary: "Confirmed", detail: "You have accepted", life: 3000 });
+	};
+
+	const reject = () => {
+		toast.current.show({ severity: "warn", summary: "Rejected", detail: "You have rejected", life: 3000 });
+	};
 
 	useEffect(() => {
 		getAllEvaluations();
 	}, [getAllEvaluations]);
 
 	const getAllEvaluations = useCallback(() => {
-		evaluationService.getAllEvaluations().then((response) => {
+		evaluationService.getAllEvaluationItems().then((response) => {
 			setEvaluations(response.data);
 		});
 	}, []);
@@ -67,29 +79,51 @@ const EvaluationList = () => {
 	const actionColumn = [
 		{
 			field: "view",
-			headerName: "View Group ",
+			headerName: "Action ",
 			width: 200,
 			renderCell: (params) => {
 				return (
 					<div className="cellAction">
-						<Link to="/evaluateform" style={{ textDecoration: "none" }}>
+						<Link to="/evaluationform/update" style={{ textDecoration: "none" }}>
 							<div className="viewButton" onClick={() => handleView(params.row.id)}>
-								Evaluate
+								Re-Evaluate
 							</div>
 						</Link>
+						<div className="deleteButton" onClick={() => handleDelete(params.row._id)}>
+							Delete
+						</div>
 					</div>
 				);
 			},
 		},
 	];
 
+	const handleDelete = () => {
+		confirmDialog({
+			message: "Do you want to delete this record?",
+			header: "Delete Confirmation",
+			icon: "pi pi-info-circle",
+			acceptClassName: "p-button-danger",
+			accept,
+			reject,
+		});
+	};
+
 	return (
-		<div className="list">
+		
+		 <div className="list">
 			<SideBar />
 			<div className="listContainer">
 				<NavBar />
 				<div className="datatable">
-					<div className="datatableTitle">Evaluation Items</div>
+					<div className="datatableTitle">
+						Evaluation Items
+						<Link to="/evaluationform/new" style={{ textDecoration: "none" }}>
+							<Button variant="contained" className="addNewBtn">
+								Add New Evaluation Item
+							</Button>
+						</Link>
+					</div>
 					<DataGrid
 						rows={evaluations}
 						columns={evaluationcolumns.concat(actionColumn)}
@@ -100,7 +134,7 @@ const EvaluationList = () => {
 					/>
 				</div>
 			</div>
-		</div>
+		</div> 
 	);
 };
 

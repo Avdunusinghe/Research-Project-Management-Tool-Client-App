@@ -12,6 +12,8 @@ import TopicList from "./pages/topic/topic-list/topic-list";
 import SubmissionDetails from "./pages/submission/submission-detail/submission.detail";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
+import EvaluationList from "./pages/evaluation/evaluation-list/evaluation.list";
+import EvaluationDetail from "./pages/evaluation/evaluation-detail/evaluation.detail";
 
 export function App() {
 	return (
@@ -37,6 +39,12 @@ export function App() {
 						</Route>
 						<Route path="topiclist">
 							<Route index element={<TopicList></TopicList>}></Route>
+						</Route>
+						<Route path="evaluationlist">
+							<Route index element={<EvaluationList></EvaluationList>}></Route>
+							<Route path="evaluationform">
+								<Route index element={<EvaluationDetail></EvaluationDetail>}></Route>
+							</Route>
 						</Route>
 						<Route path="templatelist">
 							<Route index element={<TemplateList></TemplateList>}></Route>
