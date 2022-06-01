@@ -32,6 +32,7 @@ const StudentGroupDetail = () => {
 	const [firstmemberName, setFirstMemberName] = useState("");
 	const [firstmemberEmail, setFirstMemberEmail] = useState("");
 	const [firstmemberRegNumber, setFirstMemberRegNumber] = useState("");
+	const [researchArea, setResearchArea] = useState("");
 	const [description, setdescription] = useState("");
 	const [status, setStatus] = useState(null);
 
@@ -167,6 +168,7 @@ const StudentGroupDetail = () => {
 			firstmemberName: firstmemberName,
 			firstmemberEmail: firstmemberEmail,
 			firstmemberRegNumber: firstmemberRegNumber,
+			researchArea: researchArea,
 			description: description,
 			isAccept: false,
 		};
@@ -519,7 +521,6 @@ const StudentGroupDetail = () => {
 										fullWidth
 										id="firstmemberName"
 										label="Group Leader Name"
-										autoFocus
 									/>
 								</Form.Group>
 								<Form.Group className="mb-3">
@@ -532,7 +533,6 @@ const StudentGroupDetail = () => {
 										fullWidth
 										id="firstmemberEmail"
 										label="Group Member Email"
-										autoFocus
 									/>
 								</Form.Group>
 								<Form.Group className="mb-3">
@@ -545,7 +545,18 @@ const StudentGroupDetail = () => {
 										fullWidth
 										id="firstmemberRegNumber"
 										label="Group Leader ID"
-										autoFocus
+									/>
+								</Form.Group>
+								<Form.Group className="mb-3">
+									<TextField
+										autoComplete="given-name"
+										name="researchArea"
+										required
+										value={researchArea}
+										onChange={(event) => setResearchArea(event.target.value)}
+										fullWidth
+										id="researchArea"
+										label="Research Area"
 									/>
 								</Form.Group>
 								<Form.Group className="mb-3">
@@ -558,10 +569,9 @@ const StudentGroupDetail = () => {
 										value={description}
 										onChange={(event) => setdescription(event.target.value)}
 										fullWidth
-										label="Description
+										label="
 										Mention whether you need co-supervisor or supervisor here."
 										id="description"
-										autoFocus
 									/>
 								</Form.Group>
 							</Form>
