@@ -5,12 +5,12 @@ import moment from "moment";
 import "./submisstion.list.scss";
 import { storage } from "../../../../firebase";
 import { Accordion, AccordionTab } from "primereact/accordion";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import SideBar from "../../../components/sidebar/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import NavBar from "./../../../components/navbar/navbar";
 import { InputSwitch } from "primereact/inputswitch";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 import submissionService from "../../../services/submission/submission.service";
 
@@ -34,6 +34,39 @@ const SubmissionList = () => {
 			})
 			.catch((error) => {});
 	}, []);
+
+	const handleSubmissionDownload = (url) => {
+		const storage = getStorage();
+		const downloads = ref(storage, url);
+
+		getDownloadURL(downloads)
+			.then((url) => {
+				const xhr = new XMLHttpRequest();
+				xhr.responseType = "file";
+				xhr.onload = (event) => {
+					const file = xhr.response;
+				};
+				xhr.open("GET", url);
+				xhr.send();
+			})
+			.catch((error) => {
+				switch (error.code) {
+					case "storage/object-not-found":
+						console.log("storage/object-not-found");
+						break;
+					case "storage/unauthorized":
+						console.log("storage/unauthorized");
+						break;
+					case "storage/canceled":
+						console.log("storage/canceled");
+						break;
+
+					case "storage/unknown":
+						console.log("storage/unknown");
+						break;
+				}
+			});
+	};
 
 	const handleCreateNewSubmission = () => {
 		navigate("/submission/new" + location.search);
@@ -190,6 +223,7 @@ const SubmissionList = () => {
 																			icon="pi pi-file-pdf"
 																			className="p-button-warning mr-2"
 																			data-pr-tooltip="PDF"
+																			onClick={() => handleSubmissionDownload(rowData.submissionfile)}
 																		/>
 																		<Button
 																			type="button"
