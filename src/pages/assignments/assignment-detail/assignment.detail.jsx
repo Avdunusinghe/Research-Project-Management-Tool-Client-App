@@ -226,7 +226,7 @@ const AssignmentDetail = () => {
 																	<Button
 																		type="button"
 																		icon="pi pi-file-pdf"
-																		onClick={(e) => downloadTask(item.submisstionfile)}
+																		onClick={() => downloadTask(item.submissionfile)}
 																		className="p-button-warning mr-2"
 																		data-pr-tooltip="PDF"
 																	/>
