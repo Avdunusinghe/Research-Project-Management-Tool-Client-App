@@ -31,7 +31,6 @@ const SubmissionList = () => {
 		submissionService
 			.getAllSubmissions()
 			.then((response) => {
-				console.log(response);
 				setSubmission(response.data);
 			})
 			.catch((error) => {});
@@ -71,8 +70,6 @@ const SubmissionList = () => {
 	};
 
 	const onMarkinSchemaUpload = (data) => {
-		console.log(data);
-		console.log(submissionId);
 		const name = new Date().getTime() + data.files[0].name;
 
 		const file = data.files[0];
@@ -96,9 +93,7 @@ const SubmissionList = () => {
 						break;
 				}
 			},
-			(error) => {
-				console.log(error);
-			},
+			(error) => {},
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					const submissionModel = {

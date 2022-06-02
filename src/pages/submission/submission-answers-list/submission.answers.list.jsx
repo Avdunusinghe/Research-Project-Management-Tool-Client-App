@@ -42,7 +42,6 @@ const SubmissionAnswersList = () => {
 		submissionService
 			.getSubmissionAnswers(params.id)
 			.then((response) => {
-				console.log(response);
 				setSubmissionAnswers(response.data);
 			})
 			.catch((error) => {});

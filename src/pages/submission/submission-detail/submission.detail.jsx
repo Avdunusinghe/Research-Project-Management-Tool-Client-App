@@ -63,9 +63,7 @@ const SubmissionDetail = () => {
 						break;
 				}
 			},
-			(error) => {
-				console.log(error);
-			},
+			(error) => {},
 			() => {
 				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
 					setSubmissionfile(downloadURL);
