@@ -12,10 +12,12 @@ import NavBar from "./../../../components/navbar/navbar";
 import { InputSwitch } from "primereact/inputswitch";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { FileUpload } from "primereact/fileupload";
 import submissionService from "../../../services/submission/submission.service";
 
 const SubmissionList = () => {
 	const [submissions, setSubmission] = useState([]);
+	const [submissionId, setSubmissionId] = useState(0);
 	const toast = useRef(null);
 
 	let navigate = useNavigate();
@@ -66,6 +68,62 @@ const SubmissionList = () => {
 						break;
 				}
 			});
+	};
+
+	const onMarkinSchemaUpload = (data) => {
+		console.log(data);
+		console.log(submissionId);
+		const name = new Date().getTime() + data.files[0].name;
+
+		const file = data.files[0];
+
+		const storageRef = ref(storage, name);
+		const uploadTask = uploadBytesResumable(storageRef, file);
+
+		uploadTask.on(
+			"state_changed",
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				console.log("Upload is " + progress + "% done");
+				switch (snapshot.state) {
+					case "paused":
+						console.log("Upload is paused");
+						break;
+					case "running":
+						console.log("Upload is running");
+						break;
+					default:
+						break;
+				}
+			},
+			(error) => {
+				console.log(error);
+			},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					const submissionModel = {
+						id: submissionId,
+						markingSchemaFile: downloadURL,
+					};
+					submissionService
+						.saveSubmisstion(submissionModel)
+						.then((response) => {
+							if (response.data.isSuccess === true) {
+								toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
+							} else {
+								toast.current.show({ severity: "success", summary: "Success", detail: response.data.message });
+							}
+						})
+						.catch((error) => {
+							toast.current.show({
+								severity: "success",
+								summary: "Success",
+								detail: "Network error hass been occured please try again",
+							});
+						});
+				});
+			}
+		);
 	};
 
 	const handleCreateNewSubmission = () => {
@@ -236,6 +294,7 @@ const SubmissionList = () => {
 																			data-pr-tooltip="PDF"
 																			onClick={() => handleUpdateSubmission(rowData._id)}
 																		/>
+
 																		<Button
 																			type="button"
 																			icon="pi pi-trash"
@@ -250,6 +309,26 @@ const SubmissionList = () => {
 																			}}
 																		/>
 																	</div>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane4">
+																<div className="field col">
+																	<p>UPLOAD MARKING SCHEMA</p>
+																</div>
+																<div className="field col">
+																	<FileUpload
+																		mode="basic"
+																		name="demo[]"
+																		className="p-button-success mr-2"
+																		onChange={(e) => setSubmissionId(rowData._id)}
+																		accept="All Files/*"
+																		uploadHandler={onMarkinSchemaUpload}
+																		customUpload
+																	/>
 																</div>
 															</div>
 														</td>
