@@ -9,6 +9,10 @@ class EvaluationService {
 	getAllEvaluationItems() {
 		return axios.get(`${environment.apiUrl}evaluation/all`);
 	}
+
+	deleteEvaluation(id) {
+		return axios.delete(`${environment.apiUrl}evaluation/` + id);
+	}
 }
 
 export default new EvaluationService();

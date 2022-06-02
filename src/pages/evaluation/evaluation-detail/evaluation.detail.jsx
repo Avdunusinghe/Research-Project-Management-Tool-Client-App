@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import CloudUploadIcon from "@mui/icons-material/Cloud";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
+import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import "primeicons/primeicons.css";
-import "primereact/resources/themes/lara-light-indigo/theme.css";
-import "primereact/resources/primereact.css";
-import "primeflex/primeflex.css";
+import FormLabel from "@mui/material/FormLabel";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
 import SideBar from "./../../../components/sidebar/sidebar";
 import NavBar from "./../../../components/navbar/navbar";
 import "./evaluation.detail.scss";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import evaluationService from "../../../services/evaluation/evaluation.service";
 
 const theme = createTheme();
@@ -27,13 +28,14 @@ const EvaluationDetail = () => {
 	const [mark, setMark] = useState("");
 	const [feedback, setFeedback] = useState("");
 
+    let navigate = useNavigate();
+	let location = useLocation();
+
     const handleEvaluationTypeChange = (event) => {
 		setEvaluationType(event.target.value);
 	};
-	let navigate = useNavigate();
-	let location = useLocation();
 
-    const handleEvaluationSubmit = (event) => {
+    const handleSubmit = (event) => {
 		event.preventDefault();
 
 		const evaluationModel = {
@@ -46,10 +48,11 @@ const EvaluationDetail = () => {
 		};
 
         evaluationService.saveEvaluation(evaluationModel).then((response) => {
-			if (response) {
-				console.log(response);
+			if (response.data.isSuccess === true) {
 				toast(response.data.message);
-				navigate("/home" + location.search);
+				navigate("/evaluation" + location.search);
+			} else {
+				toast(response.data.message);
 			}
 		});
 	};
@@ -82,7 +85,7 @@ const EvaluationDetail = () => {
 										alignItems: "center",
 									}}
                                     >
-                                	<Box component="form" noValidate onSubmit={handleEvaluationSubmit} sx={{ mt: 3 }}>
+                                	<Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
 										<Grid container spacing={2}>
 											<Grid item xs={12} sm={6}>
 												<FormControl sx={{ m: 1, width: 400 }}>
