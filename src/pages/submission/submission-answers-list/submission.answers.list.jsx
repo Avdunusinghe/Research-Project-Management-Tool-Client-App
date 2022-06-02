@@ -6,15 +6,28 @@ import moment from "moment";
 import { storage } from "../../../../firebase";
 import { Accordion, AccordionTab } from "primereact/accordion";
 import SideBar from "../../../components/sidebar/sidebar";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import NavBar from "./../../../components/navbar/navbar";
 import { InputSwitch } from "primereact/inputswitch";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { Dialog } from "primereact/dialog";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
 import submissionService from "../../../services/submission/submission.service";
+import { classNames } from "primereact/utils";
 const SubmissionAnswersList = () => {
-	const [submissionAnswers, setSubmissionAnswers] = useState([]);
+	let initialEvaluateModel = {
+		id: null,
+		marks: "",
+		feedBack: "",
+	};
+	const [evaluateDialog, setEvaluateDialog] = React.useState(false);
+	const [evaluate, setEvaluate] = React.useState(initialEvaluateModel);
+	const [submitted, setSubmitted] = React.useState(false);
+	const [submissionAnswers, setSubmissionAnswers] = React.useState([]);
+	const [submissionId, setSubmissionId] = React.useState("");
 	const toast = useRef(null);
 
 	let navigate = useNavigate();
@@ -29,10 +42,97 @@ const SubmissionAnswersList = () => {
 		submissionService
 			.getSubmissionAnswers(params.id)
 			.then((response) => {
+				console.log(response);
 				setSubmissionAnswers(response.data);
 			})
-			.catch((error = {}));
+			.catch((error) => {});
 	}, []);
+
+	const hideDialog = () => {
+		setSubmitted(false);
+		setEvaluateDialog(false);
+	};
+
+	const handleEvaluateSubmission = (id) => {
+		setSubmissionId(id);
+		setEvaluate({ initialEvaluateModel });
+		setSubmitted(true);
+		setEvaluateDialog(true);
+	};
+
+	const saveEvalution = () => {
+		setSubmitted(false);
+
+		let _evaluationDetails = { ...evaluate };
+
+		console.log(_evaluationDetails);
+
+		let evaluateModel = {
+			id: submissionId,
+			marks: _evaluationDetails.marks,
+			feedBack: _evaluationDetails.feedBack,
+		};
+
+		submissionService.evaluateStudentSubmission(evaluateModel).then((response) => {
+			if (response.data.isSuccess === true) {
+				toast.current.show({ severity: "info", summary: "Success", detail: response.data.message, life: 3000 });
+				setEvaluateDialog(false);
+				setEvaluate(initialEvaluateModel);
+				setSubmitted(true);
+				getSubmissionAnswers();
+			} else {
+				toast.current.show({ severity: "error", summary: "Error", detail: response.data.message, life: 3000 });
+			}
+		});
+	};
+
+	const handleStudentSubmissionDownload = (url) => {
+		const storage = getStorage();
+		const downloads = ref(storage, url);
+
+		getDownloadURL(downloads)
+			.then((url) => {
+				const xhr = new XMLHttpRequest();
+				xhr.responseType = "file";
+				xhr.onload = (event) => {
+					const file = xhr.response;
+				};
+				xhr.open("GET", url);
+				xhr.send();
+			})
+			.catch((error) => {
+				switch (error.code) {
+					case "storage/object-not-found":
+						console.log("storage/object-not-found");
+						break;
+					case "storage/unauthorized":
+						console.log("storage/unauthorized");
+						break;
+					case "storage/canceled":
+						console.log("storage/canceled");
+						break;
+
+					case "storage/unknown":
+						console.log("storage/unknown");
+						break;
+				}
+			});
+	};
+
+	const evaluateDialogFooter = (
+		<React.Fragment>
+			<Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+			<Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveEvalution} />
+		</React.Fragment>
+	);
+
+	const onInputChange = (event, name) => {
+		const value = (event.target && event.target.value) || "";
+		let _evaluate = { ...evaluate };
+		_evaluate[`${name}`] = value;
+
+		setEvaluate(_evaluate);
+	};
 
 	return (
 		<div className="new">
@@ -46,12 +146,21 @@ const SubmissionAnswersList = () => {
 					<div className="AccordingConfig">
 						{submissionAnswers.map((rowData, key) => (
 							<Accordion multiple activeIndex={0}>
-								<AccordionTab key={key} header={rowData.studentId}>
+								<AccordionTab
+									key={key}
+									header={
+										"Submission : " +
+										rowData.submissionId?.submissionName +
+										" | " +
+										"Student Name : " +
+										rowData.submittedById?.fullName
+									}
+								>
 									<div className="formgrid grid">
 										<div className="field col">
 											<table className="table">
 												<thead>
-													<h2>{rowData.submisstionName}</h2>
+													<h2>{rowData.submissionId?.submissionName}</h2>
 												</thead>
 												<tbody>
 													<tr>
@@ -64,7 +173,7 @@ const SubmissionAnswersList = () => {
 																	<p>SUBMISSION TYPE</p>
 																</div>
 																<div className="field col">
-																	<p>{rowData.submissionType}</p>
+																	<p>{rowData.submissionId?.submissionType}</p>
 																</div>
 															</div>
 														</td>
@@ -76,7 +185,7 @@ const SubmissionAnswersList = () => {
 																	<p>SUBMISSION DATE</p>
 																</div>
 																<div className="field col">
-																	<p>{moment(rowData.fromDate).format("YYYY-MM-DDTHH:mm")}</p>
+																	<p>{moment(rowData.submissionId?.fromDate).format("YYYY-MM-DDTHH:mm")}</p>
 																</div>
 															</div>
 														</td>
@@ -88,7 +197,19 @@ const SubmissionAnswersList = () => {
 																	<p>DUE DATE</p>
 																</div>
 																<div className="field col">
-																	<p>{moment(rowData.toDate).format("YYYY-MM-DDTHH:mm")}</p>
+																	<p>{moment(rowData.submissionId?.toDate).format("YYYY-MM-DDTHH:mm")}</p>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane2">
+																<div className="field col">
+																	<p>STUDENT SUBMITTED DATE</p>
+																</div>
+																<div className="field col">
+																	<p>{moment(rowData.submissionId?.submitedOn).format("YYYY-MM-DDTHH:mm")}</p>
 																</div>
 															</div>
 														</td>
@@ -101,32 +222,23 @@ const SubmissionAnswersList = () => {
 																</div>
 																<div className="field col">
 																	<div className="flex align-items-center export-buttons">
-																		<Button
-																			type="button"
-																			icon="pi pi-file-pdf"
-																			className="p-button-warning mr-2"
-																			data-pr-tooltip="PDF"
-																			onClick={() => handleSubmissionDownload(rowData.submissionfile)}
-																		/>
-																		<Button
-																			type="button"
-																			icon="pi pi-pencil"
-																			className="p-button-success mr-2"
-																			data-pr-tooltip="PDF"
-																			onClick={() => handleUpdateSubmission(rowData._id)}
-																		/>
+																		{rowData.submissionId?.submissionfile != null && (
+																			<Button
+																				type="button"
+																				icon="pi pi-file-pdf"
+																				className="p-button-warning mr-2"
+																				data-pr-tooltip="PDF"
+																				onClick={() =>
+																					handleStudentSubmissionDownload(rowData.submissionId?.submissionfile)
+																				}
+																			/>
+																		)}
+
 																		<Button
 																			type="button"
 																			icon="pi pi-trash"
 																			className="p-button-danger mr-2"
 																			onClick={() => handleSubmissionDelete(rowData._id)}
-																		/>
-																		<InputSwitch
-																			checked={rowData.isHide}
-																			className="mr-2"
-																			onChange={(e) => {
-																				handleVisibilitySubmisstion(rowData._id, rowData.isHide);
-																			}}
 																		/>
 																	</div>
 																</div>
@@ -137,10 +249,39 @@ const SubmissionAnswersList = () => {
 														<td>
 															<div className="formgrid grid rane4">
 																<div className="field col">
-																	<p>STUDENT SUBMISSION</p>
+																	<p>{rowData?.marks != null ? "UPDATE EVALUATION" : "EVALUATE SUBMISSION"}</p>
 																</div>
 																<div className="field col">
-																	<Button type="button" icon="pi pi-file" className="p-button-success mr-2" />
+																	<Button
+																		type="button"
+																		icon="pi pi-file"
+																		onClick={() => handleEvaluateSubmission(rowData._id)}
+																		className="p-button-success mr-2"
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane2">
+																<div className="field col">
+																	<p>MARKS</p>
+																</div>
+																<div className="field col">
+																	<p>{rowData?.marks != null ? rowData?.marks : "NOT GRADED"}</p>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane2">
+																<div className="field col">
+																	<p>FEEDBACK</p>
+																</div>
+																<div className="field col">
+																	<p>{rowData?.feedBack != null ? rowData?.feedBack : "NOT GRADED"}</p>
 																</div>
 															</div>
 														</td>
@@ -154,6 +295,42 @@ const SubmissionAnswersList = () => {
 						))}
 					</div>
 				</div>
+				<Dialog
+					visible={evaluateDialog}
+					style={{ width: "500px" }}
+					header="Evaluate Submisstion"
+					modal
+					className="p-fluid"
+					footer={evaluateDialogFooter}
+					onHide={hideDialog}
+				>
+					<div className="field">
+						<label htmlFor="marks">Marks </label>
+						<InputText
+							id="marks"
+							value={evaluate.marks}
+							onChange={(e) => onInputChange(e, "marks")}
+							required
+							autoFocus
+							className={classNames({ "p-invalid": submitted && !evaluate.marks })}
+						/>
+						{submitted && !evaluate.marks && <small className="p-error">Marks is required.</small>}
+					</div>
+					<div className="field">
+						<label htmlFor="feedBack">FeedBack</label>
+						<InputTextarea
+							id="feedBack"
+							value={evaluate.feedBack}
+							onChange={(e) => onInputChange(e, "feedBack")}
+							rows={3}
+							cols={20}
+							required
+							className={classNames({ "p-invalid": submitted && !evaluate.feedBack })}
+						/>
+						{submitted && !evaluate.feedBack && <small className="p-error">Feed-Back is required.</small>}
+					</div>
+				</Dialog>
+				<Toast ref={toast}></Toast>
 			</div>
 		</div>
 	);

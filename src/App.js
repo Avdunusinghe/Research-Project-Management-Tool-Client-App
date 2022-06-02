@@ -50,7 +50,7 @@ export function App() {
 							<Route index element={<SubmissionList></SubmissionList>}></Route>
 							<Route path="new" element={<SubmissionDetails></SubmissionDetails>}></Route>
 							<Route path=":id" element={<SubmissionUpdate></SubmissionUpdate>}></Route>
-							<Route path="answers/:id" element={<SubmissionAnswersList></SubmissionAnswersList>}></Route>
+							<Route path="studentAnswers/:id" element={<SubmissionAnswersList></SubmissionAnswersList>}></Route>
 						</Route>
 						<Route path="assignmentlist">
 							<Route index element={<AssignmentDetail></AssignmentDetail>}></Route>

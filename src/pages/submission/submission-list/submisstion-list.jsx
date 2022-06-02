@@ -71,6 +71,10 @@ const SubmissionList = () => {
 	const handleCreateNewSubmission = () => {
 		navigate("/submission/new" + location.search);
 	};
+
+	const handleViewStudentSubmissions = (id) => {
+		navigate("/submission/studentAnswers/" + id + location.search);
+	};
 	const handleSubmissionDelete = (id) => {
 		confirmDialog({
 			message: "Do you want to delete this record?",
@@ -257,7 +261,12 @@ const SubmissionList = () => {
 																	<p>STUDENT SUBMISSION</p>
 																</div>
 																<div className="field col">
-																	<Button type="button" icon="pi pi-file" className="p-button-success mr-2" />
+																	<Button
+																		type="button"
+																		icon="pi pi-file"
+																		onClick={() => handleViewStudentSubmissions(rowData._id)}
+																		className="p-button-success mr-2"
+																	/>
 																</div>
 															</div>
 														</td>
