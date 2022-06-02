@@ -13,7 +13,7 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import { Dropdown } from "primereact/dropdown";
-import { InputTextarea } from "primereact/inputtextarea";
+
 import { RadioButton } from "primereact/radiobutton";
 import { Button } from "primereact/button";
 const userColumns = [
@@ -76,9 +76,7 @@ const UserList = () => {
 	const [users, setUsers] = React.useState([]);
 	const [user, setUser] = React.useState(userModel);
 	const [submitted, setSubmitted] = React.useState(false);
-	const [visible, setVisible] = React.useState(false);
 	const [departments, setDeparments] = React.useState(null);
-	const [userDeparment, setUserDepartment] = React.useState(null);
 	const toast = React.useRef(null);
 
 	let navigate = useNavigate();
@@ -117,11 +115,40 @@ const UserList = () => {
 	const userDialogFooter = (
 		<React.Fragment>
 			<Button label="Cancel" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
-			<Button label="Save" icon="pi pi-check" className="p-button-text" onClick={saveUser} />
+			<Button label="Save" icon="pi pi-check" className="p-button-text" onClick={() => saveUser(user)} />
 		</React.Fragment>
 	);
 
-	const saveUser = () => {};
+	const saveUser = () => {
+		setSubmitted(true);
+		let _user = { ...user };
+
+		const userViewModel = {
+			id: _user.id,
+			fullName: _user.fullName,
+			email: _user.email,
+			mobileNumber: _user.mobileNumber,
+			department: _user.department.name,
+			password: _user.password,
+			isAdmin: _user.isAdmin,
+			isLecure: _user.isLecure,
+			isSupervisor: _user.isSupervisor,
+			isCoSupervisor: _user.isCoSupervisor,
+			isPanelMember: _user.isPanelMember,
+		};
+
+		userService.saveUser(userViewModel).then((response) => {
+			if (response.data.isSuccess === true) {
+				toast.current.show({ severity: "info", summary: "Success", detail: response.data.message, life: 3000 });
+				setUserDialog(false);
+				setUser(userModel);
+				setSubmitted(true);
+				getAllUsers();
+			} else {
+				toast.current.show({ severity: "error", summary: "Error", detail: response.data.message, life: 3000 });
+			}
+		});
+	};
 
 	const actionColumn = [
 		{
@@ -143,7 +170,7 @@ const UserList = () => {
 		},
 	];
 
-	const openUserDialog = (user) => {
+	const openUserDialog = () => {
 		setUser({ ...user });
 		setUserDialog(true);
 	};
@@ -175,9 +202,10 @@ const UserList = () => {
 	};
 
 	const onInputChange = (event, name) => {
+		console.log(event, name);
 		const value = (event.target && event.target.value) || "";
 		let _user = { ...user };
-		_evaluate[`${name}`] = value;
+		_user[`${name}`] = value;
 
 		setUser(_user);
 	};
@@ -236,7 +264,7 @@ const UserList = () => {
 					<InputText
 						id="fullName"
 						value={user.fullName}
-						onChange={(event) => onInputChange(e, "fullName")}
+						onChange={(event) => onInputChange(event, "fullName")}
 						required
 						autoFocus
 						className={classNames({ "p-invalid": submitted && !user.fullName })}
@@ -250,7 +278,7 @@ const UserList = () => {
 						value={user.email}
 						onChange={(event) => onInputChange(event, "email")}
 						required
-						className={classNames({ "p-invalid": submitted && !user.fullName })}
+						className={classNames({ "p-invalid": submitted && !user.email })}
 					/>
 					{submitted && !user.email && <small className="p-error">Email is required.</small>}
 				</div>
@@ -259,11 +287,11 @@ const UserList = () => {
 					<InputText
 						id="mobileNumber"
 						value={user.mobileNumber}
-						onChange={(event) => onInputChange(event, "password")}
+						onChange={(event) => onInputChange(event, "mobileNumber")}
 						required
 						className={classNames({ "p-invalid": submitted && !user.mobileNumber })}
 					/>
-					{submitted && !user.password && <small className="p-error">Mobile Number is required.</small>}
+					{submitted && !user.mobileNumber && <small className="p-error">Mobile Number is required.</small>}
 				</div>
 				{user.id == null && (
 					<div className="field">
@@ -279,7 +307,7 @@ const UserList = () => {
 					</div>
 				)}
 				<div className="field">
-					<label htmlFor="password">Department</label>
+					<label htmlFor="department">Department</label>
 					<Dropdown
 						value={user.department}
 						id="department"
@@ -328,7 +356,7 @@ const UserList = () => {
 						<div className="field-radiobutton col-6">
 							<RadioButton
 								inputId="isPanelMember"
-								name="isPanelMember: "
+								name="isPanelMember"
 								value={true}
 								onChange={(event) => onRoleChange(event, "isPanelMember: ")}
 								checked={user.isPanelMember === true}
@@ -337,8 +365,8 @@ const UserList = () => {
 						</div>
 						<div className="field-radiobutton col-6">
 							<RadioButton
-								inputId="isSupervisor: "
-								name="isSupervisor: "
+								inputId="isSupervisor"
+								name="isSupervisor"
 								value={true}
 								onChange={(event) => onRoleChange(event, "isSupervisor: ")}
 								checked={user.isSupervisor === true}
