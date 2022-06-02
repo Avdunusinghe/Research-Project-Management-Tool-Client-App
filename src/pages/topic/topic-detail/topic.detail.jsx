@@ -95,7 +95,7 @@ const TopicDetail = () => {
 				console.log(response);
 				if (response) {
 					console.log("model", response);
-					toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission  uploaded" });
+					toast.current.show({ severity: "success", summary: "Success", detail: "Topic Registered successfully" });
 				}
 				formik.resetForm();
 				/* if (response.data.isSuccess === true) {

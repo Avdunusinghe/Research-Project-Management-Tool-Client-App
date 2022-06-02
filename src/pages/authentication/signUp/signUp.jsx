@@ -15,6 +15,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "./signup.scss";
+import { Toast } from "primereact/toast";
 import authService from "../../../services/auth/auth.service";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -22,11 +23,12 @@ const theme = createTheme();
 
 const SignUp = () => {
 	const [fullName, setFullName] = useState("");
-	const [studentid, setStudentid] = useState("");
+	const [studentId, setStudentId] = useState("");
 	const [mobileNumber, setMobileNumber] = useState("");
 	const [department, setDepartment] = useState([]);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+	const toast = useRef(null);
 
 	let navigate = useNavigate();
 	let location = useLocation();
@@ -36,7 +38,7 @@ const SignUp = () => {
 
 		const studentModel = {
 			fullName: fullName,
-			studentid: studentid,
+			studentId: studentId,
 			mobileNumber: mobileNumber,
 			department: department,
 			email: email,
@@ -45,9 +47,9 @@ const SignUp = () => {
 		};
 
 		authService.saveStudent(studentModel).then((response) => {
-			if (response) {
+			if (response.data.isSuccess === true) {
 				console.log(response);
-				toast(response.data.message);
+				toast.current.show({ severity: "success", summary: "Success", detail: "Student Saved Successfully" });
 				navigate("/" + location.search);
 			}
 		});
@@ -92,11 +94,11 @@ const SignUp = () => {
 								margin="normal"
 								required
 								fullWidth
-								id="studentid"
+								id="studentId"
 								label="Student Id"
-								name="studentid"
-								value={studentid}
-								onChange={(e) => setStudentid(e.target.value)}
+								name="studentId"
+								value={studentId}
+								onChange={(e) => setStudentId(e.target.value)}
 							/>
 							<TextField
 								margin="normal"
@@ -149,7 +151,7 @@ const SignUp = () => {
 								id="password"
 							/>
 							<FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
-							<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
+							<Button id="signup" type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
 								Sign Up
 							</Button>
 						</Box>
@@ -157,6 +159,8 @@ const SignUp = () => {
 				</Container>
 			</ThemeProvider>
 			<ToastContainer />
+
+			<Toast ref={toast}></Toast>
 		</div>
 	);
 };

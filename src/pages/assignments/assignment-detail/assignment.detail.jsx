@@ -269,4 +269,5 @@ const AssignmentDetail = () => {
 		</div>
 	);
 };
+
 export default AssignmentDetail;
