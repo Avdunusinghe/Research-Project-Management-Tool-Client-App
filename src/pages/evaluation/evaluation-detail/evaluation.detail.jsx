@@ -65,7 +65,10 @@ const EvaluationDetail = () => {
 				</div>
 				<div className="bottom">
 					<div className=" tksa">
-						
+                        <img
+						    src="https://flyunitednigeria.com/wp-content/uploads/2022/02/online-survey.jpg"
+						    alt="">
+                        </img>
 					</div>
                     <div className="right">
 						<ThemeProvider theme={theme}>
@@ -130,7 +133,7 @@ const EvaluationDetail = () => {
 													required
 													fullWidth
 													id="evaluatoremail"
-													value={groupleaderEmail}
+													value={evaluatoremail}
 													onChange={(event) => setEvaluatorEmail(event.target.value)}
 													label="Evaluator Email"
 													name="evaluatoremail"

@@ -8,6 +8,7 @@ import "./evaluation.list.scss";
 import moment from "moment";
 import evaluationService from "../../../services/evaluation/evaluation.service";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { ToastContainer, toast } from "react-toastify";
 import { Toast } from "primereact/toast";
 
 const evaluationcolumns = [
@@ -56,6 +57,7 @@ const evaluationcolumns = [
 
 const EvaluationList = () => {
 	const [evaluations, setEvaluations] = React.useState([]);
+	const [visible, setVisible] = React.useState(false);
 	const toast = React.useRef(null);
 
 	const accept = () => {
@@ -78,14 +80,14 @@ const EvaluationList = () => {
 
 	const actionColumn = [
 		{
-			field: "view",
+			field: "action",
 			headerName: "Action ",
 			width: 200,
 			renderCell: (params) => {
 				return (
 					<div className="cellAction">
-						<Link to="/evaluationform/update" style={{ textDecoration: "none" }}>
-							<div className="viewButton" onClick={() => handleView(params.row.id)}>
+						<Link to="/evaluationlist/new" style={{ textDecoration: "none" }}>
+							<div className="viewButton">
 								Re-Evaluate
 							</div>
 						</Link>
@@ -118,7 +120,7 @@ const EvaluationList = () => {
 				<div className="datatable">
 					<div className="datatableTitle">
 						Evaluation Items
-						<Link to="/evaluationform/new" style={{ textDecoration: "none" }}>
+						<Link to="/evaluationlist/new" style={{ textDecoration: "none" }}>
 							<Button variant="contained" className="addNewBtn">
 								Add New Evaluation Item
 							</Button>
@@ -132,8 +134,11 @@ const EvaluationList = () => {
 						rowsPerPageOptions={[10]}
 						checkboxSelection
 					/>
+					<ToastContainer />
 				</div>
 			</div>
+			<Toast ref={toast} />
+			<ConfirmDialog />
 		</div> 
 	);
 };

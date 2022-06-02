@@ -42,9 +42,7 @@ export function App() {
 						</Route>
 						<Route path="evaluationlist">
 							<Route index element={<EvaluationList></EvaluationList>}></Route>
-							<Route path="evaluationform">
-								<Route index element={<EvaluationDetail></EvaluationDetail>}></Route>
-							</Route>
+							<Route path=":id" element={<EvaluationDetail></EvaluationDetail>}></Route>
 						</Route>
 						<Route path="templatelist">
 							<Route index element={<TemplateList></TemplateList>}></Route>
