@@ -64,6 +64,7 @@ const TopicList = () => {
 	const getAllTopics = useCallback(() => {
 		topicService.getAllTopics().then((response) => {
 			setTopics(response.data);
+			console.log(topics);
 		});
 	}, []);
 
@@ -104,16 +105,19 @@ const TopicList = () => {
 			<SideBar />
 			<div className="listContainer">
 				<NavBar />
-				<div className="datatable">
-					<div className="datatableTitle">Registered Topics</div>
-					<DataGrid
-						rows={topics}
-						columns={topiccolumns.concat(actionColumn)}
-						pageSize={9}
-						getRowId={(row) => row._id}
-						rowsPerPageOptions={[10]}
-						checkboxSelection
-					/>
+
+				<div className="bottom">
+					<div className="datatable">
+						<div className="datatableTitle">Registered Topics</div>
+						<DataGrid
+							rows={topics}
+							columns={topiccolumns.concat(actionColumn)}
+							pageSize={9}
+							getRowId={(row) => row._id}
+							rowsPerPageOptions={[10]}
+							checkboxSelection
+						/>
+					</div>
 				</div>
 			</div>
 		</div>

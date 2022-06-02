@@ -8,6 +8,10 @@ class UserService {
 	saveUser(userModel) {
 		return axios.post(`${environment.apiUrl}user`, userModel);
 	}
+
+	deleteUser(id) {
+		return axios.delete(`${environment.apiUrl}user/` + id);
+	}
 }
 
 export default new UserService();

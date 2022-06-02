@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { ToastContainer, toast } from "react-toastify";
+
+import { useFormik } from "formik";
+import { Button } from "primereact/button";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
+import { classNames } from "primereact/utils";
+import { Dropdown } from "primereact/dropdown";
 import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
-import TextField from "@mui/material/TextField";
-import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
+import { Toast } from "primereact/toast";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import "primeicons/primeicons.css";
@@ -15,54 +18,108 @@ import "primeflex/primeflex.css";
 import SideBar from "./../../../components/sidebar/sidebar";
 import NavBar from "./../../../components/navbar/navbar";
 import "./topic.detail.scss";
-import { useNavigate, useLocation } from "react-router-dom";
 import topicService from "../../../services/student/topic.service";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const theme = createTheme();
 const TopicDetail = () => {
-	const [topicName, setTopicName] = useState("");
-	const [subject, setSubject] = useState([]);
-	const [groupleaderId, setGroupleaderId] = useState("");
-	const [groupleadername, setGroupleadername] = useState("");
-	const [groupleaderEmail, setgroupleaderEmail] = useState("");
-	const [groupName, setGroupName] = useState("");
-	const [description, setDescription] = useState("");
+	const [subject, setSubject] = useState({});
+	const [formData, setFormData] = useState({});
+	const toast = useRef(null);
 
-	const handlesubjectChange = (event) => {
-		setSubject(event.target.value);
-	};
 	let navigate = useNavigate();
 	let location = useLocation();
 
-	const handleTopicSubmit = (event) => {
-		event.preventDefault();
+	const types = [
+		{ name: "SE", code: "SE" },
+		{ name: "AF", code: "AF" },
+		{ name: "ESD", code: "ESD" },
+		{ name: "SA", code: "SA" },
+		{ name: "DS", code: "DS" },
+		{ name: "NDM", code: "NDM" },
+		{ name: "PAF", code: "PAF" },
+		{ name: "ITP", code: "ITP" },
+	];
 
-		const topicModel = {
-			topicName: topicName,
-			subject: subject,
-			groupleadername: groupleadername,
-			groupleaderId: groupleaderId,
-			groupleaderEmail: groupleaderEmail,
-			groupName: groupName,
-			description: description,
-		};
+	useEffect(() => {
+		setSubject(types);
+	}, []);
 
-		topicService.registerTopic(topicModel).then((response) => {
-			if (response) {
-				console.log(response);
-				toast(response.data.message);
-				navigate("/home" + location.search);
+	const formik = useFormik({
+		initialValues: {
+			topicName: "",
+			subject: null,
+			groupleaderId: "",
+			groupleadername: "",
+			groupleaderEmail: "",
+			groupName: "",
+			description: "",
+		},
+		validate: (data) => {
+			let errors = {};
+
+			if (!data.topicName) {
+				errors.topicName = "Topic name is required.";
 			}
-		});
+			if (!data.groupleaderId) {
+				errors.groupleaderId = "Group Leader ID is required.";
+			}
+			if (!data.groupleadername) {
+				errors.groupleadername = "Group Leader Name is required.";
+			}
+			if (!data.groupleaderEmail) {
+				errors.groupleaderEmail = "Group Leader Email is required.";
+			}
+			if (!data.groupName) {
+				errors.groupName = "Group Name is required.";
+			}
+
+			return errors;
+		},
+
+		onSubmit: (data) => {
+			setFormData(data);
+
+			const topicModel = {
+				topicName: data.topicName,
+				subject: data.subject.name,
+				groupleadername: data.groupleadername,
+				groupleaderId: data.groupleaderId,
+				groupleaderEmail: data.groupleaderEmail,
+				groupName: data.groupName,
+				description: data.description,
+			};
+
+			topicService.registerTopic(topicModel).then((response) => {
+				console.log(response);
+				if (response) {
+					console.log("model", response);
+					toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission  uploaded" });
+				}
+				formik.resetForm();
+				/* if (response.data.isSuccess === true) {
+					console.log("haii", response.data);
+					
+					navigate("/home" + location.search);
+					//toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission  uploaded" });
+				} */
+			});
+		},
+	});
+
+	const isFormFieldValid = (name) => !!(formik.touched[name] && formik.errors[name]);
+	const getFormErrorMessage = (name) => {
+		return isFormFieldValid(name) && <small className="p-error">{formik.errors[name]}</small>;
 	};
 
 	return (
 		<div className="new">
 			<SideBar />
-			<div className="newContainer">
+			<div className="newContainer topSize">
 				<NavBar />
 
-				<div className="top">
+				<div className="top ">
 					<h1>Topic Registration</h1>
 				</div>
 				<div className="bottom">
@@ -72,131 +129,157 @@ const TopicDetail = () => {
 							alt=""
 						></img>
 					</div>
-					<div className="right">
-						<ThemeProvider theme={theme}>
-							<Container component="main" maxWidth="xs">
-								<CssBaseline />
-								<Box
-									sx={{
-										marginTop: 0,
-										display: "flex",
-										flexDirection: "column",
-										alignItems: "center",
-									}}
-								>
-									<Box component="form" noValidate onSubmit={handleTopicSubmit} sx={{ mt: 3 }}>
-										<Grid container spacing={2}>
-											<Grid item xs={12}>
-												<TextField
-													autoComplete="given-name"
-													name="topicName"
-													required
-													value={topicName}
-													onChange={(event) => setTopicName(event.target.value)}
-													fullWidth
-													id="topicName"
-													label="Topic Name"
-													autoFocus
-												/>
-											</Grid>
-											<Grid item xs={12} sm={6}>
-												<FormControl sx={{ m: 1, width: 400 }}>
-													<InputLabel id="demo-controlled-open-select-label">Subjects</InputLabel>
-													<Select
-														labelId="demo-controlled-open-select-label"
-														id="demo-controlled-open-select"
-														value={subject}
-														label="subject"
-														onChange={handlesubjectChange}
-													>
-														<MenuItem value="se">SE</MenuItem>
-														<MenuItem value="ds">DS</MenuItem>
-														<MenuItem value="paf">PAF</MenuItem>
-														<MenuItem value="sa">SA</MenuItem>
-														<MenuItem value="esd">ESD</MenuItem>
-													</Select>
-												</FormControl>
-											</Grid>
-											<Grid item xs={12}>
-												<TextField
-													autoComplete="given-name"
-													name="groupleaderId"
-													required
-													value={groupleaderId}
-													onChange={(event) => setGroupleaderId(event.target.value)}
-													fullWidth
-													id="groupleaderId"
-													label="Group Leader Id"
-													autoFocus
-												/>
-											</Grid>
-
-											<Grid item xs={12}>
-												<TextField
-													autoComplete="given-name"
-													name="groupleadername"
-													required
-													fullWidth
-													id="groupleadername"
-													value={groupleadername}
-													onChange={(event) => setGroupleadername(event.target.value)}
-													label="Group leader name"
-													autoFocus
-												/>
-											</Grid>
-
-											<Grid item xs={12}>
-												<TextField
-													required
-													fullWidth
-													id="groupleaderEmail"
-													value={groupleaderEmail}
-													onChange={(event) => setgroupleaderEmail(event.target.value)}
-													label="Group Leader Email"
-													name="groupleaderEmail"
-													autoFocus
-												/>
-											</Grid>
-
-											<Grid item xs={12}>
-												<TextField
-													required
-													fullWidth
-													id="groupName"
-													value={groupName}
-													onChange={(event) => setGroupName(event.target.value)}
-													label="Group Name"
-													name="groupName"
-													autoFocus
-												/>
-											</Grid>
-
-											<Grid item xs={12}>
-												<TextField
-													required
-													fullWidth
-													multiline={true}
-													rows={4}
-													id="description"
-													value={description}
-													onChange={(event) => setDescription(event.target.value)}
-													label="Description"
-													name="description"
-													autoFocus
-												/>
-											</Grid>
-										</Grid>
-
-										<Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }}>
-											Submit
-										</Button>
-									</Box>
-								</Box>
-							</Container>
-						</ThemeProvider>
-						<ToastContainer />
+					<div className="right ">
+						<div>
+							<form onSubmit={formik.handleSubmit} className="p-fluid ">
+								<div className="formgrid grid  ">
+									<div className="field  marginset ">
+										<span className="p-float-label inputSize ">
+											<InputText
+												id="topicName"
+												name="topicName"
+												value={formik.values.topicName}
+												onChange={formik.handleChange}
+												autoFocus
+												className={classNames({ "p-invalid": isFormFieldValid("topicName") })}
+											/>
+											<label
+												htmlFor="groupleaderRegNo"
+												className={classNames({ "p-error": isFormFieldValid("topicName") })}
+											>
+												Topic
+											</label>
+										</span>
+										{getFormErrorMessage("topicName")}
+									</div>
+								</div>
+								<div className="formgrid grid p-fluid ">
+									<div className="field col  ">
+										<span className="p-float-label inputSize">
+											<Dropdown
+												id="subject"
+												name="subject"
+												value={formik.values.subject}
+												onChange={formik.handleChange}
+												options={subject}
+												optionLabel="name"
+											/>
+											<label htmlFor="subject">Subject</label>
+										</span>
+									</div>
+								</div>
+								<div className="formgrid grid p-fluid ">
+									<div className="field col  ">
+										<span className="p-float-label inputSize">
+											<InputText
+												id="groupleaderId"
+												name="groupleaderId"
+												value={formik.values.groupleaderId}
+												onChange={formik.handleChange}
+												autoFocus
+												className={classNames({ "p-invalid": isFormFieldValid("groupleaderId") })}
+											/>
+											<label
+												htmlFor="groupleaderId"
+												className={classNames({ "p-error": isFormFieldValid("groupleaderId") })}
+											>
+												Group Leader ID
+											</label>
+										</span>
+										{getFormErrorMessage("groupleaderId")}
+									</div>
+								</div>
+								<div className="formgrid grid p-fluid ">
+									<div className="field col  ">
+										<span className="p-float-label inputSize">
+											<InputText
+												id="groupleadername"
+												name="groupleadername"
+												value={formik.values.groupleadername}
+												onChange={formik.handleChange}
+												autoFocus
+												className={classNames({ "p-invalid": isFormFieldValid("groupleadername") })}
+											/>
+											<label
+												htmlFor="groupleadername"
+												className={classNames({ "p-error": isFormFieldValid("groupleadername") })}
+											>
+												Group Leader Name
+											</label>
+										</span>
+										{getFormErrorMessage("groupleadername")}
+									</div>
+								</div>
+								<div className="formgrid grid p-fluid ">
+									<div className="field col  ">
+										<span className="p-float-label inputSize">
+											<InputText
+												id="groupleaderEmail"
+												name="groupleaderEmail"
+												value={formik.values.groupleaderEmail}
+												onChange={formik.handleChange}
+												autoFocus
+												className={classNames({ "p-invalid": isFormFieldValid("groupleaderEmail") })}
+											/>
+											<label
+												htmlFor="groupleaderEmail"
+												className={classNames({ "p-error": isFormFieldValid("groupleaderEmail") })}
+											>
+												Group Leader Email
+											</label>
+										</span>
+										{getFormErrorMessage("groupleaderEmail")}
+									</div>
+								</div>
+								<div className="formgrid grid p-fluid ">
+									<div className="field col  ">
+										<span className="p-float-label inputSize">
+											<InputText
+												id="groupName"
+												name="groupName"
+												value={formik.values.groupName}
+												onChange={formik.handleChange}
+												autoFocus
+												className={classNames({ "p-invalid": isFormFieldValid("groupName") })}
+											/>
+											<label htmlFor="groupName" className={classNames({ "p-error": isFormFieldValid("groupName") })}>
+												Group Name
+											</label>
+										</span>
+										{getFormErrorMessage("groupName")}
+									</div>
+								</div>
+								<div className="formgrid grid p-fluid  ">
+									<div className="field col   ">
+										<span className="p-float-label inputSize">
+											<InputTextarea
+												id="description"
+												name="description"
+												row="5"
+												value={formik.values.description}
+												onChange={formik.handleChange}
+												autoFocus
+												className={classNames({ "p-invalid": isFormFieldValid("description") })}
+											/>
+											<label
+											//htmlFor="description"
+											//className={classNames({ "p-error": isFormFieldValid("description") })}
+											>
+												Description
+											</label>
+										</span>
+									</div>
+								</div>
+								<div className="formgrid grid p-fluid  ">
+									<div className="field col   ">
+										<Button label="Submit" type="submit" icon="pi pi-check" className="p-button-success" />
+									</div>
+								</div>
+							</form>
+						</div>
 					</div>
 				</div>
+				<Toast ref={toast}></Toast>
 			</div>
 		</div>
 	);

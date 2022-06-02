@@ -10,9 +10,18 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const SideBar = () => {
 	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+	let navigate = useNavigate();
+	let location = useLocation();
+
+	const logOut = () => {
+		localStorage.removeItem("currentUser");
+		navigate("/" + location.search);
+	};
 
 	return (
 		<div className="sidebar">
@@ -46,6 +55,14 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)}
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/request" style={{ textDecoration: "none" }}>
+								<GroupsRoundedIcon className="icon" />
+								<span>Panel Member Request</span>
+							</Link>
+						</li>
+					)}
 
 					<li>
 						<Link to="/topiclist" style={{ textDecoration: "none" }}>
@@ -71,14 +88,14 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)}
-					{currentUser.isStudent === true && (
+					{/* {currentUser.isStudent === true && (
 						<li>
 							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
 								<GroupAddIcon className="icon" />
 								<span>Assignments</span>
 							</Link>
 						</li>
-					)}
+					)} */}
 					{currentUser.isStudent === true && (
 						<li>
 							<Link to="/templatelist" style={{ textDecoration: "none" }}>
@@ -97,28 +114,28 @@ const SideBar = () => {
 						</li>
 					)}
 
-					<li>
-						<Link to="/users" style={{ textDecoration: "none" }}>
-							<PersonOutlineOutlinedIcon className="icon" />
-							<span>Users</span>
-						</Link>
-					</li>
+					{currentUser.isStudent === true && (
+						<li>
+							<Link to="/assignmentlist" style={{ textDecoration: "none" }}>
+								<TopicIcon className="icon" />
+								<span>Assignment List</span>
+							</Link>
+						</li>
+					)}
+
 					<li>
 						<Link to="/submission" style={{ textDecoration: "none" }}>
 							<FileCopyOutlinedIcon className="icon" />
 							<span>Submission</span>
 						</Link>
 					</li>
-					<li>
-						<GroupsRoundedIcon className="icon" />
-						<span>Student Groups</span>
-					</li>
+
 					<p className="title">SETTINGS</p>
 					<li>
 						<AccountCircleOutlinedIcon className="icon" />
 						<span>Profile</span>
 					</li>
-					<li>
+					<li onClick={() => logOut()}>
 						<PowerSettingsNewOutlinedIcon className="icon" />
 						<span>LogOut</span>
 					</li>

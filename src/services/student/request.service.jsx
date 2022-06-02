@@ -1,5 +1,4 @@
 import axios from "axios";
-//const apiUrl = process.env.REACT_APP_API_URL;
 import environment from "../../../environment.prod";
 
 class RequestService {
@@ -7,8 +6,16 @@ class RequestService {
 		return axios.post(`${environment.apiUrl}requests/`, registerModel);
 	}
 
-	getAllSupervisorRequestss() {
+	getAllSupervisorRequests() {
 		return axios.get(`${environment.apiUrl}requests/all`);
+	}
+
+	getPanelMemberMasterData() {
+		return axios.get(`${environment.apiUrl}requests/masterData`);
+	}
+
+	allocatePanelMember(allocatePanelMemberModel) {
+		return axios.put(`${environment.apiUrl}requests/`, allocatePanelMemberModel);
 	}
 }
 
