@@ -311,7 +311,7 @@ const EvaluationList = () => {
 					{submitted && !evaluation.mark && <small className="p-error">Mark is required.</small>}
 				</div>
 				<div className="field">
-					<label htmlFor="feedback">Mark</label>
+					<label htmlFor="feedback">FeedBack</label>
 					<InputText
 						id="feedback"
 						value={evaluation.feedback}
