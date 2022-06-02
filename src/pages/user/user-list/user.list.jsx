@@ -100,9 +100,10 @@ const UserList = () => {
 		setUserDialog(false);
 	};
 
-	const handleUserUpdate = (params) => {
+	const handleUserSave = (params) => {
 		let model = params;
 		model.id = params._id;
+
 		for (let index = 0; index < departmentType.length; index++) {
 			if (params.department === departmentType[index].name) {
 				model.department = departmentType[index];
@@ -130,7 +131,7 @@ const UserList = () => {
 			renderCell: (params) => {
 				return (
 					<div className="cellAction">
-						<div className="viewButton" onClick={() => handleUserUpdate(params.row)}>
+						<div className="viewButton" onClick={() => handleUserSave(params.row)}>
 							Update
 						</div>
 						<div className="deleteButton" onClick={() => handleDelete(params.row._id)}>
@@ -141,6 +142,11 @@ const UserList = () => {
 			},
 		},
 	];
+
+	const openUserDialog = (user) => {
+		setUser({ ...user });
+		setUserDialog(true);
+	};
 
 	const handleDelete = (id) => {
 		confirmDialog({
@@ -199,11 +205,9 @@ const UserList = () => {
 				<div className="datatable">
 					<div className="datatableTitle">
 						Add New User
-						<Link to="/users/new" style={{ textDecoration: "none" }}>
-							<Button variant="contained" className="addNewBtn">
-								Add New User
-							</Button>
-						</Link>
+						<Button variant="contained" onClick={openUserDialog} className="addNewBtn">
+							Add New User
+						</Button>
 					</div>
 					<DataGrid
 						rows={users}
@@ -261,7 +265,7 @@ const UserList = () => {
 					/>
 					{submitted && !user.password && <small className="p-error">Mobile Number is required.</small>}
 				</div>
-				{user.id === null && (
+				{user.id == null && (
 					<div className="field">
 						<label htmlFor="password">Password</label>
 						<InputText
@@ -275,6 +279,7 @@ const UserList = () => {
 					</div>
 				)}
 				<div className="field">
+					<label htmlFor="password">Department</label>
 					<Dropdown
 						value={user.department}
 						id="department"
