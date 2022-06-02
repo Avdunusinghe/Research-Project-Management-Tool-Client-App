@@ -50,7 +50,7 @@ const EvaluationDetail = () => {
         evaluationService.saveEvaluation(evaluationModel).then((response) => {
 			if (response.data.isSuccess === true) {
 				toast(response.data.message);
-				navigate("/evaluation" + location.search);
+				navigate("/evaluationlist" + location.search);
 			} else {
 				toast(response.data.message);
 			}
