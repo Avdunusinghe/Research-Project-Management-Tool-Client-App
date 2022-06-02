@@ -5,17 +5,19 @@ import moment from "moment";
 import "./submisstion.list.scss";
 import { storage } from "../../../../firebase";
 import { Accordion, AccordionTab } from "primereact/accordion";
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import SideBar from "../../../components/sidebar/sidebar";
 import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import NavBar from "./../../../components/navbar/navbar";
 import { InputSwitch } from "primereact/inputswitch";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
+import { FileUpload } from "primereact/fileupload";
 import submissionService from "../../../services/submission/submission.service";
 
 const SubmissionList = () => {
 	const [submissions, setSubmission] = useState([]);
+	const [submissionId, setSubmissionId] = useState(0);
 	const toast = useRef(null);
 
 	let navigate = useNavigate();
@@ -29,14 +31,102 @@ const SubmissionList = () => {
 		submissionService
 			.getAllSubmissions()
 			.then((response) => {
-				console.log(response);
 				setSubmission(response.data);
 			})
 			.catch((error) => {});
 	}, []);
 
+	const handleSubmissionDownload = (url) => {
+		const storage = getStorage();
+		const downloads = ref(storage, url);
+
+		getDownloadURL(downloads)
+			.then((url) => {
+				const xhr = new XMLHttpRequest();
+				xhr.responseType = "file";
+				xhr.onload = (event) => {
+					const file = xhr.response;
+				};
+				xhr.open("GET", url);
+				xhr.send();
+			})
+			.catch((error) => {
+				switch (error.code) {
+					case "storage/object-not-found":
+						console.log("storage/object-not-found");
+						break;
+					case "storage/unauthorized":
+						console.log("storage/unauthorized");
+						break;
+					case "storage/canceled":
+						console.log("storage/canceled");
+						break;
+
+					case "storage/unknown":
+						console.log("storage/unknown");
+						break;
+				}
+			});
+	};
+
+	const onMarkinSchemaUpload = (data) => {
+		const name = new Date().getTime() + data.files[0].name;
+
+		const file = data.files[0];
+
+		const storageRef = ref(storage, name);
+		const uploadTask = uploadBytesResumable(storageRef, file);
+
+		uploadTask.on(
+			"state_changed",
+			(snapshot) => {
+				const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+				console.log("Upload is " + progress + "% done");
+				switch (snapshot.state) {
+					case "paused":
+						console.log("Upload is paused");
+						break;
+					case "running":
+						console.log("Upload is running");
+						break;
+					default:
+						break;
+				}
+			},
+			(error) => {},
+			() => {
+				getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+					const submissionModel = {
+						id: submissionId,
+						markingSchemaFile: downloadURL,
+					};
+					submissionService
+						.saveSubmisstion(submissionModel)
+						.then((response) => {
+							if (response.data.isSuccess === true) {
+								toast.current.show({ severity: "success", summary: "Success", detail: "File Uploaded" });
+							} else {
+								toast.current.show({ severity: "success", summary: "Success", detail: response.data.message });
+							}
+						})
+						.catch((error) => {
+							toast.current.show({
+								severity: "success",
+								summary: "Success",
+								detail: "Network error hass been occured please try again",
+							});
+						});
+				});
+			}
+		);
+	};
+
 	const handleCreateNewSubmission = () => {
 		navigate("/submission/new" + location.search);
+	};
+
+	const handleViewStudentSubmissions = (id) => {
+		navigate("/submission/studentAnswers/" + id + location.search);
 	};
 	const handleSubmissionDelete = (id) => {
 		confirmDialog({
@@ -190,6 +280,7 @@ const SubmissionList = () => {
 																			icon="pi pi-file-pdf"
 																			className="p-button-warning mr-2"
 																			data-pr-tooltip="PDF"
+																			onClick={() => handleSubmissionDownload(rowData.submissionfile)}
 																		/>
 																		<Button
 																			type="button"
@@ -198,6 +289,7 @@ const SubmissionList = () => {
 																			data-pr-tooltip="PDF"
 																			onClick={() => handleUpdateSubmission(rowData._id)}
 																		/>
+
 																		<Button
 																			type="button"
 																			icon="pi pi-trash"
@@ -220,10 +312,35 @@ const SubmissionList = () => {
 														<td>
 															<div className="formgrid grid rane4">
 																<div className="field col">
+																	<p>UPLOAD MARKING SCHEMA</p>
+																</div>
+																<div className="field col">
+																	<FileUpload
+																		mode="basic"
+																		name="demo[]"
+																		className="p-button-success mr-2"
+																		onChange={(e) => setSubmissionId(rowData._id)}
+																		accept="All Files/*"
+																		uploadHandler={onMarkinSchemaUpload}
+																		customUpload
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane4">
+																<div className="field col">
 																	<p>STUDENT SUBMISSION</p>
 																</div>
 																<div className="field col">
-																	<Button type="button" icon="pi pi-file" className="p-button-success mr-2" />
+																	<Button
+																		type="button"
+																		icon="pi pi-file"
+																		onClick={() => handleViewStudentSubmissions(rowData._id)}
+																		className="p-button-success mr-2"
+																	/>
 																</div>
 															</div>
 														</td>

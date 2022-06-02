@@ -72,7 +72,11 @@ const RequestList = () => {
 			.then((response) => {
 				let memebers = [];
 				for (let index = 0; index < response.data.length; index++) {
-					memebers.push({ name: response.data[index].fullName, id: response.data[index]._id });
+					memebers.push({
+						name: response.data[index].fullName,
+						id: response.data[index]._id,
+						email: response.data[index].email,
+					});
 				}
 
 				setPanelMembers(memebers);
@@ -85,7 +89,7 @@ const RequestList = () => {
 		let _request = { ...request };
 		_request[`${name}`] = member;
 
-		setRequest(d);
+		setRequest(_request);
 	};
 	const actionColumn = [
 		{
@@ -118,10 +122,12 @@ const RequestList = () => {
 
 		let _request = { ...request };
 
-		console.log(_request);
-
 		const allocatePanelMemberModel = {
+			id: _request.id,
 			panelMember: _request.panelMember.name,
+			panelMemberId: _request.panelMember.id,
+			groupLeaderEmail: _request.firstmemberEmail,
+			panelMemberEmail: _request.panelMember.email,
 			isAccept: true,
 		};
 
@@ -130,6 +136,9 @@ const RequestList = () => {
 			.then((response) => {
 				if (response.data.isSuccess === true) {
 					toast.current.show({ severity: "info", summary: "Success", detail: response.data.message, life: 3000 });
+					setRequestDialog(false);
+					setRequest(initialRequestModel);
+					getAllSupervisorRequests();
 				} else {
 					toast.current.show({ severity: "error", summary: "Error", detail: response.data.message, life: 3000 });
 				}
