@@ -10,9 +10,18 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const SideBar = () => {
 	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+	let navigate = useNavigate();
+	let location = useLocation();
+
+	const logOut = () => {
+		localStorage.removeItem("currentUser");
+		navigate("/" + location.search);
+	};
 
 	return (
 		<div className="sidebar">
@@ -110,7 +119,7 @@ const SideBar = () => {
 						<AccountCircleOutlinedIcon className="icon" />
 						<span>Profile</span>
 					</li>
-					<li>
+					<li onClick={() => logOut()}>
 						<PowerSettingsNewOutlinedIcon className="icon" />
 						<span>LogOut</span>
 					</li>
