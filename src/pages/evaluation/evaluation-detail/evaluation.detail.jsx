@@ -21,12 +21,12 @@ import evaluationService from "../../../services/evaluation/evaluation.service";
 
 const theme = createTheme();
 const EvaluationDetail = () => {
-	const [evaluationType, setEvaluationType] = useState("");
-	const [groupId, setGroupId] = useState([]);
-	const [evaluatorname, setEvaluatorName] = useState("");
-	const [evaluatoremail, setEvaluatorEmail] = useState("");
-	const [mark, setMark] = useState("");
-	const [feedback, setFeedback] = useState("");
+	const [evaluationType, setEvaluationType] = React.useState("");
+	const [groupId, setGroupId] = React.useState([]);
+	const [evaluatorname, setEvaluatorName] = React.useState("");
+	const [evaluatoremail, setEvaluatorEmail] = React.useState("");
+	const [mark, setMark] = React.useState("");
+	const [feedback, setFeedback] = React.useState("");
 
     let navigate = useNavigate();
 	let location = useLocation();

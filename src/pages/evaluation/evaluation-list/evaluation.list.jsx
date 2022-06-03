@@ -139,7 +139,7 @@ const EvaluationList = () => {
 
 		evaluationService.saveEvaluation(evaluationViewModel).then((response) => {
 			if (response.data.isSuccess === true) {
-				toast.current.show({ severity: "info", summary: "Success", detail: response.data.message, life: 3000 });
+				toast.current.show({ severity: "success", summary: "Success", detail: response.data.message, life: 3000});
 				setEvaluationDialog(false);
 				setEvaluation(evaluationModel);
 				setSubmitted(true);
@@ -147,6 +147,13 @@ const EvaluationList = () => {
 			} else {
 				toast.current.show({ severity: "error", summary: "Error", detail: response.data.message, life: 3000 });
 			}
+		})
+		.catch((error) => {
+			toast.current.show({
+				severity: "success",
+				summary: "Success",
+				detail: "Network error hass been occured please try again",
+			});
 		});
 	};
 
@@ -189,11 +196,19 @@ const EvaluationList = () => {
 	const acceptFunc = (id) => {
 		evaluationService.deleteEvaluation(id).then((response) => {
 			if (response.data.isSuccess === true) {
-				toast.current.show({ severity: "info", summary: "Confirmed", detail: response.data.message, life: 3000 });
+				toast.current.show({ severity: "success", summary: "Confirmed", detail: response.data.message, life: 3000 });
 				getAllEvaluations();
 			} else {
 				toast.current.show({ severity: "error", summary: "Rejected", detail: response.data.message, life: 3000 });
 			}
+		})
+		.catch((error) => {
+			toast.current.show({
+				severity: "error",
+				summary: "Rejected",
+				detail: "Error has been occred.Please try again",
+				life: 3000,
+			});
 		});
 	};
 
