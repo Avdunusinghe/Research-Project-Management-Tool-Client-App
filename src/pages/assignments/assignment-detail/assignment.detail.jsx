@@ -31,8 +31,6 @@ const AssignmentDetail = () => {
 
 	const [submitted, setSubmitted] = React.useState(false);
 	const [evaluateDialog, setEvaluateDialog] = React.useState(false);
-	const [submissionId, setSubmissionId] = React.useState("");
-	//const [evaluate, setEvaluate] = React.useState(initialEvaluateModel);
 
 	const downloadTask = (url) => {
 		const storage = getStorage();
@@ -151,12 +149,6 @@ const AssignmentDetail = () => {
 		});
 	};
 
-	let initialEvaluateModel = {
-		id: null,
-		marks: "",
-		feedBack: "",
-	};
-
 	const OnDialogBoxOpen = (id) => {
 		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
@@ -165,11 +157,10 @@ const AssignmentDetail = () => {
 			submittedById: currentUser.userId,
 		};
 
-		//setEvaluate({ initialEvaluateModel });
 		setSubmitted(true);
 		setEvaluateDialog(true);
 		StudentSubmissionService.getAllStudentEvaluationByStudent(studentanswerModel).then((response) => {
-			console.log(response);
+			console.log(response.data);
 			setMarks(response.data.marks);
 			setFeedBack(response.data.feedBack);
 		});
@@ -252,7 +243,7 @@ const AssignmentDetail = () => {
 																<div className="flex align-items-center export-buttons">
 																	<p>ASSIGNMENT FILES </p>
 																</div>
-																<div className="flex align-items-center export-buttons alignments">
+																<div className="flex align-items-center export-buttons alignment1">
 																	<Button
 																		type="button"
 																		icon="pi pi-file-pdf"
@@ -267,11 +258,29 @@ const AssignmentDetail = () => {
 													<tr>
 														<td>
 															<div className="formgrid grid rane4">
+																<div className="flex align-items-center export-buttons">
+																	<p>MARKING SCHEME </p>
+																</div>
+																<div className="flex align-items-center export-buttons alignment2">
+																	<Button
+																		type="button"
+																		icon="pi pi-file-pdf"
+																		onClick={() => downloadTask(item.markingSchemaFile)}
+																		className="p-button-danger mr-2"
+																		data-pr-tooltip="PDF"
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane4">
 																<div className="flex align-items-center export-buttons ">
 																	<p>SUBMISSION FILES </p>
 																</div>
 
-																<div className="flex align-items-center export-buttons alignments">
+																<div className="flex align-items-center export-buttons alignment1">
 																	<FileUpload
 																		mode="basic"
 																		name="demo[]"
@@ -294,11 +303,11 @@ const AssignmentDetail = () => {
 													<tr>
 														<td>
 															<div className="formgrid grid rane4">
-																<div className="flex align-items-center export-buttons alignments">
+																<div className="flex align-items-center export-buttons alignment3">
 																	<Button
-																		label="Get Evaluation"
+																		label="Check Grading Details"
 																		onClick={() => OnDialogBoxOpen(item._id)}
-																		className="p-button-success "
+																		className="p-button-info"
 																		style={{ marginLeft: "8px" }}
 																	/>
 																</div>
@@ -326,11 +335,11 @@ const AssignmentDetail = () => {
 				>
 					<div className="field">
 						<label htmlFor="marks">Marks </label>
-						<InputText id="marks" value={marks} />
+						<InputText id="marks" value={marks} disabled />
 					</div>
 					<div className="field">
 						<label htmlFor="feedBack">FeedBack</label>
-						<InputTextarea id="feedBack" value={feedBack} />
+						<InputTextarea id="feedBack" value={feedBack} disabled />
 					</div>
 				</Dialog>
 

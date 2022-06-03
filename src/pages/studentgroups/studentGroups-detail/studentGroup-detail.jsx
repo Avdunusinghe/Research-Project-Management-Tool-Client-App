@@ -4,8 +4,6 @@ import NavBar from "./../../../components/navbar/navbar";
 import React, { Component, useEffect, useRef, useState } from "react";
 import { useFormik } from "formik";
 import { Button } from "primereact/button";
-import { RadioButton } from "primereact/radiobutton";
-import { Tooltip } from "primereact/tooltip";
 import { InputText } from "primereact/inputtext";
 import { classNames } from "primereact/utils";
 import { Calendar } from "primereact/calendar";
@@ -19,8 +17,6 @@ import requestService from "../../../services/student/request.service";
 import { Toast } from "primereact/toast";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import Container from "@mui/material/Container";
-import { useNavigate, useLocation } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Modal, Form } from "react-bootstrap";
@@ -137,13 +133,17 @@ const StudentGroupDetail = () => {
 				fourthmemberName: data.fourthmemberName,
 				fourthmemberEmail: data.fourthmemberEmail,
 				fourthmemberRegNumber: data.fourthmemberRegNumber,
-				//need: data.need.value,
 			};
-			//console.log(studentGroupModel);
-			//navigate("/home" + location.search);
+
 			studentService.saveStudentGroup(studentGroupModel).then((response) => {
 				if (response.data.isSuccess === true) {
 					toast.current.show({ severity: "success", summary: "Success", detail: "Student Group Saved Successfully" });
+				} else {
+					toast.current.show({
+						severity: "success",
+						summary: "Success",
+						detail: "Student Group Not Saved Successfully",
+					});
 				}
 			});
 
@@ -184,11 +184,11 @@ const StudentGroupDetail = () => {
 			<SideBar />
 			<div className="newContainer">
 				<NavBar />
-				<div className="top">
-					<h1>Create Student Group</h1>
+				<div className="top colorheading">
+					<h1>CREATE STUDENT GROUPS</h1>
 				</div>
 				<div className="top">
-					<h2>Can only have maximum 4 group members</h2>
+					<h5>CAN ONLY HAVE 4 MEMBERS FOR THE GROUP</h5>
 				</div>
 				<div className="bottom">
 					<div>
