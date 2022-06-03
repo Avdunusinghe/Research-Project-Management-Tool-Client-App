@@ -33,13 +33,13 @@ const SideBar = () => {
 			<hr />
 			<div className="center">
 				<ul>
-					{currentUser.isAdmin === true && <p className="title">MAIN</p>}
-					{currentUser.isAdmin === true && (
-						<li>
-							<DashboardIcon className="icon" />
-							<span>Dashboard</span>
-						</li>
-					)}
+					<p className="title">MAIN</p>
+
+					<li>
+						<DashboardIcon className="icon" />
+						<span>Dashboard</span>
+					</li>
+
 					<p className="title">CORE MODULES</p>
 					{currentUser.isAdmin === true && (
 						<li>
@@ -113,7 +113,7 @@ const SideBar = () => {
 						<li>
 							<Link to="/assignmentlist" style={{ textDecoration: "none" }}>
 								<TopicIcon className="icon" />
-								<span>Assignment List</span>
+								<span>Assignments</span>
 							</Link>
 						</li>
 					)}
@@ -129,10 +129,10 @@ const SideBar = () => {
 					</li>
 				</ul>
 			</div>
-			{/* 	<div className="bottom">
+			<div className="bottom">
 				<div className="colorOption"></div>
 				<div className="colorOption"></div>
-			</div> */}
+			</div>
 		</div>
 	);
 };
