@@ -2,7 +2,7 @@ import React, { Component, useCallback, useEffect } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import NavBar from "../../../components/navbar/navbar";
 import SideBar from "../../../components/sidebar/sidebar";
-import { Link, useLocation, useNavigate  } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "./evaluation.list.scss";
 import moment from "moment";
 import evaluationService from "../../../services/evaluation/evaluation.service";
@@ -16,17 +16,17 @@ import { Dropdown } from "primereact/dropdown";
 import { Button } from "primereact/button";
 
 const evaluationcolumns = [
-	{ 
-        field: "evaluationType", 
-        headerName: "Evaluation Type", 
-        width: 100 
-    },
+	{
+		field: "evaluationType",
+		headerName: "Evaluation Type",
+		width: 100,
+	},
 
-	{ 
-        field: "groupId", 
-        headerName: "Group Id", 
-        width: 100 
-    },
+	{
+		field: "groupId",
+		headerName: "Group Id",
+		width: 100,
+	},
 
 	{
 		field: "evaluatorname",
@@ -137,24 +137,26 @@ const EvaluationList = () => {
 			feedback: _evaluation.feedback,
 		};
 
-		evaluationService.saveEvaluation(evaluationViewModel).then((response) => {
-			if (response.data.isSuccess === true) {
-				toast.current.show({ severity: "success", summary: "Success", detail: response.data.message, life: 3000});
-				setEvaluationDialog(false);
-				setEvaluation(evaluationModel);
-				setSubmitted(true);
-				getAllEvaluations();
-			} else {
-				toast.current.show({ severity: "error", summary: "Error", detail: response.data.message, life: 3000 });
-			}
-		})
-		.catch((error) => {
-			toast.current.show({
-				severity: "success",
-				summary: "Success",
-				detail: "Network error hass been occured please try again",
+		evaluationService
+			.saveEvaluation(evaluationViewModel)
+			.then((response) => {
+				if (response.data.isSuccess === true) {
+					toast.current.show({ severity: "success", summary: "Success", detail: response.data.message, life: 3000 });
+					setEvaluationDialog(false);
+					setEvaluation(evaluationModel);
+					setSubmitted(true);
+					getAllEvaluations();
+				} else {
+					toast.current.show({ severity: "error", summary: "Error", detail: response.data.message, life: 3000 });
+				}
+			})
+			.catch((error) => {
+				toast.current.show({
+					severity: "success",
+					summary: "Success",
+					detail: "Network error hass been occured please try again",
+				});
 			});
-		});
 	};
 
 	const actionColumn = [
@@ -194,22 +196,24 @@ const EvaluationList = () => {
 	};
 
 	const acceptFunc = (id) => {
-		evaluationService.deleteEvaluation(id).then((response) => {
-			if (response.data.isSuccess === true) {
-				toast.current.show({ severity: "success", summary: "Confirmed", detail: response.data.message, life: 3000 });
-				getAllEvaluations();
-			} else {
-				toast.current.show({ severity: "error", summary: "Rejected", detail: response.data.message, life: 3000 });
-			}
-		})
-		.catch((error) => {
-			toast.current.show({
-				severity: "error",
-				summary: "Rejected",
-				detail: "Error has been occred.Please try again",
-				life: 3000,
+		evaluationService
+			.deleteEvaluation(id)
+			.then((response) => {
+				if (response.data.isSuccess === true) {
+					toast.current.show({ severity: "success", summary: "Confirmed", detail: response.data.message, life: 3000 });
+					getAllEvaluations();
+				} else {
+					toast.current.show({ severity: "error", summary: "Rejected", detail: response.data.message, life: 3000 });
+				}
+			})
+			.catch((error) => {
+				toast.current.show({
+					severity: "error",
+					summary: "Rejected",
+					detail: "Error has been occred.Please try again",
+					life: 3000,
+				});
 			});
-		});
 	};
 
 	const reject = () => {
@@ -217,7 +221,6 @@ const EvaluationList = () => {
 	};
 
 	const onInputChange = (event, name) => {
-		console.log(event, name);
 		const value = (event.target && event.target.value) || "";
 		let _evaluation = { ...evaluation };
 		_evaluation[`${name}`] = value;
@@ -234,7 +237,7 @@ const EvaluationList = () => {
 	};
 
 	return (
-		 <div className="list">
+		<div className="list">
 			<SideBar />
 			<div className="listContainer">
 				<NavBar />
@@ -337,7 +340,7 @@ const EvaluationList = () => {
 					{submitted && !evaluation.feedback && <small className="p-error">FeedBack is required.</small>}
 				</div>
 			</Dialog>
-		</div> 
+		</div>
 	);
 };
 
