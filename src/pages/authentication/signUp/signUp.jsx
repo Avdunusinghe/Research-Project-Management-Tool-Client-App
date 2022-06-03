@@ -46,7 +46,6 @@ const SignUp = () => {
 
 		authService.saveStudent(studentModel).then((response) => {
 			if (response) {
-				console.log(response);
 				toast(response.data.message);
 				navigate("/" + location.search);
 			}

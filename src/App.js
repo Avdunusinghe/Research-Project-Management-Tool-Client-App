@@ -12,11 +12,13 @@ import TopicList from "./pages/topic/topic-list/topic-list";
 import SubmissionDetails from "./pages/submission/submission-detail/submission.detail";
 import UserDetail from "./pages/user/user-detail/user.detail";
 import UserList from "./pages/user/user-list/user.list";
+import EvaluationList from "./pages/evaluation/evaluation-list/evaluation.list";
+import EvaluationDetail from "./pages/evaluation/evaluation-detail/evaluation.detail";
 import AssignmentDetail from "./pages/assignments/assignment-detail/assignment.detail";
 import SubmissionList from "./pages/submission/submission-list/submisstion-list";
-
 import SubmissionUpdate from "./pages/submission/submission-update/submission.update";
 import RequestList from "./pages/request/request.list";
+import SubmissionAnswersList from "./pages/submission/submission-answers-list/submission.answers.list";
 
 export function App() {
 	return (
@@ -43,6 +45,10 @@ export function App() {
 						<Route path="topiclist">
 							<Route index element={<TopicList></TopicList>}></Route>
 						</Route>
+						<Route path="evaluationlist">
+							<Route index element={<EvaluationList></EvaluationList>}></Route>
+							<Route path=":id" element={<EvaluationDetail></EvaluationDetail>}></Route>
+						</Route>
 						<Route path="templatelist">
 							<Route index element={<TemplateList></TemplateList>}></Route>
 						</Route>
@@ -50,6 +56,7 @@ export function App() {
 							<Route index element={<SubmissionList></SubmissionList>}></Route>
 							<Route path="new" element={<SubmissionDetails></SubmissionDetails>}></Route>
 							<Route path=":id" element={<SubmissionUpdate></SubmissionUpdate>}></Route>
+							<Route path="studentAnswers/:id" element={<SubmissionAnswersList></SubmissionAnswersList>}></Route>
 						</Route>
 						<Route path="assignmentlist">
 							<Route index element={<AssignmentDetail></AssignmentDetail>}></Route>

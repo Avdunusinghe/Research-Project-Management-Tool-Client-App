@@ -35,7 +35,6 @@ const SubmissionUpdate = () => {
 	useEffect(() => {
 		setSubmissionTypes(types);
 		submissionService.getSubmissionById(params.id).then((response) => {
-			console.log(response);
 			setSubmissionName(response.data.submissionName);
 			for (let index = 0; index < types.length; index++) {
 				if (response.data.submissionType === types[index].name) {
@@ -55,7 +54,7 @@ const SubmissionUpdate = () => {
 			id: params.id,
 			submissionName: submissionName,
 			toDate: toDate,
-			submissionType: submissionType,
+			submissionType: submissionType.name,
 			fromDate: fromDate,
 		};
 

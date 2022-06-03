@@ -10,15 +10,24 @@ import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined
 import PowerSettingsNewOutlinedIcon from "@mui/icons-material/PowerSettingsNewOutlined";
 import FileCopyOutlinedIcon from "@mui/icons-material/FileCopyOutlined";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const SideBar = () => {
 	const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+	let navigate = useNavigate();
+	let location = useLocation();
+
+	const logOut = () => {
+		localStorage.removeItem("currentUser");
+		navigate("/" + location.search);
+	};
 
 	return (
 		<div className="sidebar">
 			<div className="top">
 				<Link to="/home" style={{ textDecoration: "none" }}>
-					<span className="logo">Application Framworks</span>
+					<span className="logo">FOC Research Project</span>
 				</Link>
 			</div>
 			<hr />
@@ -61,6 +70,15 @@ const SideBar = () => {
 							<span>Registered Topic</span>
 						</Link>
 					</li>
+
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/evaluationlist" style={{ textDecoration: "none"}}>
+								<TopicIcon className="icon" />
+								<span>Evaluation</span>
+							</Link>
+						</li>
+					)}
 
 					{currentUser.isStudent === true && (
 						<li>
@@ -117,7 +135,7 @@ const SideBar = () => {
 						<AccountCircleOutlinedIcon className="icon" />
 						<span>Profile</span>
 					</li>
-					<li>
+					<li onClick={() => logOut()}>
 						<PowerSettingsNewOutlinedIcon className="icon" />
 						<span>LogOut</span>
 					</li>
