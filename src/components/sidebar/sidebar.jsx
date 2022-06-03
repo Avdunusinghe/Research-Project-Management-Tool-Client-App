@@ -73,7 +73,7 @@ const SideBar = () => {
 
 					{currentUser.isAdmin === true && (
 						<li>
-							<Link to="/evaluationlist" style={{ textDecoration: "none"}}>
+							<Link to="/evaluationlist" style={{ textDecoration: "none" }}>
 								<TopicIcon className="icon" />
 								<span>Evaluation</span>
 							</Link>
@@ -96,14 +96,6 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)} */}
-					{currentUser.isStudent === true && (
-						<li>
-							<Link to="/templatelist" style={{ textDecoration: "none" }}>
-								<GroupAddIcon className="icon" />
-								<span>Templates</span>
-							</Link>
-						</li>
-					)}
 
 					{currentUser.isStudent === true && (
 						<li>
@@ -118,7 +110,7 @@ const SideBar = () => {
 						<li>
 							<Link to="/assignmentlist" style={{ textDecoration: "none" }}>
 								<TopicIcon className="icon" />
-								<span>Assignment List</span>
+								<span>Assignments</span>
 							</Link>
 						</li>
 					)}
