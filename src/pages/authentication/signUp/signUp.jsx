@@ -47,14 +47,8 @@ const SignUp = () => {
 		};
 
 		authService.saveStudent(studentModel).then((response) => {
-<<<<<<< HEAD
-			if (response.data.isSuccess === true) {
-				console.log(response);
-				toast.current.show({ severity: "success", summary: "Success", detail: "Student Saved Successfully" });
-=======
 			if (response) {
 				toast(response.data.message);
->>>>>>> dd839135cff4368d7812ecb4b95e71e0cd0c5b4a
 				navigate("/" + location.search);
 			}
 		});
