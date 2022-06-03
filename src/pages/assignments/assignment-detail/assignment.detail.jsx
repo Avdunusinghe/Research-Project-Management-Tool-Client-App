@@ -1,34 +1,36 @@
-import { Card } from "primereact/card";
 import { Button } from "primereact/button";
 import SideBar from "./../../../components/sidebar/sidebar";
 import NavBar from "./../../../components/navbar/navbar";
 import "primeicons/primeicons.css";
 import "primereact/resources/themes/lara-light-indigo/theme.css";
 import "primereact/resources/primereact.css";
+import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
 import "primeflex/primeflex.css";
-import { useFormik } from "formik";
 import { FileUpload } from "primereact/fileupload";
 import "./assignment.detail.scss";
 import submissionService from "../../../services/submission/submission.service";
-import ReactDOM from "react-dom";
 import { storage } from "../../../../firebase";
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import React, { useState, useCallback, useRef, useEffect } from "react";
 import { Accordion, AccordionTab } from "primereact/accordion";
-import { fontStyle, style } from "@mui/system";
-import { CardHeader, getScopedCssBaselineUtilityClass } from "@mui/material";
 import StudentSubmissionService from "../../../services/studentsubmission/studentsubmission.service";
-import { Modal, Form } from "react-bootstrap";
-import BallotIcon from "@mui/icons-material/Ballot";
 import { Toast } from "primereact/toast";
+import { Dialog } from "primereact/dialog";
 
 const AssignmentDetail = () => {
 	const [submisstions, setSubmisstions] = React.useState([]);
+	const [submissionanswers, setSubmissionanswers] = React.useState([]);
 	const [activeIndex, setActiveIndex] = useState(null);
 	const toast = useRef(null);
 	const fileDownloadRef = useRef();
 	const [file, setFile] = useState("");
 	const [studentAnswerfile, setStudentAnswerfile] = useState("");
+	const [marks, setMarks] = useState("");
+	const [feedBack, setFeedBack] = useState("");
+
+	const [submitted, setSubmitted] = React.useState(false);
+	const [evaluateDialog, setEvaluateDialog] = React.useState(false);
 
 	const downloadTask = (url) => {
 		const storage = getStorage();
@@ -142,12 +144,38 @@ const AssignmentDetail = () => {
 
 		StudentSubmissionService.saveStudentSubmission(studentsubmissionModel).then((response) => {
 			if (response.data.isSuccess === true) {
-				console.log("model", response.data);
-				console.log("haai", studentsubmissionModel);
 				toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission sent" });
 			}
 		});
 	};
+
+	const OnDialogBoxOpen = (id) => {
+		const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+		const studentanswerModel = {
+			submissionId: id,
+			submittedById: currentUser.userId,
+		};
+
+		setSubmitted(true);
+		setEvaluateDialog(true);
+		StudentSubmissionService.getAllStudentEvaluationByStudent(studentanswerModel).then((response) => {
+			console.log(response.data);
+			setMarks(response.data.marks);
+			setFeedBack(response.data.feedBack);
+		});
+	};
+
+	const hideDialog = () => {
+		setSubmitted(false);
+		setEvaluateDialog(false);
+	};
+
+	const evaluateDialogFooter = (
+		<React.Fragment>
+			<Button label="OK" icon="pi pi-times" className="p-button-text" onClick={hideDialog} />
+		</React.Fragment>
+	);
 
 	return (
 		<div className="new">
@@ -215,7 +243,7 @@ const AssignmentDetail = () => {
 																<div className="flex align-items-center export-buttons">
 																	<p>ASSIGNMENT FILES </p>
 																</div>
-																<div className="flex align-items-center export-buttons alignments">
+																<div className="flex align-items-center export-buttons alignment1">
 																	<Button
 																		type="button"
 																		icon="pi pi-file-pdf"
@@ -230,11 +258,29 @@ const AssignmentDetail = () => {
 													<tr>
 														<td>
 															<div className="formgrid grid rane4">
+																<div className="flex align-items-center export-buttons">
+																	<p>MARKING SCHEME </p>
+																</div>
+																<div className="flex align-items-center export-buttons alignment2">
+																	<Button
+																		type="button"
+																		icon="pi pi-file-pdf"
+																		onClick={() => downloadTask(item.markingSchemaFile)}
+																		className="p-button-danger mr-2"
+																		data-pr-tooltip="PDF"
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane4">
 																<div className="flex align-items-center export-buttons ">
 																	<p>SUBMISSION FILES </p>
 																</div>
 
-																<div className="flex align-items-center export-buttons alignments">
+																<div className="flex align-items-center export-buttons alignment1">
 																	<FileUpload
 																		mode="basic"
 																		name="demo[]"
@@ -254,6 +300,20 @@ const AssignmentDetail = () => {
 															</div>
 														</td>
 													</tr>
+													<tr>
+														<td>
+															<div className="formgrid grid rane4">
+																<div className="flex align-items-center export-buttons alignment3">
+																	<Button
+																		label="Check Grading Details"
+																		onClick={() => OnDialogBoxOpen(item._id)}
+																		className="p-button-info"
+																		style={{ marginLeft: "8px" }}
+																	/>
+																</div>
+															</div>
+														</td>
+													</tr>
 												</tbody>
 											</table>
 										</div>
@@ -263,6 +323,25 @@ const AssignmentDetail = () => {
 						))}
 					</div>
 				</div>
+
+				<Dialog
+					visible={evaluateDialog}
+					style={{ width: "500px" }}
+					header="Assignment Evaluation"
+					modal
+					className="p-fluid"
+					onHide={hideDialog}
+					footer={evaluateDialogFooter}
+				>
+					<div className="field">
+						<label htmlFor="marks">Marks </label>
+						<InputText id="marks" value={marks} disabled />
+					</div>
+					<div className="field">
+						<label htmlFor="feedBack">FeedBack</label>
+						<InputTextarea id="feedBack" value={feedBack} disabled />
+					</div>
+				</Dialog>
 
 				<Toast ref={toast}></Toast>
 			</div>

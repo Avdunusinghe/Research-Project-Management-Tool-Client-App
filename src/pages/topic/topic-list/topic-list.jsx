@@ -64,7 +64,6 @@ const TopicList = () => {
 	const getAllTopics = useCallback(() => {
 		topicService.getAllTopics().then((response) => {
 			setTopics(response.data);
-			console.log(topics);
 		});
 	}, []);
 
