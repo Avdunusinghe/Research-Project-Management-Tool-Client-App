@@ -71,7 +71,7 @@ const SideBar = () => {
 						</Link>
 					</li>
 
-					{currentUser.isPanelMember === true && (
+					{currentUser.isAdmin === true && (
 						<li>
 							<Link to="/evaluationlist" style={{ textDecoration: "none"}}>
 								<TopicIcon className="icon" />
