@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import "./topic-list.scss";
 import moment from "moment";
 import topicService from "../../../services/student/topic.service";
+import { ToggleButton } from 'primereact/togglebutton';
 
 const topiccolumns = [
 	{ field: "topicName", headerName: "Group name", width: 100 },
@@ -66,6 +67,11 @@ const TopicList = () => {
 		});
 	}, []);
 
+	const handleAccept = () => {
+		const [checked, setChecked] = useState(false);
+	}
+
+
 	const actionColumn = [
 		{
 			field: "view",
@@ -74,9 +80,14 @@ const TopicList = () => {
 			renderCell: (params) => {
 				return (
 					<div className="cellAction">
-						<div className="viewButton" onClick={() => handleView(params.row.id)}>
-							Evaluate
-						</div>
+						<ToggleButton checked={checked} onChange={(e) => 
+							setChecked(e.value)} 
+							onLabel="I confirm" 
+							offLabel="I reject" 
+							onIcon="pi pi-check" 
+							offIcon="pi pi-times" 
+							style={{width: '10em'}} 
+							aria-label="Confirmation" />
 						<Link to="/topicform" style={{ textDecoration: "none" }}>
 							<div className="viewButton" onClick={() => handleView(params.row.id)}>
 								Register Again

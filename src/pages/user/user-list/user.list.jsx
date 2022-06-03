@@ -202,7 +202,6 @@ const UserList = () => {
 	};
 
 	const onInputChange = (event, name) => {
-		console.log(event, name);
 		const value = (event.target && event.target.value) || "";
 		let _user = { ...user };
 		_user[`${name}`] = value;

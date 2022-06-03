@@ -27,7 +27,7 @@ const SideBar = () => {
 		<div className="sidebar">
 			<div className="top">
 				<Link to="/home" style={{ textDecoration: "none" }}>
-					<span className="logo">Application Framworks</span>
+					<span className="logo">FOC Research Project</span>
 				</Link>
 			</div>
 			<hr />
@@ -72,6 +72,15 @@ const SideBar = () => {
 							<span>Registered Topic</span>
 						</Link>
 					</li>
+
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/evaluationlist" style={{ textDecoration: "none"}}>
+								<TopicIcon className="icon" />
+								<span>Evaluation</span>
+							</Link>
+						</li>
+					)}
 
 					{currentUser.isStudent === true && (
 						<li>
