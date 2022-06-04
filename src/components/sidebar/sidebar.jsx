@@ -34,10 +34,12 @@ const SideBar = () => {
 			<div className="center">
 				<ul>
 					<p className="title">MAIN</p>
+
 					<li>
 						<DashboardIcon className="icon" />
 						<span>Dashboard</span>
 					</li>
+
 					<p className="title">CORE MODULES</p>
 					{currentUser.isAdmin === true && (
 						<li>
@@ -73,7 +75,7 @@ const SideBar = () => {
 
 					{currentUser.isAdmin === true && (
 						<li>
-							<Link to="/evaluationlist" style={{ textDecoration: "none"}}>
+							<Link to="/evaluationlist" style={{ textDecoration: "none" }}>
 								<TopicIcon className="icon" />
 								<span>Evaluation</span>
 							</Link>
@@ -88,19 +90,12 @@ const SideBar = () => {
 							</Link>
 						</li>
 					)}
-					{/* {currentUser.isStudent === true && (
+
+					{currentUser.isAdmin === true && (
 						<li>
-							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
-								<GroupAddIcon className="icon" />
-								<span>Assignments</span>
-							</Link>
-						</li>
-					)} */}
-					{currentUser.isStudent === true && (
-						<li>
-							<Link to="/templatelist" style={{ textDecoration: "none" }}>
-								<GroupAddIcon className="icon" />
-								<span>Templates</span>
+							<Link to="/submission" style={{ textDecoration: "none" }}>
+								<FileCopyOutlinedIcon className="icon" />
+								<span>Submission</span>
 							</Link>
 						</li>
 					)}
@@ -118,17 +113,10 @@ const SideBar = () => {
 						<li>
 							<Link to="/assignmentlist" style={{ textDecoration: "none" }}>
 								<TopicIcon className="icon" />
-								<span>Assignment List</span>
+								<span>Assignments</span>
 							</Link>
 						</li>
 					)}
-
-					<li>
-						<Link to="/submission" style={{ textDecoration: "none" }}>
-							<FileCopyOutlinedIcon className="icon" />
-							<span>Submission</span>
-						</Link>
-					</li>
 
 					<p className="title">SETTINGS</p>
 					<li>
@@ -140,10 +128,6 @@ const SideBar = () => {
 						<span>LogOut</span>
 					</li>
 				</ul>
-			</div>
-			<div className="bottom">
-				<div className="colorOption"></div>
-				<div className="colorOption"></div>
 			</div>
 		</div>
 	);

@@ -6,7 +6,6 @@ import SignUp from "./pages/authentication/signUp/signUp";
 import Home from "./pages/home/home";
 import StudentGroupList from "./pages/studentgroups/studentGroup-list/studentGroup-list";
 import StudentGroupDetail from "./pages/studentgroups/studentGroups-detail/studentGroup-detail";
-import TemplateList from "./pages/templates/template.detail";
 import TopicDetail from "./pages/topic/topic-detail/topic.detail";
 import TopicList from "./pages/topic/topic-list/topic-list";
 import SubmissionDetails from "./pages/submission/submission-detail/submission.detail";
@@ -49,9 +48,7 @@ export function App() {
 							<Route index element={<EvaluationList></EvaluationList>}></Route>
 							<Route path=":id" element={<EvaluationDetail></EvaluationDetail>}></Route>
 						</Route>
-						<Route path="templatelist">
-							<Route index element={<TemplateList></TemplateList>}></Route>
-						</Route>
+
 						<Route path="submission">
 							<Route index element={<SubmissionList></SubmissionList>}></Route>
 							<Route path="new" element={<SubmissionDetails></SubmissionDetails>}></Route>
