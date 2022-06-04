@@ -41,7 +41,6 @@ const StudentGroupList = () => {
 	const getAllStudentsGroups = useCallback(() => {
 		studentService.getAllStudentsGroups().then((response) => {
 			setStudentgroups(response.data);
-			//console.log(response);
 		});
 	}, []);
 

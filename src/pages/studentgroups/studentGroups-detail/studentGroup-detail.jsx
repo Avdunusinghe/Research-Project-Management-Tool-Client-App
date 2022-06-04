@@ -21,6 +21,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { Modal, Form } from "react-bootstrap";
 import { padding } from "@mui/system";
+import { useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const theme = createTheme();
 const StudentGroupDetail = () => {
@@ -31,6 +33,9 @@ const StudentGroupDetail = () => {
 	const [researchArea, setResearchArea] = useState("");
 	const [description, setdescription] = useState("");
 	const [status, setStatus] = useState(null);
+
+	let navigate = useNavigate();
+	let location = useLocation();
 
 	const types = [
 		{ name: "SE", code: "SE" },
@@ -148,6 +153,8 @@ const StudentGroupDetail = () => {
 			});
 
 			formik.resetForm();
+
+			navigate("/home" + location.search);
 		},
 	});
 
