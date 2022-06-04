@@ -27,17 +27,19 @@ const SideBar = () => {
 		<div className="sidebar">
 			<div className="top">
 				<Link to="/home" style={{ textDecoration: "none" }}>
-					<span className="logo">Application Framworks</span>
+					<span className="logo">FOC Research Project</span>
 				</Link>
 			</div>
 			<hr />
 			<div className="center">
 				<ul>
 					<p className="title">MAIN</p>
+
 					<li>
 						<DashboardIcon className="icon" />
 						<span>Dashboard</span>
 					</li>
+
 					<p className="title">CORE MODULES</p>
 					{currentUser.isAdmin === true && (
 						<li>
@@ -71,22 +73,24 @@ const SideBar = () => {
 						</Link>
 					</li>
 
+					{currentUser.isAdmin === true && (
+						<li>
+							<Link to="/evaluationlist" style={{ textDecoration: "none" }}>
+								<TopicIcon className="icon" />
+								<span>Evaluation</span>
+							</Link>
+						</li>
+					)}
+
 					{currentUser.isStudent === true && (
 						<li>
 							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
 								<GroupAddIcon className="icon" />
-								<span>Group Registration</span>
+								<span>Register Groups</span>
 							</Link>
 						</li>
 					)}
-					{/* {currentUser.isStudent === true && (
-						<li>
-							<Link to="/studentGroups" style={{ textDecoration: "none" }}>
-								<GroupAddIcon className="icon" />
-								<span>Assignments</span>
-							</Link>
-						</li>
-					)} */}
+
 					{currentUser.isAdmin === true && (
 						<li>
 							<Link to="/submission" style={{ textDecoration: "none" }}>
@@ -109,7 +113,7 @@ const SideBar = () => {
 						<li>
 							<Link to="/assignmentlist" style={{ textDecoration: "none" }}>
 								<TopicIcon className="icon" />
-								<span>Assignment List</span>
+								<span>Assignments</span>
 							</Link>
 						</li>
 					)}

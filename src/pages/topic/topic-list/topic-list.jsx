@@ -6,55 +6,45 @@ import { Link } from "react-router-dom";
 import "./topic-list.scss";
 import moment from "moment";
 import topicService from "../../../services/student/topic.service";
+import { ToggleButton } from "primereact/togglebutton";
 
 const topiccolumns = [
-	{ field: "topicName", headerName: "Group name", width: 100 },
-	{ field: "subject", headerName: "Subject name", width: 100 },
+	{ field: "topicName", headerName: "Group name", width: 130 },
+	{ field: "subject", headerName: "Subject name", width: 130 },
 	{
 		field: "groupleadername",
 		headerName: "Group Leader Name",
-		width: 130,
+		width: 160,
 	},
 	{
 		field: "groupleaderId",
 		headerName: "Group LeaderID",
-		width: 130,
+		width: 160,
 	},
 	{
 		field: "groupleaderEmail",
 		headerName: "Group Leader Email",
-		width: 130,
+		width: 160,
 	},
 	{
 		field: "groupName",
 		headerName: "Group Name",
-		width: 130,
+		width: 160,
 	},
 	{
 		field: "createOn",
 		headerName: "Created On",
-		width: 100,
+		width: 160,
 		type: "date",
 		valueFormatter: (params) => {
 			return moment(params.value).format("YYYY-MM-DD");
-		},
-	},
-	{
-		field: "isAccept",
-		headerName: "Status",
-		width: 130,
-		renderCell: (params) => {
-			if (params.row.isAccept == false) {
-				return <div className={`cellWithStatus ${params.row.isAccept}`}>pending</div>;
-			} else {
-				return <div className={`cellWithStatus ${params.row.isAccept}`}>accept</div>;
-			}
 		},
 	},
 ];
 
 const TopicList = () => {
 	const [topics, setTopics] = React.useState([]);
+	const [checked, setChecked] = React.useState(false);
 
 	useEffect(() => {
 		getAllTopics();
@@ -63,9 +53,10 @@ const TopicList = () => {
 	const getAllTopics = useCallback(() => {
 		topicService.getAllTopics().then((response) => {
 			setTopics(response.data);
-			console.log(topics);
 		});
 	}, []);
+
+	const handleAccept = () => {};
 
 	const actionColumn = [
 		{
@@ -75,9 +66,11 @@ const TopicList = () => {
 			renderCell: (params) => {
 				return (
 					<div className="cellAction">
-						<div className="viewButton" onClick={() => handleView(params.row.id)}>
-							Evaluate
-						</div>
+						<Link to="/evaluationlist" style={{ textDecoration: "none" }}>
+							<div className="viewButton" onClick={() => handleView(params.row.id)}>
+								Evaluate
+							</div>
+						</Link>
 						<Link to="/topicform" style={{ textDecoration: "none" }}>
 							<div className="viewButton" onClick={() => handleView(params.row.id)}>
 								Register Again

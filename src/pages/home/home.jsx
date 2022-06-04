@@ -19,7 +19,7 @@ const Home = () => {
 				<NavBar />
 
 				<div className="listContainer">
-					<h1 className="homeHeader">RESEARCH PROJECT MANAGEMENT TOOL</h1>
+					<h1 className="homeHeader">RESEARCH PROJECT MANAGEMENT</h1>
 				</div>
 				<div className="listContainer">
 					<CaroselSlider />

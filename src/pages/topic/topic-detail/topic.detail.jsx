@@ -98,12 +98,8 @@ const TopicDetail = () => {
 					toast.current.show({ severity: "success", summary: "Success", detail: "Topic Registered successfully" });
 				}
 				formik.resetForm();
-				/* if (response.data.isSuccess === true) {
-					console.log("haii", response.data);
-					
-					navigate("/home" + location.search);
-					//toast.current.show({ severity: "success", summary: "Success", detail: "Student Submission  uploaded" });
-				} */
+
+				navigate("/home" + location.search);
 			});
 		},
 	});
@@ -256,17 +252,13 @@ const TopicDetail = () => {
 												id="description"
 												name="description"
 												row="5"
+												label="mention references here"
 												value={formik.values.description}
 												onChange={formik.handleChange}
 												autoFocus
 												className={classNames({ "p-invalid": isFormFieldValid("description") })}
 											/>
-											<label
-											//htmlFor="description"
-											//className={classNames({ "p-error": isFormFieldValid("description") })}
-											>
-												Description
-											</label>
+											<label>Description (References)</label>
 										</span>
 									</div>
 								</div>

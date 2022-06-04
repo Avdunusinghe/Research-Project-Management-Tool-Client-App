@@ -19,6 +19,7 @@ import { Toast } from "primereact/toast";
 import authService from "../../../services/auth/auth.service";
 import { ToastContainer, toast } from "react-toastify";
 import { useNavigate, useLocation } from "react-router-dom";
+import { Toast } from "primereact/toast";
 const theme = createTheme();
 
 const SignUp = () => {
@@ -28,7 +29,7 @@ const SignUp = () => {
 	const [department, setDepartment] = useState([]);
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const toast = useRef(null);
+	const toast = React.useRef(null);
 
 	let navigate = useNavigate();
 	let location = useLocation();
@@ -48,7 +49,9 @@ const SignUp = () => {
 
 		authService.saveStudent(studentModel).then((response) => {
 			if (response) {
-				toast(response.data.message);
+				if (response.data.isSuccess === true) {
+				}
+				toast.current.show({ severity: "info", summary: "Success", detail: response.data.message, life: 3000 });
 				navigate("/" + location.search);
 			}
 		});
@@ -156,6 +159,7 @@ const SignUp = () => {
 						</Box>
 					</Box>
 				</Container>
+				<Toast ref={toast} />
 			</ThemeProvider>
 			<ToastContainer />
 
